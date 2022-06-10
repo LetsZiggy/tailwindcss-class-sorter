@@ -48,9 +48,32 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 			variant_ordering = PluginUtils.get_pref(["variant_ordering"], self.view)
 			breakpoint_order = PluginUtils.get_pref(["breakpoint_order"], self.view)
 
+			# Expand group-* / peer-* in variant_order
+			variant_ordering_no_star = variant_ordering.copy()
+
+			try:
+				variant_ordering_no_star.remove("group-*")
+				variant_ordering_group = [f"group-{x}" for x in variant_ordering_no_star if x != "group-*"]
+				group_star_index = variant_ordering.index("group-*")
+			except:
+				variant_ordering_group = []
+				group_star_index = 0
+
+			variant_ordering = variant_ordering[:group_star_index] + variant_ordering_group + variant_ordering[group_star_index:]
+
+			try:
+				variant_ordering_no_star.remove("peer-*")
+				variant_ordering_peer = [f"peer-{x}" for x in variant_ordering_no_star if x != "peer-*"]
+				peer_star_index = variant_ordering.index("peer-*")
+			except:
+				variant_ordering_peer = []
+				peer_star_index = 0
+
+			variant_ordering = variant_ordering[:peer_star_index] + variant_ordering_peer + variant_ordering[peer_star_index:]
+
 			# Default regex
 			re_class_regex = re.compile(class_regex)
-			re_string_start = re.compile(r"[a-zA-Z!-]")
+			re_string_start = re.compile(r"[a-zA-Z!-\[\]]")
 			re_template_class = re.compile(r"(\"[^\"]*?\")|('[^']*?')|(`[^`]*?`)")
 			re_tw_variant = re.compile(r":[a-zA-Z!-]")
 
@@ -103,7 +126,7 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					class_name_group_order_sort = class_name
 
 					# find dynamic class_name (if/else) by templating engine
-					if re_string_start.match(class_name) is None:  # if string doesn't start with [a-zA-Z!-]
+					if re_string_start.match(class_name) is None:  # if string doesn't start with [a-zA-Z!-\[\]]
 						res = class_name.split(conditional_split_character)[1]
 						res = re_template_class.finditer(res)
 						res = [x.group() for x in res]
@@ -178,7 +201,7 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					class_name_variant_sort = None
 
 					# find dynamic class_name (if/else) by templating engine
-					if re_string_start.match(class_name) is None:  # if string doesn't start with [a-zA-Z!-]
+					if re_string_start.match(class_name) is None:  # if string doesn't start with [a-zA-Z!-\[\]]
 						class_name_variant_sort = []
 						res = class_name.split(conditional_split_character)[1]
 						res = re_template_class.finditer(res)
@@ -189,11 +212,13 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					if class_name_variant_sort is None:  # If class_name is not set dynamically
 						if class_name.count(":") > 1:
 							class_name = class_name.split(":")
+							class_name = self.merge_dynamic_variant_parts(class_name)
 							class_name = self.sort_variants(class_name, variant_ordering)
 					else:  # If class_name is set dynamically (if/else) by templating engine
 						for index, item in enumerate(class_name_variant_sort):
 							if item.count(":") > 1:
 								item = item.split(":")
+								item = self.merge_dynamic_variant_parts(item)
 								class_name_variant_sort[index] = self.sort_variants(item, variant_ordering)
 
 						# replace dynamic class_name (if/else) by templating engine with sorted version
@@ -326,13 +351,31 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 
 		return class_name
 
+	def merge_dynamic_variant_parts(self, class_name):
+		bracket_open = False
+		merged = []
+
+		for part in class_name:
+			if bracket_open is True:
+				merged[-1] = f"{merged[-1]}:{part}"
+
+				if part.endswith("]"):
+					bracket_open = False
+			else:
+				merged.append(part)
+
+				if ("-[" in part or part.startswith("[")) and not part.endswith("]"):
+					bracket_open = True
+
+		return merged
+
 	def sort_variants(self, class_name, order):
 		def sorting_variants(x):
 			try:
 				y = None
-				if x.startswith("group-"):
+				if x.startswith("group-") and x not in order:
 					y = f"{x[:6]}*"
-				elif x.startswith("peer-"):
+				elif x.startswith("peer-") and x not in order:
 					y = f"{x[:5]}*"
 				else:
 					y = x

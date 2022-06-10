@@ -6,3 +6,12 @@
 		After: "custom-class print:before:hover:content-['*'] print:after:hover:content-['*'] block ltr:dark:sm:block rtl:dark:2xl:block m-2 dark:sm:active:hover:m-2 dark:2xl:active:hover:m-2 text-red-50/50"
 	-->
 </div>
+
+<div
+	class="custom-class before:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] after:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] [&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] sm:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] 2xl:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px]">
+	<!--
+		Before: "   2xl:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px]  custom-class  sm:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px]  [&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:after:top-[5px]  [&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px]  [&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:before:top-[5px]   "
+	--- --- --- --- ---
+		After: "custom-class before:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] after:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] [&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] sm:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px] 2xl:[&:nth-child(1)]:[@supports(backdrop-filter:blur(0))]:top-[5px]"
+	-->
+</div>

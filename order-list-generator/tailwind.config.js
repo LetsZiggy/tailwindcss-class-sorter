@@ -8,10 +8,10 @@
 const stub = require("tailwindcss/stubs/defaultConfig.stub")
 
 module.exports = {
-	content: [],
+	content: [ "content.html" ],
 	safelist: [{ pattern: /.+/ }],
 	presets: [],
-	darkMode: false, // false | "media" | "class"
+	darkMode: "media", // "class"
 	theme: { ...stub.theme },
 	variantOrder: [ ...stub.variantOrder ],
 	plugins: [],

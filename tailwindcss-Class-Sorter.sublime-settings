@@ -21,7 +21,8 @@
 	 * 	[extension]: {
 	 * 		"region": Regex to detect the classes ([class="a b c"] becomes [a b c])
 	 * 		"class": Regex to find each class using "re.findall()" (Place more specific regex first)
-	 * 		"conditional_split_character": Character used after condition expression in ternary operator (if/else) in templating engine
+	 * 		"conditional_split_character": Character used to split ternary expression or complex class bindings by templating engine
+	 * 		"conditional_class_location": "before" | "after" string used to determine where the classes resides in the complex expression after splitting with "conditional_split_character"
 	 * 		"separator": Separator character between classes (Only required if classes are not space separated)
 	 * 	},
 	 * },
@@ -30,9 +31,17 @@
 	 * 	"extension" is the file type
 	 * 	"region" remains the same as default "class" attribute is used
 	 * 	"class" regex to find CSS classes with more specific regex placed in front
-	 * 	"conditional_split_character" is required if classes are dynamically added through ternary expression by templating engine
-	 * 		- eg: class="${ condition === comparator ? 'block' : 'inline' } text-white"
-	 * 		                                         ^ -> `conditional_split_character`
+	 * 	"conditional_split_character" is required if classes are complex templating engine expression
+	 * 		- if classes are dynamically added through ternary expression by templating engine
+	 * 			- eg: class="${ condition === comparator ? 'block' : 'inline' } text-white"
+	 * 			                                         ^ -> `conditional_split_character`
+	 * 		- if classes are dynamically added through templating engine string interpolation (Please note classes must be surrounded by quotes ["'`])
+	 * 			                         ∨-----∨ -> `must have quotes`
+	 * 			- eg (vue.js): :class="{ 'block': condition } text-white"
+	 * 			                                ^ -> `conditional_split_character`
+	 * 			- eg (aurelia.js): class="${ 'block' | valueConverter:param1 } text-white"
+	 * 			                                     ^ -> `conditional_split_character`
+	 * 	"conditional_class_location" is required if classes are complex templating engine expression
 	 * 	"separator" is required if classes are not separated by spaces (Separator character will also be prefixed to the first sorted class - see `pug templating language` below)
 	 * 		- eg: div.before:block.before:w-2.before:h-2.block.w-4.h-4
 	 * 		         ^^^^^^^^^^^^^ -> `first sorted class`
@@ -47,6 +56,7 @@
 	 * 				"region": "(?<=\\sclass=\\\")((?!\\\").)+(?=\\\")|(?<=\\sclass=')((?!').)+(?=')|(?<=@apply\\s)((?!;).)+(?=;)",
 	 * 				"class": "\\$\\{\\s?[^\\}]+\\s?\\}|[^\\s]+",
 	 * 				"conditional_split_character": "?",
+	 * 				"conditional_class_location": "after",
 	 * 			},
 	 * 		},
 	 */
@@ -83,47 +93,50 @@
 	 * 	- Grouped by the first common word of the class names (to optimize search)
 	 * 	- Group_name excludes characters starting with ["!", "-", "no-", "not-", "min-", "max-", "auto-"]
 	 * 	- Group_name may repeat (see ["recess" -> "content"] group_name in order_list.json)
+	 * Edits will be applied in this order - "overwrite" then "amend" then "append"
+	 * 	- "append" are applied in reverse order meaning there is no need to offset the indices of later "append" groups
 	 *
-	 * "edit_order": [
-	 * 	{
-	 * 		"action":
-	 * 			| {
-	 * 			| 	"type": "overwrite",
-	 * 			| 	"group_index": Index of existing group,
-	 * 			| }
-	 * 			| {
-	 * 			| 	"type": "amend",
-	 * 			| 	"position": "start" | "end",
-	 * 			| 	"group_index": Index of existing group,
-	 * 			| }
-	 * 			| {
-	 * 			| 	"type": "append",
-	 * 			| 	"position": "before" | "after",
-	 * 			| 	"group_index": Index of existing group,
-	 * 			| 	"group_name": New group_name (see example above for group_name),
-	 * 			| }
-	 * 		"regex_list": Regex to find and order each class within the group
-	 * 	},
-	 * ],
+	 * "edit_order": {
+	 * 	"overwrite": [
+	 * 		{
+	 * 			"group_index": Index of existing group,
+	 * 			"regex_list": Regex(es) to find and order each class within the group,
+	 * 		},
+	 * 	],
+	 * 	"amend": [
+	 * 		{
+	 * 			"group_index": Index of existing group,
+	 * 			"position": "start" | "end",
+	 * 			"regex_list": Regex(es) to find and order each class within the group,
+	 * 		},
+	 * 	],
+	 * 	"append": [
+	 * 		{
+	 * 			"group_index": Index of existing group,
+	 * 			"group_name": New group_name (see example above for group_name),
+	 * 			"position": "before" | "after",
+	 * 			"append_order": Integer,
+	 * 			"regex_list": Regex(es) to find and order each class within the group,
+	 * 		},
+	 * 	],
+	 * },
 	 *
 	 * Explanation:
-	 * 	"action" takes only
-	 * 		| {
-	 * 		| 	"type": "overwrite" to overwrite the whole group,
-	 * 		| 	"group_index": Index of existing group,
-	 * 		| }
-	 * 		| {
-	 * 		| 	"type": "amend" to add new regex to the group,
-	 * 		| 	"position": Amend to the `start` or `end` of current group_regex state,
-	 * 		| 	"group_index": Index of existing group,
-	 * 		| }
-	 * 		| {
-	 * 		| 	"type": "append" to add new group,
-	 * 		| 	"position": Place the new sorting group `before` or `after` an default/amended/appended group,
-	 * 		| 	"group_index": Index of existing group,
-	 * 		| 	"group_name": New group_name (see example above for group_name),
-	 * 		| }
-	 * 	"regex_list" is the list of new regex
+	 * 	"overwrite" the whole group in place
+	 * 		- "group_index" is the index of group to be overwritten
+	 * 		- "regex_list" is the list of new regex(es) to replace the `group_regex`
+	 *
+	 * 	"amend" to add new regex(es) to the group
+	 * 		- "group_index" is the index of group to be amended
+	 * 		- "position" of the new regex(es) to be added to the `group_regex`
+	 * 		- "regex_list" is the list of new regex(es) to be added
+	 *
+	 * 	"append" to add a new group to the list
+	 * 		- "group_index" of an existing group as positional reference
+	 * 		- "group_name" of the new group (see example above for `group_name`)
+	 * 		- "position" of the new group to be appended in relation to the reference (see "group_index" under "append")
+	 * 		- "append_order": Order of new groups added if referencing the same existing group (smaller integer will appear earlier in the final order)
+	 * 		- "regex_list" is the list of new regex(es) to be added
 	 *
 	 * Example:
 	 * 	[to overwrite sorting group defaults]
@@ -154,19 +167,18 @@
 	 *
 	 * 	Setting: {
 	 * 		...
-	 * 		"edit_order": [
-	 * 			{
-	 * 				"action": {
-	 * 					"type": "overwrite",
+	 * 		"edit_order": {
+	 * 			"overwrite": [
+	 * 				{
 	 * 					"group_index": 114,
+	 * 					"regex_list": [
+	 * 						"stroke-(transparent|current|black|white)",
+	 * 						"stroke-\\d{1,4}",
+	 * 						"stroke-opacity-\\d{1,4}",
+	 * 					],
 	 * 				},
-	 * 				"regex_list": [
-	 * 					"stroke-(transparent|current|black|white)",
-	 * 					"stroke-\\d{1,4}",
-	 * 					"stroke-opacity-\\d{1,4}",
-	 * 				],
-	 * 			},
-	 * 		],
+	 * 			],
+	 * 		},
 	 * 		...
 	 * 	}
 	 *
@@ -196,18 +208,17 @@
 	 *
 	 * 	Setting: {
 	 * 		...
-	 * 		"edit_order": [
-	 * 			{
-	 * 				"action": {
-	 * 					"type": "amend",
-	 * 					"position": "end",
+	 * 		"edit_order": {
+	 * 			"amend": [
+	 * 				{
 	 * 					"group_index": 113,
+	 * 					"position": "end",
+	 * 					"regex_list": [
+	 * 						fill-rule-(nonzero|evenodd)",
+	 * 					],
 	 * 				},
-	 * 				"regex_list": [
-	 * 					fill-rule-(nonzero|evenodd)",
-	 * 				],
-	 * 			},
-	 * 		],
+	 * 			],
+	 * 		},
 	 * 		...
 	 * 	}
 	 *
@@ -244,23 +255,26 @@
 	 *
 	 * 	Setting: {
 	 * 		...
-	 * 		"edit_order": [
-	 * 			{
-	 * 				"action": {
-	 * 					"type": "append",
-	 * 					"position": "after",
+	 * 		"edit_order": {
+	 * 			"append": [
+	 * 				{
 	 * 					"group_index": 114,
 	 * 					"group_name": "dasharray",
+	 * 					"position": "after",
+	 * 					"regex_list": [
+	 * 						"dasharray-none",
+	 * 					],
 	 * 				},
-	 * 				"regex_list": [
-	 * 					"dasharray-none",
-	 * 				],
-	 * 			},
-	 * 		],
+	 * 			],
+	 * 		},
 	 * 		...
 	 * 	}
 	 */
-	"edit_order": [],
+	"edit_order": {
+		"overwrite": [],
+		"amend": [],
+		"append": [],
+	},
 
 	/**
 	 * Grouping of classnames
@@ -283,6 +297,19 @@
 	"variant_ordering": [
 		"ltr",
 		"rtl",
+		"data-*",
+		"group-aria-*",
+		"peer-aria-*",
+		"aria-*",
+		"aria-selected",
+		"aria-required",
+		"aria-readonly",
+		"aria-pressed",
+		"aria-hidden",
+		"aria-expanded",
+		"aria-disabled",
+		"aria-checked",
+		"supports-*",
 		"print",
 		"contrast-less",
 		"contrast-more",
@@ -296,6 +323,13 @@
 		"lg",
 		"xl",
 		"2xl",
+		"min-*",
+		"max-sm",
+		"max-md",
+		"max-lg",
+		"max-xl",
+		"max-2xl",
+		"max-*",
 		"before",
 		"after",
 		"group-*",
@@ -348,5 +382,12 @@
 		"lg",
 		"xl",
 		"2xl",
+		"min-*",
+		"max-sm",
+		"max-md",
+		"max-lg",
+		"max-xl",
+		"max-2xl",
+		"max-*",
 	],
 }

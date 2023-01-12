@@ -5,9 +5,60 @@ from json import loads
 from os import path
 from platform import system
 from sys import exc_info
+from typing import Any, Dict, List, Literal, Pattern, Tuple, TypedDict, Union, cast
 
 import sublime
 import sublime_plugin
+
+### Define types ###
+
+OrderType = Literal["recess", "concentric", "smacss"]
+OrderList = List[Tuple[str, List[str]]]
+
+
+class Overwrite(TypedDict):
+	group_index: int
+	regex_list: List[str]
+
+
+class Amend(TypedDict):
+	group_index: int
+	position: Literal["start", "end"]
+	regex_list: List[str]
+
+
+class Append(TypedDict):
+	group_index: int
+	group_name: str
+	position: Literal["before", "after"]
+	append_order: int
+	regex_list: List[str]
+
+
+class EditOrder(TypedDict):
+	overwrite: List[Overwrite]
+	amend: List[Amend]
+	append: List[Append]
+
+
+class SpecialCase(TypedDict):
+	classes: List[str]
+	index: List[int]
+	minimum: Union[int, None]
+
+
+class SpecialCases(TypedDict):
+	position_style: SpecialCase
+	display_style: SpecialCase
+
+
+class MatchedData(TypedDict):
+	group_name_index: Union[int, None]
+	group_order_weight: Union[float, None]
+	breakpoint_order_weight: Union[int, float, None]
+
+
+### Define global ###
 
 PROJECT_NAME = "tailwindcss-Class-Sorter"
 SETTINGS_FILE = f"{PROJECT_NAME}.sublime-settings"
@@ -19,38 +70,53 @@ IS_WINDOWS = PLATFORM == "Windows"
 class SortTailwindcssCommand(sublime_plugin.TextCommand):
 	def run(self, edit):
 		try:
-			file_extension = path.splitext(self.view.file_name())[1][1:]
-			region_regex = PluginUtils.get_pref(["extensions_regex", file_extension, "region"], self.view)
-			region_regex = (
+			### Get settings ###
+
+			file_extension: str = path.splitext(self.view.file_name())[1][1:]
+			region_regex: str = cast(str, PluginUtils.get_pref(["extensions_regex", file_extension, "region"], self.view))
+			region_regex: str = (
 				region_regex.get(file_extension, {}).get("region", "") if isinstance(region_regex, dict) else region_regex
 			)
-			class_regex = PluginUtils.get_pref(["extensions_regex", file_extension, "class"], self.view)
-			class_regex = class_regex.get(file_extension, {}).get("class", "") if isinstance(class_regex, dict) else class_regex
-			conditional_split_character = PluginUtils.get_pref(
-				["extensions_regex", file_extension, "conditional_split_character"],
-				self.view,
+			class_regex: str = cast(str, PluginUtils.get_pref(["extensions_regex", file_extension, "class"], self.view))
+			class_regex: str = (
+				class_regex.get(file_extension, {}).get("class", "") if isinstance(class_regex, dict) else class_regex
 			)
-			conditional_split_character = (
+			conditional_split_character: str = cast(
+				str,
+				PluginUtils.get_pref(["extensions_regex", file_extension, "conditional_split_character"], self.view),
+			)
+			conditional_split_character: str = (
 				conditional_split_character.get(file_extension, {}).get("conditional_split_character", "?")
 				if isinstance(conditional_split_character, dict)
 				else conditional_split_character
 			)
-			separator_string = PluginUtils.get_pref(["extensions_regex", file_extension, "separator"], self.view)
-			separator_string = (
+			conditional_class_location: str = cast(
+				str,
+				PluginUtils.get_pref(["extensions_regex", file_extension, "conditional_class_location"], self.view),
+			)
+			conditional_class_location: str = (
+				conditional_class_location.get(file_extension, {}).get("conditional_class_location", "after")
+				if isinstance(conditional_class_location, dict)
+				else conditional_class_location
+			)
+			separator_string: str = cast(str, PluginUtils.get_pref(["extensions_regex", file_extension, "separator"], self.view))
+			separator_string: str = (
 				separator_string.get(file_extension, {}).get("separator", " ")
 				if isinstance(separator_string, dict)
 				else separator_string
 			)
-			placement = PluginUtils.get_pref(["non_tailwindcss_placement"], self.view)
-			order_list, order_group_name_list = PluginUtils.get_order(self.view)
-			breakpoint_grouping = PluginUtils.get_pref(["breakpoint_grouping"], self.view)
-			breakpoint_multiplier = 1000 if breakpoint_grouping == "breakpoint" else 0.00001
-			variant_ordering = PluginUtils.get_pref(["variant_ordering"], self.view)
-			breakpoint_order = PluginUtils.get_pref(["breakpoint_order"], self.view)
+			placement: str = cast(str, PluginUtils.get_pref(["non_tailwindcss_placement"], self.view))
+			order_list, order_group_name_list = cast(Tuple[OrderList, List[str]], PluginUtils.get_order(self.view))
+			breakpoint_grouping: str = cast(str, PluginUtils.get_pref(["breakpoint_grouping"], self.view))
+			breakpoint_multiplier: Union[int, float] = 1000 if breakpoint_grouping == "breakpoint" else 0.00001
+			variant_ordering: List[str] = cast(List[str], PluginUtils.get_pref(["variant_ordering"], self.view))
+			breakpoint_order: List[str] = cast(List[str], PluginUtils.get_pref(["breakpoint_order"], self.view))
 
-			# Expand group-* / peer-* in variant_order
+			### Expand group-* / peer-* in variant_order ###
+
 			variant_ordering_no_star = variant_ordering.copy()
 
+			# Expand group-*
 			try:
 				variant_ordering_no_star.remove("group-*")
 				variant_ordering_group = [f"group-{x}" for x in variant_ordering_no_star if x != "group-*"]
@@ -61,6 +127,7 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 
 			variant_ordering = variant_ordering[:group_star_index] + variant_ordering_group + variant_ordering[group_star_index:]
 
+			# Expand peer-*
 			try:
 				variant_ordering_no_star.remove("peer-*")
 				variant_ordering_peer = [f"peer-{x}" for x in variant_ordering_no_star if x != "peer-*"]
@@ -71,14 +138,16 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 
 			variant_ordering = variant_ordering[:peer_star_index] + variant_ordering_peer + variant_ordering[peer_star_index:]
 
-			# Default regex
+			### Define default regex(es) ###
+
 			re_class_regex = re.compile(class_regex)
 			re_string_start = re.compile(r"[a-zA-Z!-\[\]]")
 			re_template_class = re.compile(r"(\"[^\"]*?\")|('[^']*?')|(`[^`]*?`)")
 			re_tw_variant = re.compile(r":[a-zA-Z!-]")
 
-			# Special cases
-			special_cases = {
+			### Define special cases ###
+
+			special_cases: SpecialCases = {
 				"position_style": {
 					"classes": ["static", "absolute", "relative", "fixed", "sticky"],
 					"index": [],
@@ -99,9 +168,12 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 			]
 			special_cases["display_style"]["minimum"] = min(*special_cases["display_style"]["index"])
 
-			# Get regions and region lengths
+			### Get regions and region lengths ###
+
 			region_list = self.view.find_all(region_regex)
 			region_offset = 0
+
+			### Main function ###
 
 			for region_item in region_list:
 				region_size = region_item.size()
@@ -113,21 +185,21 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					else sublime.Region(region_item.begin() + region_offset, region_item.end() + region_offset)
 				)
 
-				region_string = self.view.substr(region)
-				class_list = re_class_regex.findall(region_string)
+				region_string: str = self.view.substr(region)
+				class_list: List[str] = re_class_regex.findall(region_string)
 
 				# Setup container for class groups
-				class_list_grouped = [*map(lambda x: [x, []], order_group_name_list)]
-				class_list_others = None
+				class_list_grouped: List[Tuple[str, List[Tuple[float, str]]]] = [*map(lambda x: (x, []), order_group_name_list)]
+				class_list_others: Union[List[str], None] = None
 				class_list_result = ""
 
 				# Group class_names together and get group order weight
 				for class_name in class_list:
 					class_name_group_order_sort = class_name
 
-					# find dynamic class_name (if/else) by templating engine
+					# find dynamic class_name (if/else | class binding | valueConverter) by templating engine
 					if re_string_start.match(class_name) is None:  # if string doesn't start with [a-zA-Z!-\[\]]
-						res = class_name.split(conditional_split_character)[1]
+						res = class_name.split(conditional_split_character)[0 if conditional_class_location == "before" else 1]
 						res = re_template_class.finditer(res)
 						res = [x.group() for x in res]
 						for item in res:
@@ -148,10 +220,13 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					# removes opacity modifier (eg: text-red-500/50)
 					group_name = self.cleanup(class_name_group_order_sort, [re.compile(r"/\d+$")], True)
 
+					# removes group / peer differentiator (eg: group/{name} | peer/{name})
+					group_name = self.cleanup(class_name_group_order_sort, [re.compile(r"/\w+$")], True)
+
 					# get group_name
 					group_name = group_name.split("-")[0]
 
-					matched_data = {
+					matched_data: MatchedData = {
 						"group_name_index": None,  # 1
 						"group_order_weight": None,  # 0.001
 						"breakpoint_order_weight": None,  # 1000 if (breakpoint_grouping == "breakpoint") else 0.00001
@@ -200,10 +275,10 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					# Sort variants
 					class_name_variant_sort = None
 
-					# find dynamic class_name (if/else) by templating engine
+					# find dynamic class_name (if/else | class binding | valueConverter) by templating engine
 					if re_string_start.match(class_name) is None:  # if string doesn't start with [a-zA-Z!-\[\]]
 						class_name_variant_sort = []
-						res = class_name.split(conditional_split_character)[1]
+						res = class_name.split(conditional_split_character)[0 if conditional_class_location == "before" else 1]
 						res = re_template_class.finditer(res)
 						res = [x.group() for x in res]
 						for index, item in enumerate(res):
@@ -214,17 +289,23 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 							class_name = class_name.split(":")
 							class_name = self.merge_dynamic_variant_parts(class_name)
 							class_name = self.sort_variants(class_name, variant_ordering)
-					else:  # If class_name is set dynamically (if/else) by templating engine
+					else:  # If class_name is set dynamically (if/else | class binding | valueConverter) by templating engine
 						for index, item in enumerate(class_name_variant_sort):
 							if item.count(":") > 1:
 								item = item.split(":")
 								item = self.merge_dynamic_variant_parts(item)
 								class_name_variant_sort[index] = self.sort_variants(item, variant_ordering)
 
-						# replace dynamic class_name (if/else) by templating engine with sorted version
+						# replace dynamic class_name (if/else | class binding | valueConverter) by templating engine with sorted version
 						class_name_find_replace = class_name.split(conditional_split_character)
-						class_name_find_replace_condition = f"{class_name_find_replace[0]}{conditional_split_character}"
-						class_name_find_replace = re_template_class.split(class_name_find_replace[1])
+						class_name_find_replace_with_conditional = (
+							f"{conditional_split_character}{class_name_find_replace[1]}"
+							if conditional_class_location == "before"
+							else f"{class_name_find_replace[0]}{conditional_split_character}"
+						)
+						class_name_find_replace = re_template_class.split(
+							class_name_find_replace[0 if conditional_class_location == "before" else 1],
+						)
 						class_name_find_replace = [x for x in class_name_find_replace if x is not None]
 						class_name_variant_sort_index = 0
 						for index, item in enumerate(class_name_find_replace):
@@ -236,7 +317,11 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 								)
 								class_name_variant_sort_index += 1
 
-						class_name = f"{class_name_find_replace_condition}{''.join(class_name_find_replace)}"
+						class_name = (
+							f"{''.join(class_name_find_replace)}{class_name_find_replace_with_conditional}"
+							if conditional_class_location == "before"
+							else f"{class_name_find_replace_with_conditional}{''.join(class_name_find_replace)}"
+						)
 
 					# Get breakpoint_order_weight
 					if class_name_variant_sort is None:  # If class_name is not set dynamically
@@ -244,23 +329,37 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 							matched_data["breakpoint_order_weight"] = 0
 						else:
 							class_name_variant_sort = class_name.split(":")
+							class_name_variant_sort = self.merge_dynamic_variant_parts(class_name_variant_sort)
 							for breakpoint_index, breakpoint_item in enumerate(breakpoint_order):
 								# found breakpoint
-								if f"{breakpoint_item}:" in class_name:
+								if f"{breakpoint_item}:" in class_name and f"-{breakpoint_item}:" not in class_name:
+									matched_data["breakpoint_order_weight"] = (breakpoint_index + 1) * breakpoint_multiplier
+									break
+
+								# found breakpoint
+								if breakpoint_item in {"min-*", "max-*"} and re.search(f"{breakpoint_item[:-1]}[^:]+", class_name) is not None:
 									matched_data["breakpoint_order_weight"] = (breakpoint_index + 1) * breakpoint_multiplier
 									break
 
 								# no breakpoint found
 								if breakpoint_index == (len(breakpoint_order) - 1):
 									matched_data["breakpoint_order_weight"] = 0
-					else:  # If class_name is set dynamically (if/else)
+					else:  # If class_name is set dynamically (if/else | class binding | valueConverter)
 						for index, item in enumerate(class_name_variant_sort):
 							if class_name_variant_sort[index].count(":") == 0:
 								matched_data["breakpoint_order_weight"] = 0
 							else:
 								for breakpoint_index, breakpoint_item in enumerate(breakpoint_order):
 									# found breakpoint
-									if f"{breakpoint_item}:" in class_name_variant_sort[index]:
+									if f"{breakpoint_item}:" in class_name_variant_sort[index] and f"-{breakpoint_item}:" not in class_name:
+										matched_data["breakpoint_order_weight"] = (breakpoint_index + 1) * breakpoint_multiplier
+										break
+
+									# found breakpoint
+									if (
+										breakpoint_item in {"min-*", "max-*"}
+										and re.search(f"{breakpoint_item[:-1]}[^:]+", class_name_variant_sort[index]) is not None
+									):
 										matched_data["breakpoint_order_weight"] = (breakpoint_index + 1) * breakpoint_multiplier
 										break
 
@@ -276,10 +375,12 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 						class_list_others = [class_name] if class_list_others is None else class_list_others + [class_name]
 					else:
 						class_list_grouped[matched_data["group_name_index"]][1].append(
-							[
-								matched_data["group_name_index"] + matched_data["group_order_weight"] + matched_data["breakpoint_order_weight"],
+							(
+								cast(int, matched_data["group_name_index"])
+								+ cast(float, matched_data["group_order_weight"])
+								+ cast(Union[int, float], matched_data["breakpoint_order_weight"]),
 								class_name,
-							],
+							),
 						)
 
 				# Trim empty groups and group_name
@@ -289,23 +390,25 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 				class_list_grouped_trimmed = [*chain(*class_list_grouped_trimmed)]
 				class_list_grouped_trimmed.sort(key=lambda x: x[0])
 
-				# Separate pseudo-elements ("before:" | "after:")
+				### Handle "before:" | "after:" pseudo-elements variants ###
+
+				# Separate "before:" | "after:" variant
 				class_list_before_element = [
-					*filter(lambda x: x[1].find("before:") != -1, class_list_grouped_trimmed),
+					*filter(lambda x: "before:" in x[1], class_list_grouped_trimmed),
 				]
 				class_list_after_element = [
-					*filter(lambda x: x[1].find("after:") != -1, class_list_grouped_trimmed),
+					*filter(lambda x: "after:" in x[1], class_list_grouped_trimmed),
 				]
 				class_list_grouped_trimmed = [
 					*filter(
-						lambda x: bool(x[1].find("before:") == -1 and x[1].find("after:") == -1),
+						lambda x: "before:" not in x[1] and "after:" not in x[1],
 						class_list_grouped_trimmed,
 					),
 				]
 
 				class_list_result = separator_string.join([*map(lambda x: x[1], class_list_grouped_trimmed)])
 
-				# Reapply pseudo-elements ("before:" | "after:")
+				# Reapply "before:" | "after:" variant
 				class_list_before_element_result = separator_string.join([*map(lambda x: x[1], class_list_before_element)])
 				class_list_after_element_result = separator_string.join([*map(lambda x: x[1], class_list_after_element)])
 				if placement == "front":
@@ -321,7 +424,8 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					if len(class_list_after_element_result) != 0:
 						class_list_result = f"{class_list_result}{separator_string}{class_list_after_element_result}"
 
-				# Reapply non-TailwindCSS classes
+				### Reapply non-TailwindCSS classes ###
+
 				if class_list_others is not None:
 					class_name = res = separator_string.join(class_list_others)
 					if len(class_list_result) == 0:
@@ -331,7 +435,8 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 					else:
 						class_list_result = f"{separator_string}{class_list_result}{separator_string}{class_name}".strip()
 
-				# Get region offset if replace string has different length
+				### Get region offset if replace string has different length ###
+
 				if len(class_list_result) != region_size:
 					region_offset = region_offset + len(class_list_result) - region_size
 
@@ -339,11 +444,16 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 		except:
 			print(exc_info())
 
-	def cleanup(self, class_name, remove_list, check_from_tail=False):
+	def cleanup(
+		self,
+		class_name: str,
+		remove_list: Union[List[str], List[Pattern[str]]],
+		check_from_tail: bool = False,
+	) -> str:
 		for item in remove_list:
 			if check_from_tail is False:
-				if class_name.startswith(item):
-					class_name = class_name[len(item) :]
+				if class_name.startswith(cast(str, item)):
+					class_name = class_name[len(cast(str, item)) :]
 			else:
 				match = re.search(item, class_name)
 				if match is not None:
@@ -351,7 +461,7 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 
 		return class_name
 
-	def merge_dynamic_variant_parts(self, class_name):
+	def merge_dynamic_variant_parts(self, class_name: List[str]) -> List[str]:
 		bracket_open = False
 		merged = []
 
@@ -364,59 +474,60 @@ class SortTailwindcssCommand(sublime_plugin.TextCommand):
 			else:
 				merged.append(part)
 
-				if ("-[" in part or part.startswith("[")) and not part.endswith("]"):
+				if ("-[" in part or part.startswith("[")) and part.rfind("]") == -1:
 					bracket_open = True
 
 		return merged
 
-	def sort_variants(self, class_name, order):
-		def sorting_variants(x):
-			try:
-				y = None
-				if x.startswith("group-") and x not in order:
-					y = f"{x[:6]}*"
-				elif x.startswith("peer-") and x not in order:
-					y = f"{x[:5]}*"
-				else:
-					y = x
-
-				return order.index(y)
-			except:
-				return 99999
-
+	def sort_variants(self, class_name: List[str], order: List[str]) -> str:
 		class_base = class_name[-1]
 		class_variants = class_name[:-1]
-		class_variants.sort(key=sorting_variants)
+		class_variants.sort(key=lambda variant: self.get_variant_order(variant, order))
 		class_variants.append(class_base)
 
 		return ":".join(class_variants)
 
+	def get_variant_order(self, variant: str, order: List[str]) -> int:
+		try:
+			if variant.startswith("group-aria-") and variant not in order:
+				variant_ordering_group = f"{variant[:11]}*"
+			elif variant.startswith("peer-aria-") and variant not in order:
+				variant_ordering_group = f"{variant[:10]}*"
+			elif variant.startswith("supports-") and variant not in order:
+				variant_ordering_group = f"{variant[:9]}*"
+			elif variant.startswith("group-") and variant not in order:
+				variant_ordering_group = f"{variant[:6]}*"
+			elif variant.startswith(("peer-", "aria-", "data-")) and variant not in order:
+				variant_ordering_group = f"{variant[:5]}*"
+			elif variant.startswith(("min-", "max-")) and variant not in order:
+				variant_ordering_group = f"{variant[:4]}*"
+			else:
+				variant_ordering_group = variant
 
-class GetGroupIndexListTailwindcssCommand(sublime_plugin.TextCommand):
-	def run(self, edit):
+			return order.index(variant_ordering_group)
+		except:
+			return 99999
+
+
+class GetDefaultGroupIndexListTailwindcssCommand(sublime_plugin.TextCommand):
+	def run(self, edit) -> None:
 		try:
 			# Get order_type and apply "edit_order"
 			_, order_group_name_list = PluginUtils.get_order(self.view, True)
-
-			advice = """============================================================================================================
-| Actions are implemented sequentially. Indexes may change after an action has been added to 'edit_order'. |
-|  It may affect subsequent actions. It is recommended to re-run this command after adding every action.   |
-============================================================================================================"""
-
-			print(order_group_name_list, advice, sep="\n\n")
+			print(order_group_name_list, sep="\n\n")
 		except:
 			print(exc_info())
 
 
 class TailwindcssClassSorterEventListeners(sublime_plugin.EventListener):
 	@staticmethod
-	def should_run_command(view):
+	def should_run_command(view) -> bool:
 		if not PluginUtils.get_pref(["format_on_save"], view):
 			return False
 
 		# Flat settings in .sublime-project
 		pattern = re.compile(r"tailwindcss-Class-Sorter\.extensions_regex\.")
-		file_extensions = [*view.settings().to_dict()]
+		file_extensions: List[str] = [*view.settings().to_dict()]
 		file_extensions = [*filter(lambda elem: pattern.match(elem), file_extensions)]
 		if len(file_extensions) > 0:
 			file_extensions = [
@@ -425,7 +536,7 @@ class TailwindcssClassSorterEventListeners(sublime_plugin.EventListener):
 			file_extensions = [*set(file_extensions)]
 		# Nested settings in .sublime-project | Default settings
 		else:
-			file_extensions = PluginUtils.get_pref(["extensions_regex"], view).keys()
+			file_extensions = [*PluginUtils.get_pref(["extensions_regex"], view)]
 
 		file_extension = path.splitext(view.file_name())[1][1:]
 
@@ -433,18 +544,18 @@ class TailwindcssClassSorterEventListeners(sublime_plugin.EventListener):
 		if not file_extension:
 			file_extension = path.basename(view.file_name())
 
-		# Skip if file_extension is not listed
+		# Skip if extension is not listed
 		return not file_extensions or file_extension in file_extensions
 
 	@staticmethod
-	def on_pre_save(view):
+	def on_pre_save(view) -> None:
 		if TailwindcssClassSorterEventListeners.should_run_command(view):
 			view.run_command("sort_tailwindcss")
 
 
 class PluginUtils:
 	@staticmethod
-	def get_pref(key_list, view=None):
+	def get_pref(key_list: List[str], view=None) -> Union[str, List[str], Dict[str, Any]]:
 		if view is not None:
 			settings = view.settings()
 
@@ -481,53 +592,72 @@ class PluginUtils:
 		return value
 
 	@staticmethod
-	def get_order(view, to_enumerate=False):
-		order_type = PluginUtils.get_pref(["order_type"], view)
-		order_json = loads(sublime.load_resource(sublime.find_resources("order_list.json")[0]))
-		order_list = order_json[order_type]
-		edit_order_list = PluginUtils.get_pref(["edit_order"], view)
-
-		# "action":
-		# 	| {
-		# 	| 	type: "overwrite",
-		# 	| 	group_index: Index of existing group,
-		# 	| }
-		# 	| {
-		# 	| 	type: "amend",
-		# 	| 	position: "start" | "end",
-		# 	| 	group_index: Index of existing group,
-		# 	| }
-		# 	| {
-		# 	| 	type: "append",
-		# 	| 	position: "before" | "after",
-		# 	| 	group_index: Index of existing group,
-		# 	| 	group_name: New group_name (see example above for group_name),
-		# 	| }
-		# "regex_list": Regex to find and order each class within the group
-
-		for item in edit_order_list:
-			if item["action"]["type"] == "overwrite":
-				order_list[item["action"]["group_index"]][1] = item["regex_list"]
-			elif item["action"]["type"] == "amend":
-				order_list[item["action"]["group_index"]][1] = (
-					item["regex_list"] + order_list[item["action"]["group_index"]][1]
-					if item["action"]["position"] == "start"
-					else order_list[item["action"]["group_index"]][1] + item["regex_list"]
-				)
-			else:
-				append_index = (
-					item["action"]["group_index"] - 1 if item["action"]["position"] == "before" else item["action"]["group_index"] + 1
-				)
-				order_list = (
-					[[item["action"]["group_name"], item["regex_list"]]] + order_list
-					if append_index < 0
-					else order_list[0:append_index] + [[item["action"]["group_name"], item["regex_list"]]] + order_list[append_index:]
-				)
-
-		order_group_name_list = (
-			[*map(lambda x: x[0], order_list)]
-			if to_enumerate is False
-			else [*map(lambda x: [x[0], x[1][0]], enumerate(order_list))]
+	def get_order(view, to_enumerate=False) -> Union[Tuple[OrderList, List[Tuple[int, str]]], Tuple[OrderList, List[str]]]:
+		order_type: OrderType = cast(OrderType, PluginUtils.get_pref(["order_type"], view))
+		order_json: Dict[OrderType, OrderList] = loads(
+			sublime.load_resource(sublime.find_resources("order_list.json")[0]),
 		)
+		order_list: OrderList = order_json[order_type]
+		edit_order: EditOrder = cast(EditOrder, PluginUtils.get_pref(["edit_order"], view))
 
-		return [order_list, order_group_name_list]
+		# Print order_list for reference if to_enumerate is True
+		if to_enumerate is True:
+			order_indexed_group_name_list: List[Tuple[int, str]] = [*map(lambda x: (x[0], x[1][0]), enumerate(order_list))]
+			return (order_list, order_indexed_group_name_list)
+
+		edit_order_overwrite = edit_order.setdefault("overwrite", [])
+		edit_order_amend = edit_order.setdefault("amend", [])
+		edit_order_append = edit_order.setdefault("append", [])
+
+		# "overwrite": [
+		# 	{
+		# 		"group_index": 1,
+		# 		"regex_list": [],
+		# 	},
+		# ],
+
+		for item in edit_order_overwrite:
+			order_list[item["group_index"]] = (order_list[item["group_index"]][0], item["regex_list"])
+
+		# "amend": [
+		# 	{
+		# 		"group_index": 1,
+		# 		"position": "start | end",
+		# 		"regex_list": [],
+		# 	},
+		# ],
+
+		for item in edit_order_amend:
+			order_list[item["group_index"]] = (
+				(order_list[item["group_index"]][0], item["regex_list"] + order_list[item["group_index"]][1])
+				if item["position"] == "start"
+				else (order_list[item["group_index"]][0], order_list[item["group_index"]][1] + item["regex_list"])
+			)
+
+		# "append": [
+		# 	{
+		# 		"group_index": 1,
+		# 		"group_name": "name",
+		# 		"position": "before | after",
+		# 		"append_order": 1,
+		# 		"regex_list": [],
+		# 	},
+		# ],
+
+		# Sort higher "append_order" first
+		edit_order_append.sort(reverse=True, key=lambda item: item["append_order"])
+		# Sort "after" then "before"
+		edit_order_append.sort(reverse=False, key=lambda item: ord(item["position"][0:1]))
+		# Sort higher "group_index" first
+		edit_order_append.sort(reverse=True, key=lambda item: item["group_index"])
+
+		for item in edit_order_append:
+			append_index = item["group_index"] - 1 if item["position"] == "before" else item["group_index"] + 1
+			order_list = (
+				[(item["group_name"], item["regex_list"])] + order_list
+				if append_index < 0
+				else order_list[0:append_index] + [(item["group_name"], item["regex_list"])] + order_list[append_index:]
+			)
+
+		order_group_name_list: List[str] = [*map(lambda x: cast(str, x[0]), order_list)]
+		return (order_list, order_group_name_list)

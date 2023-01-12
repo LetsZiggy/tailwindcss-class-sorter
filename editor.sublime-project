@@ -42,8 +42,16 @@
 				"html": {
 					"region": "(?<=\\sclass=\\\")((?!\\\").)+(?=\\\")|(?<=\\sclass=')((?!').)+(?=')|(?<=@apply\\s)((?!;).)+(?=;)",
 					"class": "\\$\\{\\s?[^\\}]+\\s?\\}|[^\\s]+",
-					"conditional_split_character": "?", // ${ condition === comparator ? 'className1' : 'className2' }
+					// "conditional_split_character": "?", // ${ condition === comparator ? 'className1' : 'className2' }
+					// "conditional_class_location": "after",
+					"conditional_split_character": "|", // ${ 'className' | valueConverter:param1 }
+					"conditional_class_location": "before",
 				},
+			},
+			"edit_order": {
+				"overwrite": [],
+				"amend": [],
+				"append": [],
 			},
 		},
 

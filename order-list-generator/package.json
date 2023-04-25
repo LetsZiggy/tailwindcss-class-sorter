@@ -16,27 +16,22 @@
 		"node": ">=10.12.0"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.20.12",
-		"@babel/eslint-parser": "^7.18.9",
-		"@babel/preset-env": "^7.18.10",
-		"autoprefixer": "^10.4.8",
-		"eslint": "^8.32.0",
-		"eslint-config-standard": "^17.0.0",
+		"@babel/core": "^7.22.9",
+		"@babel/eslint-parser": "^7.22.9",
+		"@babel/preset-env": "^7.22.9",
+		"autoprefixer": "^10.4.14",
+		"eslint": "^8.45.0",
+		"eslint-config-standard": "^17.1.0",
 		"eslint-plugin-import": "^2.27.5",
-		"eslint-plugin-n": "^15.6.1",
+		"eslint-plugin-n": "^16.0.1",
 		"eslint-plugin-promise": "^6.0.1",
-		"eslint-plugin-unicorn": "^45.0.2",
-		"postcss": "^8.4.21",
-		"stylelint": "^14.16.1",
+		"eslint-plugin-unicorn": "^48.0.0",
+		"postcss": "^8.4.27",
+		"stylelint": "^15.10.2",
 		"stylelint-config-concentric-order": "^5.1.0",
-		"stylelint-config-property-sort-order-smacss": "^9.0.0",
-		"stylelint-config-recess-order": "^3.1.0",
-		"stylelint-order": "^6.0.1",
-		"tailwindcss": "3.2.4"
-	},
-	"peerDependencies": {
-		"eslint-plugin-import": "^2.27.5",
-		"eslint-plugin-n": "^15.6.1",
-		"eslint-plugin-promise": "^6.0.1"
+		"stylelint-config-property-sort-order-smacss": "^9.1.0",
+		"stylelint-config-recess-order": "^4.3.0",
+		"stylelint-order": "^6.0.3",
+		"tailwindcss": "3.3.3"
 	}
 }

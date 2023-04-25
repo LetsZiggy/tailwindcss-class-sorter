@@ -5,7 +5,7 @@
  * 	3. pnpm run generate-order-lists
  */
 
-const stub = require("tailwindcss/stubs/defaultConfig.stub")
+const stub = require("tailwindcss/stubs/config.full")
 
 module.exports = {
 	content: [ "content.html" ],
@@ -13,6 +13,5 @@ module.exports = {
 	presets: [],
 	darkMode: "media", // "class"
 	theme: { ...stub.theme },
-	variantOrder: [ ...stub.variantOrder ],
 	plugins: [],
 }

@@ -1,0 +1,172 @@
+# ------------------------------ #
+# ---------- General ----------- #
+# ------------------------------ #
+
+# OS
+# Ref: https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/Windows.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/Linux.gitignore
+.DS_Store
+Thumbs.db
+*.sh
+*.bat
+
+# Editors
+# Ref: https://github.com/github/gitignore/blob/main/Global
+# Ref: https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/SublimeText.gitignore
+.history
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# ------------------------------ #
+# ------------- Go ------------- #
+# ------------------------------ #
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# env file
+.env
+
+# ------------------------------ #
+# --------- JavaScript --------- #
+# ------------------------------ #
+
+# Logs
+_nodejs_/logs/
+_nodejs_/*.log
+_nodejs_/npm-debug.log*
+_nodejs_/yarn-debug.log*
+_nodejs_/yarn-error.log*
+_nodejs_/lerna-debug.log*
+_nodejs_/.pnpm-debug.log*
+
+# Bower dependency directory (https://bower.io/)
+_nodejs_/bower_components/
+
+# Dependency directories
+_nodejs_/jspm_packages/
+_nodejs_/node_modules/
+
+# TypeScript cache
+_nodejs_/*.tsbuildinfo
+
+# Optional npm cache directory
+_nodejs_/.npm/
+
+# Optional eslint cache
+_nodejs_/.eslintcache/
+
+# Optional stylelint cache
+_nodejs_/.stylelintcache/
+
+# dotenv environment variable files
+_nodejs_/.env
+_nodejs_/.env.development.local
+_nodejs_/.env.test.local
+_nodejs_/.env.production.local
+_nodejs_/.env.local
+
+# parcel-bundler cache (https://parceljs.org/)
+_nodejs_/.cache/
+_nodejs_/.parcel-cache/
+
+# ------------------------------ #
+# ----------- Python ----------- #
+# ------------------------------ #
+
+# Byte-compiled / optimized / DLL files
+_python_/__pycache__/
+_python_/*.py[cod]
+_python_/*$py.class
+
+# C extensions
+_python_/*.so
+
+# Distribution / Packaging
+_python_/.Python
+_python_/build/
+_python_/develop-eggs/
+_python_/dist/
+_python_/downloads/
+_python_/eggs/
+_python_/.eggs/
+_python_/lib/
+_python_/lib64/
+_python_/parts/
+_python_/sdist/
+_python_/var/
+_python_/wheels/
+_python_/share/python-wheels/
+_python_/*.egg-info/
+_python_/.installed.cfg
+_python_/*.egg
+_python_/MANIFEST
+
+# Unit test / coverage reports
+_python_/htmlcov/
+_python_/.tox/
+_python_/.nox/
+_python_/.coverage
+_python_/.coverage.*
+_python_/.cache
+_python_/nosetests.xml
+_python_/coverage.xml
+_python_/*.cover
+_python_/*.py,cover
+_python_/.hypothesis/
+_python_/.pytest_cache/
+_python_/cover/
+
+# Django
+_python_/*.log
+_python_/local_settings.py
+_python_/db.sqlite3
+_python_/db.sqlite3-journal
+
+# Environments
+_python_/.env/
+_python_/env/
+_python_/.venv/
+_python_/venv/
+_python_/.env.bak/
+_python_/env.bak/
+_python_/.venv.bak/
+_python_/venv.bak/
+_python_/ENV/
+
+# Ruff
+_python_/.ruff_cache/
+
+# ------------------------------ #
+# ------------ *** ------------- #
+# ------------------------------ #
+
+# project
+_nodejs_/dist/
+_nodejs_/style.css
+_nodejs_/style-raw.css

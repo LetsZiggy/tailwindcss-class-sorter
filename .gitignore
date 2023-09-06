@@ -1,0 +1,56 @@
+# ------------------------------ #
+# -----------General------------ #
+# ------------------------------ #
+
+# OS
+# Ref: https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/Windows.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/Linux.gitignore
+.DS_Store
+Thumbs.db
+*.sh
+*.bat
+
+# Editors
+# Ref: https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+# Ref: https://github.com/github/gitignore/blob/main/Global/SublimeText.gitignore
+.history
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+# ------------------------------ #
+# ---------JavaScript----------- #
+# ------------------------------ #
+
+# Dependencies
+node_modules
+.pnpm-debug.log
+
+# Compiled
+_nodejs-order-list-generator/dist
+

@@ -1,0 +1,74 @@
+$schema: 'https://raw.githubusercontent.com/evilmartians/lefthook/master/schema.json'
+
+commit-msg:
+  commands:
+    go-gitlint:
+      run: >
+        go-gitlint
+        --path="$(git rev-parse --show-toplevel)"
+        --msg-file="$(git rev-parse --show-toplevel)/{1}"
+        --since=$(date +"%Y-%m-%d")
+        --max-parents=1
+        --subject-regex="(?:^Initial commit$)|(?:^(?:fixup! )?(?:(?:feat)|(?:fix)|(?:docs)|(?:style)|(?:refactor)|(?:perf)|(?:test)|(?:build)|(?:ci)|(?:chore)|(?:revert))(?:\([^()\r\n]+\))?: (?:(?:LICENSE)|(?:README)|(?:[^\r\n ][^\r\n]+[^. ]))$)"
+
+pre-commit:
+  # parallel: true
+  commands:
+    gofumpt:
+      glob: '{.[!.],}*.go'
+      run: |
+        echo -e "staged_files >>> {staged_files}\n";
+        gofumpt -l -w {staged_files};
+      stage_fixed: true
+    ruff:
+      glob: '{.[!.],}*.py'
+      run: |
+        echo -e "staged_files >>> {staged_files}\n";
+        uv --project webscrape-tailwindcss run ruff format {staged_files};
+        uv --project webscrape-tailwindcss run ruff check --fix {staged_files};
+      stage_fixed: true
+    eslint:
+      glob: '{.[!.],}*.{js,ts}'
+      run: |
+        CURRENT_FOLDER=$(pwd);
+        GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+        STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,^([.A-Za-z0-9_-]),$GIT_ROOT_PATH/\1,g" -e "s,([.A-Za-z0-9_-]+) ([.A-Za-z0-9_-]),\1 $GIT_ROOT_PATH/\2,g");
+        echo -e "staged_files >>> {staged_files} >>> "$STAGED_FILES_ABS_PATH"\n";
+        cd $GIT_ROOT_PATH/generator-order-list;
+        pnpm run fix:eslint $STAGED_FILES_ABS_PATH;
+        cd $CURRENT_FOLDER;
+      stage_fixed: true
+    # stylelint:
+    #   glob: '{.[!.],}*.css'
+    #   run: |
+    #     CURRENT_FOLDER=$(pwd);
+    #     GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+    #     STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,^([.A-Za-z0-9_-]),$GIT_ROOT_PATH/\1,g" -e "s,([.A-Za-z0-9_-]+) ([.A-Za-z0-9_-]),\1 $GIT_ROOT_PATH/\2,g");
+    #     echo -e "staged_files >>> {staged_files} >>> "$STAGED_FILES_ABS_PATH"\n";
+    #     cd $GIT_ROOT_PATH/generator-order-list;
+    #     pnpm run fix:stylelint $STAGED_FILES_ABS_PATH;
+    #     cd $CURRENT_FOLDER;
+    #   stage_fixed: true
+    prettier-json:
+      glob: '{.[!.],}*.json'
+      run: |
+        CURRENT_FOLDER=$(pwd);
+        GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+        STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,^([.A-Za-z0-9_-]),$GIT_ROOT_PATH/\1,g" -e "s,([.A-Za-z0-9_-]+) ([.A-Za-z0-9_-]),\1 $GIT_ROOT_PATH/\2,g");
+        echo -e "staged_files >>> {staged_files} >>> "$STAGED_FILES_ABS_PATH"\n";
+        cd $GIT_ROOT_PATH/generator-order-list;
+        pnpm run fix:prettier $STAGED_FILES_ABS_PATH;
+        sed -E -i -z -e 's/\n+$//' $STAGED_FILES_ABS_PATH;
+        cd $CURRENT_FOLDER;
+      stage_fixed: true
+    # prettier-html:
+    #   glob: '{.[!.],}*.html'
+    #   run: |
+    #     CURRENT_FOLDER=$(pwd);
+    #     GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+    #     STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,^([.A-Za-z0-9_-]),$GIT_ROOT_PATH/\1,g" -e "s,([.A-Za-z0-9_-]+) ([.A-Za-z0-9_-]),\1 $GIT_ROOT_PATH/\2,g");
+    #     echo -e "staged_files >>> {staged_files} >>> "$STAGED_FILES_ABS_PATH"\n";
+    #     cd $GIT_ROOT_PATH/generator-order-list;
+    #     pnpm run fix:prettier $STAGED_FILES_ABS_PATH;
+    #     cd $CURRENT_FOLDER;
+    #   stage_fixed: true

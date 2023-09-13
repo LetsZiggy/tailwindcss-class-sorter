@@ -1,0 +1,26 @@
+#$schema: 'https://taskfile.dev/schema.json'
+
+version: '3'
+
+silent: true
+
+vars:
+  CONFIG_BASE64: ''
+  STDIN_BASE64: ''
+  REGIONS_BASE64: ''
+
+tasks:
+  upgrade-go-version:
+    desc: task upgrade-go-version
+    cmds:
+      - |
+        go mod edit -go=$(sed -E -e 's/.*go([0-9]+\.[0-9]+\.[0-9]+).*/\1/' <<< $(go version))
+        echo "go.mod" && cat {{.TASKFILE_DIR}}/go.mod | sed -n '3p' | sed -E -e 's/go ([0-9]+\.[0-9]+\.[0-9]+)/v\1/'
+
+  tag:
+    desc: task tag -- [VERSION]
+    cmds:
+      - |
+        git add .
+        git commit -m "feat: tailwindcss $(sed -E -e 's/\.[0-9]+$/\.\*/' <<< {{.CLI_ARGS}}) test"
+        git tag -a "v{{.CLI_ARGS}}" -m "tailwindcss v$(sed -E -e 's/\.[0-9]+$/\.\*/' <<< {{.CLI_ARGS}}) support"

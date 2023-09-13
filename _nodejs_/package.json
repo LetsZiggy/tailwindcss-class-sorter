@@ -1,0 +1,66 @@
+{
+	"name": "tailwindcss-node",
+	"version": "0.0.0",
+	"description": "tailwindcss-node",
+	"contributors": [
+		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
+	],
+	"type": "module",
+	"scripts": {
+		"fix:eslint": "./node_modules/.bin/eslint --config ./eslint.config.js --max-warnings 0 --no-warn-ignored --fix .",
+		"fix:prettier": "./node_modules/.bin/prettier --config ./prettier.config.js --write .",
+		"fix:stylelint": "./node_modules/.bin/stylelint --max-warnings 0 --fix .",
+		"preinstall": "npx only-allow pnpm",
+		"lint:commit": "./node_modules/.bin/commitlint --edit $1"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		],
+		"rules": {
+			"scope-case": [
+				2,
+				"always",
+				"lower-case"
+			]
+		}
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog",
+			"maxHeaderWidth": 100
+		}
+	},
+	"browserslist": [
+		"defaults"
+	],
+	"devDependencies": {
+		"@commitlint/cli": "^19.8.0",
+		"@commitlint/config-conventional": "^19.8.0",
+		"@eslint/js": "^9.22.0",
+		"@stylistic/eslint-plugin": "^4.2.0",
+		"@stylistic/eslint-plugin-migrate": "^4.2.0",
+		"commitizen": "^4.3.1",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^9.22.0",
+		"eslint-import-resolver-typescript": "^3.8.5",
+		"eslint-plugin-import": "^2.31.0",
+		"eslint-plugin-n": "^17.16.2",
+		"eslint-plugin-promise": "^7.2.1",
+		"eslint-plugin-sort-class-members": "^1.21.0",
+		"eslint-plugin-sort-destructure-keys": "^2.0.0",
+		"eslint-plugin-unicorn": "^57.0.0",
+		"prettier": "^3.5.3",
+		"prettier-plugin-organize-attributes": "^1.0.0",
+		"prettier-plugin-packagejson": "^2.5.10",
+		"stylelint": "^16.15.0",
+		"stylelint-config-concentric-order": "^5.2.1",
+		"stylelint-config-property-sort-order-smacss": "^10.0.0",
+		"stylelint-config-recess-order": "^6.0.0",
+		"stylelint-order": "^6.0.4",
+		"typescript-eslint": "^8.26.1"
+	},
+	"engines": {
+		"node": ">=22.13.1"
+	}
+}

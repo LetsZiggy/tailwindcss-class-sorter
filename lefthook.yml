@@ -1,0 +1,36 @@
+# prepare-commit-msg:
+#   commands:
+#     commitizen:
+#       interactive: true
+#       run: exec < /dev/tty && pnpm --dir _nodejs_ run cz --hook || true
+#       env:
+#         LEFTHOOK: 0
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm -dir _nodejs_ run lint:commit
+
+pre-commit:
+  # parallel: true
+  commands:
+    gofumpt:
+      glob: '{.[!.],}*.go'
+      run: gofumpt -l -w {staged_files}
+      stage_fixed: true
+    # eslint:
+    #   glob: "{.[!.],}*.{js,ts}"
+    #   run: pnpm --dir _nodejs_ run fix:eslint
+    #   stage_fixed: true
+    # stylelint:
+    #   glob: "{.[!.],}*.css"
+    #   run: pnpm --dir _nodejs_ run fix:stylelint
+    #   stage_fixed: true
+    prettier-json:
+      glob: '{.[!.],}*.json'
+      run: pnpm --dir _nodejs_ run fix:prettier
+      stage_fixed: true
+    # prettier-html:
+    #   glob: "{.[!.],}*.html"
+    #   run: pnpm --dir _nodejs_ run fix:prettier
+    #   stage_fixed: true

@@ -1,0 +1,381 @@
+version: '3'
+
+silent: true
+
+vars:
+  CONFIG_BASE64: ''
+  STDIN_BASE64: ''
+  REGIONS_BASE64: ''
+
+tasks:
+  upgrade-go-version:
+    desc: task upgrade-go-version
+    cmds:
+      # - go version | sed -e 's/.*go\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/g' | ( read version; go mod edit -go=${version}; )
+      # - echo "go.mod" && cat go.mod | sed -n '3p' | sed -e 's/go \([0-9]\+\.[0-9]\+\.[0-9]\+\)/v\1/g'
+      - go mod edit -go=$(sed 's/.*go\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/g' <<< $(go version))
+      - echo "go.mod" && cat ./go.mod | sed -n '3p' | sed -e 's/go \([0-9]\+\.[0-9]\+\.[0-9]\+\)/v\1/g'
+
+  tag:
+    desc: task tag -- [VERSION]
+    cmds:
+      # - echo "${1}" | ( read version; echo "${version}" | sed 's/\.[0-9]\+$/\.\*/g' | ( read edited; git tag -a "v${version}" -m "tailwindcss v${edited} support"; ); )
+      - git tag -a "v{{.CLI_ARGS}}" -m "tailwindcss v$(sed "s/\.[0-9]\+$/\.\*/g" <<< {{.CLI_ARGS}}) support"
+
+  build:
+    desc: task build -- [VERSION]
+    cmds:
+      - task: clean
+      - task: minify-dist/config.json-dist/config.min.json
+      - task: minify-dist/order_list.json-dist/order_list.min.json
+      - task: build:darwin-arm64
+      - task: build:darwin-amd64
+      - task: build:linux-arm64
+      - task: build:linux-386
+      - task: build:linux-amd64
+      - task: build:windows-arm64
+      - task: build:windows-386
+      - task: build:windows-amd64
+      - task: build:js-wasm
+
+  build:darwin-arm64:
+    desc: task build:darwin-arm64 -- [VERSION]
+    cmds:
+      - GOOS=darwin  GOARCH=arm64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-arm-64/twcs
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-arm-64/twcs
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-arm-64/twcs.gz
+
+  build:darwin-amd64:
+    desc: task build:darwin-amd64 -- [VERSION]
+    cmds:
+      - GOOS=darwin  GOARCH=amd64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-x86-64/twcs
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-x86-64/twcs
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-x86-64/twcs.gz
+
+  build:linux-arm64:
+    desc: task build:linux-arm64 -- [VERSION]
+    cmds:
+      - GOOS=linux   GOARCH=arm64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-arm-64/twcs
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-arm-64/twcs
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-arm-64/twcs.gz
+
+  build:linux-386:
+    desc: task build:linux-386 -- [VERSION]
+    cmds:
+      - GOOS=linux   GOARCH=386   go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-32/twcs
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-32/twcs
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-32/twcs.gz
+
+  build:linux-amd64:
+    desc: task build:linux-amd64 -- [VERSION]
+    cmds:
+      - GOOS=linux   GOARCH=amd64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-64/twcs
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-64/twcs
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-64/twcs.gz
+
+  build:windows-arm64:
+    desc: task build:windows-arm64 -- [VERSION]
+    cmds:
+      - GOOS=windows GOARCH=arm64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-arm-64/twcs.exe
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-arm-64/twcs.exe
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-arm-64/twcs.exe.gz
+
+  build:windows-386:
+    desc: task build:windows-386 -- [VERSION]
+    cmds:
+      - GOOS=windows GOARCH=386   go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-32/twcs.exe
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-32/twcs.exe
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-32/twcs.exe.gz
+
+  build:windows-amd64:
+    desc: task build:windows-amd64 -- [VERSION]
+    cmds:
+      - GOOS=windows GOARCH=amd64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-64/twcs.exe
+      - gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-64/twcs.exe
+      - chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-64/twcs.exe.gz
+
+  build:js-wasm:
+    desc: task build:js-wasm -- [VERSION]
+    cmds:
+      - 'sed -i "s/\"version\": \"[0-9]\+.[0-9]\+.[0-9]\"/\"version\": \"{{.CLI_ARGS}}\"/g" package.json'
+      - GOOS=js GOARCH=wasm go build -o {{.TASKFILE_DIR}}/dist/twcs.wasm
+      - chmod 755                       {{.TASKFILE_DIR}}/dist/twcs.wasm
+
+  clean:
+    desc: task clean
+    cmds:
+      # - git rev-parse --show-toplevel | ( read rootpath; rm -rf $rootpath/dist/*/; rm -rf $rootpath/dist/*.wasm; )
+      - rm -rf {{.TASKFILE_DIR}}/dist/*/
+      - rm -rf {{.TASKFILE_DIR}}/dist/*.wasm
+
+  minify-*-*:
+    desc: task minify-[INPUT_FILE]-[OUTPUT_FILE]
+    vars:
+      SOURCE: '{{.ROOT_DIR}}/{{index .MATCH 0}}'
+      DESTINATION: '{{.ROOT_DIR}}/{{index .MATCH 1}}'
+    cmds:
+      - cat {{.SOURCE}} | jq -r tostring > {{.DESTINATION}}
+
+  test:
+    desc: task test
+    cmds:
+      - task: test:embedded-config-go
+      # - task: test:embedded-config-js
+      # - task: test:embedded-config-pnpm
+      - task: test:list-command-go
+      # - task: test:list-command-js
+      # - task: test:list-command-pnpm
+      - task: test:file-input-go
+      # - task: test:file-input-js
+      # - task: test:file-input-pnpm
+      - task: test:stdin-input-go
+      # - task: test:stdin-input-js
+      # - task: test:stdin-input-pnpm
+      - task: test:regions-input-go
+      # - task: test:regions-input-js
+      # - task: test:regions-input-pnpm
+
+  test:embedded-config-go:
+    desc: task test:embedded-config-go
+    cmds:
+      - |
+        OUT=$(go run . list --embedded-config --config tests/config-embedded.test.json --base64-output --edited-order)
+
+        if [ "$OUT" = {{.CONFIG_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:embedded-config-js:
+    desc: task test:embedded-config-js
+    cmds:
+      - |
+        OUT=$(dist/wasm_exec_node.js list --embedded-config --config tests/config-embedded.test.json --base64-output --edited-order)
+
+        if [ "$OUT" = {{.CONFIG_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:embedded-config-pnpm:
+    desc: task test:embedded-config-pnpm
+    cmds:
+      - |
+        cd {{.TASKFILE_DIR}}/tests
+        OUT=$(pnpm --silent run twcs list --embedded-config --config config-embedded.test.json --base64-output --edited-order)
+        cd {{.TASKFILE_DIR}}
+
+        if [ "$OUT" = {{.CONFIG_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:list-command-go:
+    desc: task test:list-command-go
+    cmds:
+      - |
+        OUT=$(go run . list --config tests/config.test.json --base64-output --edited-order)
+
+        if [ "$OUT" = {{.CONFIG_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:list-command-js:
+    desc: task test:list-command-js
+    cmds:
+      - |
+        OUT=$(dist/wasm_exec_node.js list --config tests/config.test.json --base64-output --edited-order)
+
+        if [ "$OUT" = {{.CONFIG_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:list-command-pnpm:
+    desc: task test:list-command-pnpm
+    cmds:
+      - |
+        cd {{.TASKFILE_DIR}}/tests
+        OUT=$(pnpm --silent run twcs list --embedded-config --config config-embedded.test.json --base64-output --edited-order)
+        cd {{.TASKFILE_DIR}}
+
+        if [ "$OUT" = {{.CONFIG_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:file-input-go:
+    desc: task test:file-input-go
+    cmds:
+      - |
+        HTML=('tests/a/a.html' 'tests/b/b.html' 'tests/c/c.html')
+        OUT=''
+
+        go run . format tests/{a,b,c}/*.html
+
+        for (( i=0; i < "${#HTML[@]}"; i++ )); do
+          if cmp -s "${HTML[$i]}" tests/test-html.after.txt; then
+           [ -z "$OUT" ] \
+           && OUT="${HTML[$i]} \u2714" \
+           || OUT="$OUT ${HTML[$i]} \u2714"
+          else
+            [ -z "$OUT" ] \
+            && OUT="${HTML[$i]} \u2716" \
+            || OUT="$OUT ${HTML[$i]} \u2716"
+          fi
+
+          yes | cp -rf tests/test-html.before.txt "${HTML[$i]}"
+        done
+
+        echo -e "{{.TASK}} - $OUT"
+
+  test:file-input-js:
+    desc: task test:file-input-js
+    cmds:
+      - |
+        HTML=('tests/a/a.html' 'tests/b/b.html' 'tests/c/c.html')
+        OUT=''
+
+        dist/wasm_exec_node.js format tests/{a,b,c}/*.html
+
+        for (( i=0; i < "${#HTML[@]}"; i++ )); do
+          if cmp -s "${HTML[$i]}" tests/test-html.after.txt; then
+           [ -z "$OUT" ] \
+           && OUT="${HTML[$i]} \u2714" \
+           || OUT="$OUT ${HTML[$i]} \u2714"
+          else
+            [ -z "$OUT" ] \
+            && OUT="${HTML[$i]} \u2716" \
+            || OUT="$OUT ${HTML[$i]} \u2716"
+          fi
+
+          yes | cp -rf tests/test-html.before.txt "${HTML[$i]}"
+        done
+
+        echo -e "{{.TASK}} - $OUT"
+
+  test:file-input-pnpm:
+    desc: task test:file-input-pnpm
+    cmds:
+      - |
+        HTML=('tests/a/a.html' 'tests/b/b.html' 'tests/c/c.html')
+        OUT=''
+
+        cd {{.TASKFILE_DIR}}/tests
+        pnpm --silent run twcs format {a,b,c}/*.html
+        cd {{.TASKFILE_DIR}}
+
+        for (( i=0; i < "${#HTML[@]}"; i++ )); do
+          if cmp -s "${HTML[$i]}" tests/test-html.after.txt; then
+           [ -z "$OUT" ] \
+           && OUT="${HTML[$i]} \u2714" \
+           || OUT="$OUT ${HTML[$i]} \u2714"
+          else
+            [ -z "$OUT" ] \
+            && OUT="${HTML[$i]} \u2716" \
+            || OUT="$OUT ${HTML[$i]} \u2716"
+          fi
+
+          yes | cp -rf tests/test-html.before.txt "${HTML[$i]}"
+        done
+
+        echo -e "{{.TASK}} - $OUT"
+
+  test:stdin-input-go:
+    desc: task test:stdin-input-go
+    cmds:
+      - |
+        IN=$(base64 -w 0 tests/test-html.before.txt)
+        OUT=$(go run . format --code-ext html --code $IN)
+
+        if [ "$OUT" = {{.STDIN_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:stdin-input-js:
+    desc: Expects error; See summary
+    summary: |
+      Error: total length of command line and environment variables exceeds limit
+    cmds:
+      - |
+        IN=$(base64 -w 0 tests/test-html.before.txt)
+        OUT=$(dist/wasm_exec_node.js format --code-ext html --code $IN)
+
+        if [ "$OUT" = {{.STDIN_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:stdin-input-pnpm:
+    desc: Expects error; See summary
+    summary: |
+      Error: total length of command line and environment variables exceeds limit
+    cmds:
+      - |
+        IN=$(base64 -w 0 tests/test-html.before.txt)
+
+        cd {{.TASKFILE_DIR}}/tests
+        OUT=$(pnpm --silent run twcs format --code-ext html --code $IN)
+        cd {{.TASKFILE_DIR}}
+
+        if [ "$OUT" = {{.STDIN_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:regions-input-go:
+    desc: task test:regions-input-go
+    cmds:
+      - |
+        IN=$(base64 -w 0 tests/test-regions.json)
+        OUT=$(go run . format --region-input --code-ext html --code $IN)
+
+        if [ "$OUT" = {{.REGIONS_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:regions-input-js:
+    desc: Expects error; See summary
+    summary: |
+      Error: total length of command line and environment variables exceeds limit
+    cmds:
+      - |
+        IN=$(base64 -w 0 tests/test-regions.json)
+        OUT=$(dist/wasm_exec_node.js format --region-input --code-ext html --code $IN)
+
+        if [ "$OUT" = {{.REGIONS_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi
+
+  test:regions-input-pnpm:
+    desc: Expects error; See summary
+    summary: |
+      Error: total length of command line and environment variables exceeds limit
+    cmds:
+      - |
+        IN=$(base64 -w 0 tests/test-regions.json)
+
+        cd {{.TASKFILE_DIR}}/tests
+        OUT=$(pnpm --silent run twcs format --region-input --code-ext html --code $IN)
+        cd {{.TASKFILE_DIR}}
+
+        if [ "$OUT" = {{.REGIONS_BASE64}} ]; then
+          echo -e "{{.TASK}} \u2714"
+        else
+          echo -e "{{.TASK}} \u2716"
+        fi

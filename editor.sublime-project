@@ -1,0 +1,192 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "root",
+			"folder_exclude_patterns": [
+				".svn",
+				".git",
+				".hg",
+				"CVS",
+				"node_modules",
+				"_nodejs_",
+				"_python_",
+				"dist",
+				"tests",
+			],
+			"follow_symlinks": true,
+		},
+		{
+			"path": "_nodejs_",
+			"name": "_nodejs_",
+			"folder_exclude_patterns": ["node_modules", "_golang-implementation_incomplete", "dist"],
+			"follow_symlinks": true,
+		},
+		{
+			"path": "_python_",
+			"name": "_python_",
+			"folder_exclude_patterns": [".venv", "__pycache__", "*.egg-info"],
+			"follow_symlinks": true,
+		},
+		{
+			"path": "dist",
+			"name": "dist",
+			"folder_exclude_patterns": [],
+			"follow_symlinks": true,
+		},
+		{
+			"path": "tests",
+			"name": "tests",
+			"folder_exclude_patterns": ["node_modules"],
+			"follow_symlinks": true,
+		},
+	],
+	"settings": {
+		/* "default_encoding": "UTF-8", */
+		/* "default_line_ending": "unix", */
+		"detect_indentation": true,
+		/* "ensure_newline_at_eof_on_save": true, */
+		"show_definitions": false,
+		"show_line_endings": true,
+		/* "tab_size": 2, */
+		/* "translate_tabs_to_spaces": false, */
+		/* "trim_trailing_white_space_on_save": "all", */
+		"use_tab_stops": true,
+		"word_wrap": true,
+
+		/* JsPrettier */
+		"js_prettier": {
+			"debug": false,
+			"auto_format_on_save": true,
+			// "auto_format_on_save_excludes": [],
+			"auto_format_on_save_requires_prettier_config": true,
+			"allow_inline_formatting": true,
+			"additional_cli_args": {
+				"--config": "${project_path}/_nodejs_/prettier.config.js",
+				"--config-precedence": "prefer-file",
+				"--ignore-path": "${project_path}/_nodejs_/.prettierignore",
+			},
+		},
+
+		/* LSP */
+		"lsp_format_on_save": true,
+		"lsp_code_actions_on_save": {
+			"source.fixAll.eslint": true,
+			"source.fixAll.json": false,
+			"source.fixAll.ruff": true,
+			"source.organizeImports.ruff": false,
+			"source.addMissingImports.ts": false,
+			"source.fixAll.ts": false,
+			"source.organizeImports.ts": false,
+			"source.removeUnused.ts": false,
+			"source.removeUnusedImports.ts": false,
+			"source.sortImports.ts": false,
+			"source.fixAll.yaml": true,
+		},
+
+		"LSP": {
+			/* LSP-gopls */
+			"gopls": {
+				"enabled": true,
+				"settings": {
+					"gopls.gofumpt": true,
+					"gopls.directoryFilters": ["-**/node_modules", "-${project_path}/_nodejs_", "-${project_path}/_python_"],
+					// "gopls.env": {
+					// 	"GOPATH": "${project_path}",
+					// },
+				},
+			},
+
+			/* LSP-eslint */
+			"LSP-eslint": {
+				"enabled": true,
+				"settings": {
+					"options": {
+						"overrideConfigFile": "${project_path}/_nodejs_/eslint.config.js",
+					},
+					"probe": ["javascript", "typescript"],
+					"validate": ["javascript", "typescript"],
+					"workingDirectories": ["${project_path}/_nodejs_"],
+				},
+				"selector": "source.js | source.ts",
+			},
+
+			/* LSP-typescript */
+			"LSP-typescript": {
+				"enabled": true,
+				"settings": {
+					"javascript.format.insertSpaceAfterCommaDelimiter": false,
+					"javascript.format.insertSpaceAfterConstructor": false,
+					"javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+					"javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+					"javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+					"javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+					"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+					"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+					"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+					"javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+					"javascript.format.insertSpaceAfterSemicolonInForStatements": false,
+					"javascript.format.insertSpaceAfterTypeAssertion": false,
+					"javascript.format.insertSpaceBeforeAndAfterBinaryOperators": false,
+					"javascript.format.insertSpaceBeforeFunctionParenthesis": false,
+					"javascript.format.insertSpaceBeforeTypeAnnotation": false,
+					"javascript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+					"javascript.format.placeOpenBraceOnNewLineForFunctions": false,
+					"javascript.format.semicolons": "ignore", // ignore | insert | remove
+					"javascript.format.trimTrailingWhitespace": false,
+					"typescript.format.insertSpaceAfterCommaDelimiter": false,
+					"typescript.format.insertSpaceAfterConstructor": false,
+					"typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+					"typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+					"typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+					"typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+					"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+					"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+					"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+					"typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+					"typescript.format.insertSpaceAfterSemicolonInForStatements": false,
+					"typescript.format.insertSpaceAfterTypeAssertion": false,
+					"typescript.format.insertSpaceBeforeAndAfterBinaryOperators": false,
+					"typescript.format.insertSpaceBeforeFunctionParenthesis": false,
+					"typescript.format.insertSpaceBeforeTypeAnnotation": false,
+					"typescript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+					"typescript.format.placeOpenBraceOnNewLineForFunctions": false,
+					"typescript.format.semicolons": "ignore", // ignore | insert | remove
+					"typescript.format.trimTrailingWhitespace": false,
+				},
+				/* https://github.com/sublimelsp/LSP-typescript/issues/118#issuecomment-1004776231 */
+				"disabled_capabilities": {
+					"documentFormattingProvider": true,
+					"documentFormattingEditProvider": true,
+					"documentRangeFormattingProvider": true,
+					"documentRangeFormattingEditProvider": true,
+					"documentOnTypeFormattingProvider": true,
+					"documentOnTypeFormattingEditProvider": true,
+				},
+				"selector": "source.js | source.ts",
+			},
+
+			/* LSP-basedpyright */
+			"LSP-basedpyright": {
+				"enabled": true,
+				"settings": {
+					"python.pythonPath": "${project_path}/_python_/.venv/bin/python",
+					"python.venvPath": "${project_path}/_python_/.venv",
+					"basedpyright.disableOrganizeImports": true,
+				},
+			},
+
+			/* LSP-ruff */
+			"LSP-ruff": {
+				"enabled": true,
+				"initializationOptions": {
+					"settings": {
+						"configuration": "${project_path}/_python_/pyproject.toml",
+					},
+				},
+			},
+		},
+	},
+
+	"debugger_configurations": [],
+}

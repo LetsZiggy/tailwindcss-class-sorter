@@ -1,0 +1,40 @@
+{
+	"name": "tailwindcss-node",
+	"description": "tailwindcss-node",
+	"version": "0.1.0",
+	"contributors": [
+		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
+	],
+	"scripts": {
+		"generate-tailwindcss": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/node-order-list-generator && NODE_ENV=development node_modules/.bin/tailwindcss -i ./tailwind.css -c ./tailwind.config.js -o ./style.css )",
+		"prepare-css": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/node-order-list-generator && node prepare-css.js --src ./style.css )",
+		"generate-order-lists": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/node-order-list-generator && node generate-order-list.js --src ./style.css --stylelintrc ./.stylelintrc.js --out $rootpath/tailwindcss-class-sorter/order_list.json )",
+		"generate": "pnpm run generate-tailwindcss && pnpm run prepare-css && pnpm run generate-order-lists"
+	},
+	"browserslist": [
+		"defaults"
+	],
+	"engines": {
+		"node": ">=16.20.2"
+	},
+	"devDependencies": {
+		"@stylistic/eslint-plugin": "^1.0.1",
+		"@types/node": "^20.9.0",
+		"autoprefixer": "^10.4.16",
+		"eslint": "^8.53.0",
+		"eslint-config-standard-with-typescript": "^39.1.1",
+		"eslint-import-resolver-typescript": "^3.6.1",
+		"eslint-plugin-import": "^2.29.0",
+		"eslint-plugin-n": "^16.3.0",
+		"eslint-plugin-promise": "^6.1.1",
+		"eslint-plugin-unicorn": "^49.0.0",
+		"postcss": "^8.4.31",
+		"stylelint": "^15.11.0",
+		"stylelint-config-concentric-order": "^5.2.0",
+		"stylelint-config-property-sort-order-smacss": "^9.1.0",
+		"stylelint-config-recess-order": "^4.3.0",
+		"stylelint-order": "^6.0.3",
+		"tailwindcss": "3.3.5",
+		"typescript": "^5.2.2"
+	}
+}

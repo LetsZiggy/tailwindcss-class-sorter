@@ -117,6 +117,29 @@
 				},
 				"selector": "source.js | source.ts",
 			},
+
+			/*------------------*/
+			/* LSP-pyright */
+			"LSP-pyright": {
+				"enabled": true,
+				"settings": {
+					"python.pythonPath": "/home/shafiq/code/sublime-tailwindcss-class-sorter/venv/bin/python",
+					"python.venvPath": "/home/shafiq/code/sublime-tailwindcss-class-sorter/venv",
+					"pyright.dev_environment": "sublime_text",
+				},
+			},
+
+			/* LSP-ruff */
+			"LSP-ruff": {
+				"enabled": true,
+				"initializationOptions": {
+					"settings": {
+						"lint.args": [ "--config", "/home/shafiq/code/sublime-tailwindcss-class-sorter/pyproject.toml" ],
+						"format.args": [ "--config", "/home/shafiq/code/sublime-tailwindcss-class-sorter/pyproject.toml" ],
+					},
+				},
+			},
+			/*------------------*/
 		},
 	},
 }

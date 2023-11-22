@@ -7,54 +7,56 @@ import (
 	"github.com/tidwall/jsonc"
 )
 
-func listCommand(configInput string, isBase64, isShowEditedOrder bool) {
+func listCommand(isBase64Config, isBase64Output bool, configRaw string, isShowEditedOrder bool) {
 	var (
-		defaultOrderMap map[string]TOrder
-		configByte      []byte
-		config          TConfig
-		order           TOrder
-		uneditedOutput  TOrderIndex
-		editedOutput    TOrderIndex
+		defaultOrderMap    map[string]TOrderList
+		configByte         []byte
+		configInput        TConfigInput
+		ok                 bool
+		order              TOrderList
+		orderIndexEdited   TOrderIndex
+		orderIndexUnedited TOrderIndex
 	)
-	json.Unmarshal(jsonc.ToJSON(orderListDefault), &defaultOrderMap)
-	switch isBase64 {
-	case true:
-		configByte = decodeBase64(configInput, false)
 
-	case false:
-		configByte = getFile(configInput, false)
-	}
-	config = normaliseConfig(configByte)
-	switch config.OrderType {
+	/* ---get config/order--- */
+	json.Unmarshal(jsonc.ToJSON(orderListDefault), &defaultOrderMap)
+	configByte = getUserConfig(configRaw, isBase64Config)
+	configInput = normaliseConfig(configByte, true)
+
+	switch configInput.OrderType {
 	case "custom":
-		uneditedOutput = orderIndex(config.CustomOrder)
-		order = normaliseOrder(config.CustomOrder, config.EditOrder)
-		editedOutput = orderIndex(order)
+		orderIndexUnedited = orderIndex(configInput.CustomOrder)
+		order = normaliseOrder(configInput.CustomOrder, configInput.EditOrder)
+		orderIndexEdited = orderIndex(order)
+
 	default:
-		var ok bool
-		if order, ok = defaultOrderMap[config.OrderType]; !ok {
+		if order, ok = defaultOrderMap[configInput.OrderType]; !ok {
 			order = defaultOrderMap["recess"]
 		}
-		uneditedOutput = orderIndex(order)
-		order = normaliseOrder(order, config.EditOrder)
-		editedOutput = orderIndex(order)
+
+		orderIndexUnedited = orderIndex(order)
+		order = normaliseOrder(order, configInput.EditOrder)
+		orderIndexEdited = orderIndex(order)
 	}
+
+	/* ---output--- */
 	switch {
-	case isBase64 && !isShowEditedOrder:
-		str, err := json.MarshalIndent(uneditedOutput, "", "\t")
+	case isBase64Output && !isShowEditedOrder:
+		str, err := json.MarshalIndent(orderIndexUnedited, "", "\t")
 		handleError(err, "base64 unedited list to JSON:", true)
-		fmt.Println(encodeBase64(str, true))
 
-	case isBase64 && isShowEditedOrder:
-		str, err := json.MarshalIndent(editedOutput, "", "\t")
+		fmt.Println(encodeBase64(str, true, true))
+
+	case isBase64Output && isShowEditedOrder:
+		str, err := json.MarshalIndent(orderIndexEdited, "", "\t")
 		handleError(err, "base64 edited list to JSON:", true)
-		fmt.Println(encodeBase64(str, true))
 
-	case !isBase64 && !isShowEditedOrder:
-		prettyPrinter(uneditedOutput, "", "\t")
+		fmt.Println(encodeBase64(str, true, true))
 
-	case !isBase64 && isShowEditedOrder:
-		prettyPrinter(editedOutput, "", "\t")
+	case !isBase64Output && !isShowEditedOrder:
+		prettyPrinter(orderIndexUnedited, "", "\t")
+
+	case !isBase64Output && isShowEditedOrder:
+		prettyPrinter(orderIndexEdited, "", "\t")
 	}
-	return
 }

@@ -78,17 +78,17 @@ const rootRules = {
 
 	"unicorn/filename-case": ["error", { cases: { kebabCase: true }}], // Overwrite unicorn
 
+	"unicorn/name-replacements": ["error", { checkFilenames: false }], // Overwrite unicorn
+
+	"unicorn/no-array-reduce": ["off"], // Overwrite unicorn
+
+	"unicorn/no-useless-undefined": ["off"], // Overwrite unicorn
+
 	"unicorn/prefer-at": ["error"], // Overwrite unicorn
 
 	"unicorn/prefer-module": ["off"], // Overwrite unicorn
 
 	"unicorn/prefer-string-replace-all": ["error"], // Overwrite unicorn
-
-	"unicorn/prevent-abbreviations": ["error", { checkFilenames: false }], // Overwrite unicorn
-
-	"unicorn/no-array-reduce": ["off"], // Overwrite unicorn
-
-	"unicorn/no-useless-undefined": ["off"], // Overwrite unicorn
 
 	// ---@stylistic--- //
 

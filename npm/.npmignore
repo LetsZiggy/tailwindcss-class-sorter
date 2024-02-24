@@ -1,0 +1,11 @@
+*
+
+!wasm_exec.js
+!wasm_exec_node.js
+!package.json
+!README.md
+!LICENSE
+!.npmignore
+!.npmrc
+!go_js_wasm_exec
+!twcs.wasm

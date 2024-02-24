@@ -1,0 +1,2670 @@
+{
+	"tailwindcss-forms": {
+		"regular": [
+			"form-input",
+			"form-textarea",
+			"form-select",
+			"form-multiselect",
+			"form-checkbox",
+			"form-radio"
+		],
+		"custom": []
+	},
+	"tailwindcss-typography": {
+		"regular": [
+			"prose",
+			"not-prose",
+			"prose-invert",
+			"prose-sm",
+			"prose-base",
+			"prose-lg",
+			"prose-xl",
+			"prose-2xl",
+			"prose-gray",
+			"prose-slate",
+			"prose-zinc",
+			"prose-neutral",
+			"prose-stone"
+		],
+		"custom": []
+	},
+	"aspect-ratio": {
+		"regular": [
+			"aspect-1/2",
+			"aspect-square",
+			"aspect-video",
+			"aspect-auto"
+		],
+		"custom": [
+			"aspect-(<custom-property>)",
+			"aspect-[<value>]"
+		]
+	},
+	"columns": {
+		"regular": [
+			"columns-5",
+			"columns-3xs",
+			"columns-2xs",
+			"columns-xs",
+			"columns-sm",
+			"columns-md",
+			"columns-lg",
+			"columns-xl",
+			"columns-2xl",
+			"columns-3xl",
+			"columns-4xl",
+			"columns-5xl",
+			"columns-6xl",
+			"columns-7xl",
+			"columns-auto"
+		],
+		"custom": [
+			"columns-(<custom-property>)",
+			"columns-[<value>]"
+		]
+	},
+	"break-after": {
+		"regular": [
+			"break-after-auto",
+			"break-after-avoid",
+			"break-after-all",
+			"break-after-avoid-page",
+			"break-after-page",
+			"break-after-left",
+			"break-after-right",
+			"break-after-column"
+		],
+		"custom": []
+	},
+	"break-before": {
+		"regular": [
+			"break-before-auto",
+			"break-before-avoid",
+			"break-before-all",
+			"break-before-avoid-page",
+			"break-before-page",
+			"break-before-left",
+			"break-before-right",
+			"break-before-column"
+		],
+		"custom": []
+	},
+	"break-inside": {
+		"regular": [
+			"break-inside-auto",
+			"break-inside-avoid",
+			"break-inside-avoid-page",
+			"break-inside-avoid-column"
+		],
+		"custom": []
+	},
+	"box-decoration-break": {
+		"regular": [
+			"box-decoration-clone",
+			"box-decoration-slice"
+		],
+		"custom": []
+	},
+	"box-sizing": {
+		"regular": [
+			"box-border",
+			"box-content"
+		],
+		"custom": []
+	},
+	"display": {
+		"regular": [
+			"inline",
+			"block",
+			"inline-block",
+			"flow-root",
+			"flex",
+			"inline-flex",
+			"grid",
+			"inline-grid",
+			"contents",
+			"table",
+			"inline-table",
+			"table-caption",
+			"table-cell",
+			"table-column",
+			"table-column-group",
+			"table-footer-group",
+			"table-header-group",
+			"table-row-group",
+			"table-row",
+			"list-item",
+			"hidden",
+			"sr-only",
+			"not-sr-only"
+		],
+		"custom": []
+	},
+	"float": {
+		"regular": [
+			"float-right",
+			"float-left",
+			"float-start",
+			"float-end",
+			"float-none"
+		],
+		"custom": []
+	},
+	"clear": {
+		"regular": [
+			"clear-left",
+			"clear-right",
+			"clear-both",
+			"clear-start",
+			"clear-end",
+			"clear-none"
+		],
+		"custom": []
+	},
+	"isolation": {
+		"regular": [
+			"isolate",
+			"isolation-auto"
+		],
+		"custom": []
+	},
+	"object-fit": {
+		"regular": [
+			"object-contain",
+			"object-cover",
+			"object-fill",
+			"object-none",
+			"object-scale-down"
+		],
+		"custom": []
+	},
+	"object-position": {
+		"regular": [
+			"object-bottom",
+			"object-center",
+			"object-left",
+			"object-left-bottom",
+			"object-left-top",
+			"object-right",
+			"object-right-bottom",
+			"object-right-top",
+			"object-top"
+		],
+		"custom": [
+			"object-(<custom-property>)",
+			"object-[<value>]"
+		]
+	},
+	"overflow": {
+		"regular": [
+			"overflow-auto",
+			"overflow-hidden",
+			"overflow-clip",
+			"overflow-visible",
+			"overflow-scroll",
+			"overflow-x-auto",
+			"overflow-y-auto",
+			"overflow-x-hidden",
+			"overflow-y-hidden",
+			"overflow-x-clip",
+			"overflow-y-clip",
+			"overflow-x-visible",
+			"overflow-y-visible",
+			"overflow-x-scroll",
+			"overflow-y-scroll"
+		],
+		"custom": []
+	},
+	"overscroll-behavior": {
+		"regular": [
+			"overscroll-auto",
+			"overscroll-contain",
+			"overscroll-none",
+			"overscroll-x-auto",
+			"overscroll-x-contain",
+			"overscroll-x-none",
+			"overscroll-y-auto",
+			"overscroll-y-contain",
+			"overscroll-y-none"
+		],
+		"custom": []
+	},
+	"position": {
+		"regular": [
+			"static",
+			"fixed",
+			"absolute",
+			"relative",
+			"sticky"
+		],
+		"custom": []
+	},
+	"top-right-bottom-left": {
+		"regular": [
+			"inset-5",
+			"-inset-5",
+			"inset-1/2",
+			"-inset-1/2",
+			"inset-px",
+			"-inset-px",
+			"inset-full",
+			"-inset-full",
+			"inset-auto",
+			"inset-x-5",
+			"-inset-x-5",
+			"inset-x-1/2",
+			"-inset-x-1/2",
+			"inset-x-px",
+			"-inset-x-px",
+			"inset-x-full",
+			"-inset-x-full",
+			"inset-x-auto",
+			"inset-y-5",
+			"-inset-y-5",
+			"inset-y-1/2",
+			"-inset-y-1/2",
+			"inset-y-px",
+			"-inset-y-px",
+			"inset-y-full",
+			"-inset-y-full",
+			"inset-y-auto",
+			"start-5",
+			"-start-5",
+			"start-1/2",
+			"-start-1/2",
+			"start-px",
+			"-start-px",
+			"start-full",
+			"-start-full",
+			"start-auto",
+			"end-5",
+			"-end-5",
+			"end-1/2",
+			"-end-1/2",
+			"end-px",
+			"-end-px",
+			"end-full",
+			"-end-full",
+			"end-auto",
+			"top-5",
+			"-top-5",
+			"top-1/2",
+			"-top-1/2",
+			"top-px",
+			"-top-px",
+			"top-full",
+			"-top-full",
+			"top-auto",
+			"right-5",
+			"-right-5",
+			"right-1/2",
+			"-right-1/2",
+			"right-px",
+			"-right-px",
+			"right-full",
+			"-right-full",
+			"right-auto",
+			"bottom-5",
+			"-bottom-5",
+			"bottom-1/2",
+			"-bottom-1/2",
+			"bottom-px",
+			"-bottom-px",
+			"bottom-full",
+			"-bottom-full",
+			"bottom-auto",
+			"left-5",
+			"-left-5",
+			"left-1/2",
+			"-left-1/2",
+			"left-px",
+			"-left-px",
+			"left-full",
+			"-left-full",
+			"left-auto"
+		],
+		"custom": [
+			"inset-(<custom-property>)",
+			"inset-[<value>]",
+			"inset-x-(<custom-property>)",
+			"inset-x-[<value>]",
+			"inset-y-(<custom-property>)",
+			"inset-y-[<value>]",
+			"start-(<custom-property>)",
+			"start-[<value>]",
+			"end-(<custom-property>)",
+			"end-[<value>]",
+			"top-(<custom-property>)",
+			"top-[<value>]",
+			"right-(<custom-property>)",
+			"right-[<value>]",
+			"bottom-(<custom-property>)",
+			"bottom-[<value>]",
+			"left-(<custom-property>)",
+			"left-[<value>]"
+		]
+	},
+	"visibility": {
+		"regular": [
+			"visible",
+			"invisible",
+			"collapse"
+		],
+		"custom": []
+	},
+	"z-index": {
+		"regular": [
+			"z-5",
+			"z-auto"
+		],
+		"custom": [
+			"z-(<custom-property>)",
+			"z-[<value>]"
+		]
+	},
+	"flex-basis": {
+		"regular": [
+			"basis-5",
+			"basis-1/2",
+			"basis-full",
+			"basis-auto",
+			"basis-3xs",
+			"basis-2xs",
+			"basis-xs",
+			"basis-sm",
+			"basis-md",
+			"basis-lg",
+			"basis-xl",
+			"basis-2xl",
+			"basis-3xl",
+			"basis-4xl",
+			"basis-5xl",
+			"basis-6xl",
+			"basis-7xl"
+		],
+		"custom": [
+			"basis-(<custom-property>)",
+			"basis-[<value>]"
+		]
+	},
+	"flex-direction": {
+		"regular": [
+			"flex-row",
+			"flex-row-reverse",
+			"flex-col",
+			"flex-col-reverse"
+		],
+		"custom": []
+	},
+	"flex-wrap": {
+		"regular": [
+			"flex-nowrap",
+			"flex-wrap",
+			"flex-wrap-reverse"
+		],
+		"custom": []
+	},
+	"flex": {
+		"regular": [
+			"flex-5",
+			"flex-1/2",
+			"flex-auto",
+			"flex-initial",
+			"flex-none"
+		],
+		"custom": [
+			"flex-(<custom-property>)",
+			"flex-[<value>]"
+		]
+	},
+	"flex-grow": {
+		"regular": [
+			"grow",
+			"grow-5"
+		],
+		"custom": [
+			"grow-(<custom-property>)",
+			"grow-[<value>]"
+		]
+	},
+	"flex-shrink": {
+		"regular": [
+			"shrink",
+			"shrink-5"
+		],
+		"custom": [
+			"shrink-(<custom-property>)",
+			"shrink-[<value>]"
+		]
+	},
+	"order": {
+		"regular": [
+			"order-5",
+			"-order-5",
+			"order-first",
+			"order-last",
+			"order-none"
+		],
+		"custom": [
+			"order-(<custom-property>)",
+			"order-[<value>]"
+		]
+	},
+	"grid-template-columns": {
+		"regular": [
+			"grid-cols-5",
+			"grid-cols-none",
+			"grid-cols-subgrid"
+		],
+		"custom": [
+			"grid-cols-(<custom-property>)",
+			"grid-cols-[<value>]"
+		]
+	},
+	"grid-column": {
+		"regular": [
+			"col-span-5",
+			"col-span-full",
+			"col-start-5",
+			"-col-start-5",
+			"col-start-auto",
+			"col-end-5",
+			"-col-end-5",
+			"col-end-auto",
+			"col-auto",
+			"col-5",
+			"-col-5"
+		],
+		"custom": [
+			"col-span-(<custom-property>)",
+			"col-span-[<value>]",
+			"col-start-(<custom-property>)",
+			"col-start-[<value>]",
+			"col-end-(<custom-property>)",
+			"col-end-[<value>]",
+			"col-(<custom-property>)",
+			"col-[<value>]"
+		]
+	},
+	"grid-template-rows": {
+		"regular": [
+			"grid-rows-5",
+			"grid-rows-none",
+			"grid-rows-subgrid"
+		],
+		"custom": [
+			"grid-rows-(<custom-property>)",
+			"grid-rows-[<value>]"
+		]
+	},
+	"grid-row": {
+		"regular": [
+			"row-span-5",
+			"row-span-full",
+			"row-start-5",
+			"-row-start-5",
+			"row-start-auto",
+			"row-end-5",
+			"-row-end-5",
+			"row-end-auto",
+			"row-auto",
+			"row-5",
+			"-row-5"
+		],
+		"custom": [
+			"row-span-(<custom-property>)",
+			"row-span-[<value>]",
+			"row-start-(<custom-property>)",
+			"row-start-[<value>]",
+			"row-end-(<custom-property>)",
+			"row-end-[<value>]",
+			"row-(<custom-property>)",
+			"row-[<value>]"
+		]
+	},
+	"grid-auto-flow": {
+		"regular": [
+			"grid-flow-row",
+			"grid-flow-col",
+			"grid-flow-dense",
+			"grid-flow-row-dense",
+			"grid-flow-col-dense"
+		],
+		"custom": []
+	},
+	"grid-auto-columns": {
+		"regular": [
+			"auto-cols-auto",
+			"auto-cols-min",
+			"auto-cols-max",
+			"auto-cols-fr"
+		],
+		"custom": [
+			"auto-cols-(<custom-property>)",
+			"auto-cols-[<value>]"
+		]
+	},
+	"grid-auto-rows": {
+		"regular": [
+			"auto-rows-auto",
+			"auto-rows-min",
+			"auto-rows-max",
+			"auto-rows-fr"
+		],
+		"custom": [
+			"auto-rows-(<custom-property>)",
+			"auto-rows-[<value>]"
+		]
+	},
+	"gap": {
+		"regular": [
+			"gap-5",
+			"gap-x-5",
+			"gap-y-5"
+		],
+		"custom": [
+			"gap-(<custom-property>)",
+			"gap-[<value>]",
+			"gap-x-(<custom-property>)",
+			"gap-x-[<value>]",
+			"gap-y-(<custom-property>)",
+			"gap-y-[<value>]"
+		]
+	},
+	"justify-content": {
+		"regular": [
+			"justify-start",
+			"justify-end",
+			"justify-center",
+			"justify-between",
+			"justify-around",
+			"justify-evenly",
+			"justify-stretch",
+			"justify-baseline",
+			"justify-normal"
+		],
+		"custom": []
+	},
+	"justify-items": {
+		"regular": [
+			"justify-items-start",
+			"justify-items-end",
+			"justify-items-center",
+			"justify-items-stretch",
+			"justify-items-normal"
+		],
+		"custom": []
+	},
+	"justify-self": {
+		"regular": [
+			"justify-self-auto",
+			"justify-self-start",
+			"justify-self-end",
+			"justify-self-center",
+			"justify-self-stretch"
+		],
+		"custom": []
+	},
+	"align-content": {
+		"regular": [
+			"content-normal",
+			"content-center",
+			"content-start",
+			"content-end",
+			"content-between",
+			"content-around",
+			"content-evenly",
+			"content-baseline",
+			"content-stretch"
+		],
+		"custom": []
+	},
+	"align-items": {
+		"regular": [
+			"items-start",
+			"items-end",
+			"items-center",
+			"items-baseline",
+			"items-stretch"
+		],
+		"custom": []
+	},
+	"align-self": {
+		"regular": [
+			"self-auto",
+			"self-start",
+			"self-end",
+			"self-center",
+			"self-stretch",
+			"self-baseline"
+		],
+		"custom": []
+	},
+	"place-content": {
+		"regular": [
+			"place-content-center",
+			"place-content-start",
+			"place-content-end",
+			"place-content-between",
+			"place-content-around",
+			"place-content-evenly",
+			"place-content-baseline",
+			"place-content-stretch"
+		],
+		"custom": []
+	},
+	"place-items": {
+		"regular": [
+			"place-items-start",
+			"place-items-end",
+			"place-items-center",
+			"place-items-baseline",
+			"place-items-stretch"
+		],
+		"custom": []
+	},
+	"place-self": {
+		"regular": [
+			"place-self-auto",
+			"place-self-start",
+			"place-self-end",
+			"place-self-center",
+			"place-self-stretch"
+		],
+		"custom": []
+	},
+	"padding": {
+		"regular": [
+			"p-5",
+			"p-px",
+			"px-5",
+			"px-px",
+			"py-5",
+			"py-px",
+			"ps-5",
+			"ps-px",
+			"pe-5",
+			"pe-px",
+			"pt-5",
+			"pt-px",
+			"pr-5",
+			"pr-px",
+			"pb-5",
+			"pb-px",
+			"pl-5",
+			"pl-px"
+		],
+		"custom": [
+			"p-(<custom-property>)",
+			"p-[<value>]",
+			"px-(<custom-property>)",
+			"px-[<value>]",
+			"py-(<custom-property>)",
+			"py-[<value>]",
+			"ps-(<custom-property>)",
+			"ps-[<value>]",
+			"pe-(<custom-property>)",
+			"pe-[<value>]",
+			"pt-(<custom-property>)",
+			"pt-[<value>]",
+			"pr-(<custom-property>)",
+			"pr-[<value>]",
+			"pb-(<custom-property>)",
+			"pb-[<value>]",
+			"pl-(<custom-property>)",
+			"pl-[<value>]"
+		]
+	},
+	"margin": {
+		"regular": [
+			"m-5",
+			"-m-5",
+			"m-auto",
+			"m-px",
+			"-m-px",
+			"mx-5",
+			"-mx-5",
+			"mx-auto",
+			"mx-px",
+			"-mx-px",
+			"my-5",
+			"-my-5",
+			"my-auto",
+			"my-px",
+			"-my-px",
+			"ms-5",
+			"-ms-5",
+			"ms-auto",
+			"ms-px",
+			"-ms-px",
+			"me-5",
+			"-me-5",
+			"me-auto",
+			"me-px",
+			"-me-px",
+			"mt-5",
+			"-mt-5",
+			"mt-auto",
+			"mt-px",
+			"-mt-px",
+			"mr-5",
+			"-mr-5",
+			"mr-auto",
+			"mr-px",
+			"-mr-px",
+			"mb-5",
+			"-mb-5",
+			"mb-auto",
+			"mb-px",
+			"-mb-px",
+			"ml-5",
+			"-ml-5",
+			"ml-auto",
+			"ml-px",
+			"-ml-px",
+			"space-x-5",
+			"-space-x-5",
+			"space-x-px",
+			"-space-x-px",
+			"space-y-5",
+			"-space-y-5",
+			"space-y-px",
+			"-space-y-px",
+			"space-x-reverse",
+			"space-y-reverse"
+		],
+		"custom": [
+			"m-(<custom-property>)",
+			"m-[<value>]",
+			"mx-(<custom-property>)",
+			"mx-[<value>]",
+			"my-(<custom-property>)",
+			"my-[<value>]",
+			"ms-(<custom-property>)",
+			"ms-[<value>]",
+			"me-(<custom-property>)",
+			"me-[<value>]",
+			"mt-(<custom-property>)",
+			"mt-[<value>]",
+			"mr-(<custom-property>)",
+			"mr-[<value>]",
+			"mb-(<custom-property>)",
+			"mb-[<value>]",
+			"ml-(<custom-property>)",
+			"ml-[<value>]",
+			"space-x-(<custom-property>)",
+			"space-x-[<value>]",
+			"space-y-(<custom-property>)",
+			"space-y-[<value>]"
+		]
+	},
+	"width": {
+		"regular": [
+			"w-5",
+			"w-1/2",
+			"w-3xs",
+			"w-2xs",
+			"w-xs",
+			"w-sm",
+			"w-md",
+			"w-lg",
+			"w-xl",
+			"w-2xl",
+			"w-3xl",
+			"w-4xl",
+			"w-5xl",
+			"w-6xl",
+			"w-7xl",
+			"w-auto",
+			"w-px",
+			"w-full",
+			"w-screen",
+			"w-dvw",
+			"w-dvh",
+			"w-lvw",
+			"w-lvh",
+			"w-svw",
+			"w-svh",
+			"w-min",
+			"w-max",
+			"w-fit",
+			"size-5",
+			"size-1/2",
+			"size-auto",
+			"size-px",
+			"size-full",
+			"size-dvw",
+			"size-dvh",
+			"size-lvw",
+			"size-lvh",
+			"size-svw",
+			"size-svh",
+			"size-min",
+			"size-max",
+			"size-fit"
+		],
+		"custom": [
+			"w-(<custom-property>)",
+			"w-[<value>]",
+			"size-(<custom-property>)",
+			"size-[<value>]"
+		]
+	},
+	"min-width": {
+		"regular": [
+			"min-w-5",
+			"min-w-1/2",
+			"min-w-3xs",
+			"min-w-2xs",
+			"min-w-xs",
+			"min-w-sm",
+			"min-w-md",
+			"min-w-lg",
+			"min-w-xl",
+			"min-w-2xl",
+			"min-w-3xl",
+			"min-w-4xl",
+			"min-w-5xl",
+			"min-w-6xl",
+			"min-w-7xl",
+			"min-w-auto",
+			"min-w-px",
+			"min-w-full",
+			"min-w-screen",
+			"min-w-dvw",
+			"min-w-dvh",
+			"min-w-lvw",
+			"min-w-lvh",
+			"min-w-svw",
+			"min-w-svh",
+			"min-w-min",
+			"min-w-max",
+			"min-w-fit"
+		],
+		"custom": [
+			"min-w-(<custom-property>)",
+			"min-w-[<value>]"
+		]
+	},
+	"max-width": {
+		"regular": [
+			"max-w-5",
+			"max-w-1/2",
+			"max-w-3xs",
+			"max-w-2xs",
+			"max-w-xs",
+			"max-w-sm",
+			"max-w-md",
+			"max-w-lg",
+			"max-w-xl",
+			"max-w-2xl",
+			"max-w-3xl",
+			"max-w-4xl",
+			"max-w-5xl",
+			"max-w-6xl",
+			"max-w-7xl",
+			"max-w-none",
+			"max-w-px",
+			"max-w-full",
+			"max-w-dvw",
+			"max-w-dvh",
+			"max-w-lvw",
+			"max-w-lvh",
+			"max-w-svw",
+			"max-w-svh",
+			"max-w-screen",
+			"max-w-min",
+			"max-w-max",
+			"max-w-fit",
+			"container"
+		],
+		"custom": [
+			"max-w-(<custom-property>)",
+			"max-w-[<value>]"
+		]
+	},
+	"height": {
+		"regular": [
+			"h-5",
+			"h-1/2",
+			"h-auto",
+			"h-px",
+			"h-full",
+			"h-screen",
+			"h-dvh",
+			"h-dvw",
+			"h-lvh",
+			"h-lvw",
+			"h-svh",
+			"h-svw",
+			"h-min",
+			"h-max",
+			"h-fit",
+			"size-5",
+			"size-1/2",
+			"size-auto",
+			"size-px",
+			"size-full",
+			"size-dvw",
+			"size-dvh",
+			"size-lvw",
+			"size-lvh",
+			"size-svw",
+			"size-svh",
+			"size-min",
+			"size-max",
+			"size-fit"
+		],
+		"custom": [
+			"h-(<custom-property>)",
+			"h-[<value>]",
+			"size-(<custom-property>)",
+			"size-[<value>]"
+		]
+	},
+	"min-height": {
+		"regular": [
+			"min-h-5",
+			"min-h-1/2",
+			"min-h-px",
+			"min-h-full",
+			"min-h-screen",
+			"min-h-dvh",
+			"min-h-dvw",
+			"min-h-lvh",
+			"min-h-lvw",
+			"min-h-svw",
+			"min-h-svh",
+			"min-h-auto",
+			"min-h-min",
+			"min-h-max",
+			"min-h-fit"
+		],
+		"custom": [
+			"min-h-(<custom-property>)",
+			"min-h-[<value>]"
+		]
+	},
+	"max-height": {
+		"regular": [
+			"max-h-5",
+			"max-h-1/2",
+			"max-h-none",
+			"max-h-px",
+			"max-h-full",
+			"max-h-screen",
+			"max-h-dvh",
+			"max-h-dvw",
+			"max-h-lvh",
+			"max-h-lvw",
+			"max-h-svh",
+			"max-h-svw",
+			"max-h-min",
+			"max-h-max",
+			"max-h-fit"
+		],
+		"custom": [
+			"max-h-(<custom-property>)",
+			"max-h-[<value>]"
+		]
+	},
+	"font-family": {
+		"regular": [
+			"font-sans",
+			"font-serif",
+			"font-mono"
+		],
+		"custom": [
+			"font-(family-name:<custom-property>)",
+			"font-[<value>]"
+		]
+	},
+	"font-size": {
+		"regular": [
+			"text-xs",
+			"text-sm",
+			"text-base",
+			"text-lg",
+			"text-xl",
+			"text-2xl",
+			"text-3xl",
+			"text-4xl",
+			"text-5xl",
+			"text-6xl",
+			"text-7xl",
+			"text-8xl",
+			"text-9xl"
+		],
+		"custom": [
+			"text-(length:<custom-property>)",
+			"text-[<value>]"
+		]
+	},
+	"font-smoothing": {
+		"regular": [
+			"antialiased",
+			"subpixel-antialiased"
+		],
+		"custom": []
+	},
+	"font-style": {
+		"regular": [
+			"italic",
+			"not-italic"
+		],
+		"custom": []
+	},
+	"font-weight": {
+		"regular": [
+			"font-thin",
+			"font-extralight",
+			"font-light",
+			"font-normal",
+			"font-medium",
+			"font-semibold",
+			"font-bold",
+			"font-extrabold",
+			"font-black"
+		],
+		"custom": [
+			"font-(<custom-property>)",
+			"font-[<value>]"
+		]
+	},
+	"font-stretch": {
+		"regular": [
+			"font-stretch-ultra-condensed",
+			"font-stretch-extra-condensed",
+			"font-stretch-condensed",
+			"font-stretch-semi-condensed",
+			"font-stretch-normal",
+			"font-stretch-semi-expanded",
+			"font-stretch-expanded",
+			"font-stretch-extra-expanded",
+			"font-stretch-ultra-expanded",
+			"font-stretch-10%"
+		],
+		"custom": [
+			"font-stretch-(<custom-property>)",
+			"font-stretch-[<value>]"
+		]
+	},
+	"font-variant-numeric": {
+		"regular": [
+			"normal-nums",
+			"ordinal",
+			"slashed-zero",
+			"lining-nums",
+			"oldstyle-nums",
+			"proportional-nums",
+			"tabular-nums",
+			"diagonal-fractions",
+			"stacked-fractions"
+		],
+		"custom": []
+	},
+	"letter-spacing": {
+		"regular": [
+			"tracking-tighter",
+			"tracking-tight",
+			"tracking-normal",
+			"tracking-wide",
+			"tracking-wider",
+			"tracking-widest"
+		],
+		"custom": [
+			"tracking-(<custom-property>)",
+			"tracking-[<value>]"
+		]
+	},
+	"line-clamp": {
+		"regular": [
+			"line-clamp-5",
+			"line-clamp-none"
+		],
+		"custom": [
+			"line-clamp-(<custom-property>)",
+			"line-clamp-[<value>]"
+		]
+	},
+	"line-height": {
+		"regular": [
+			"text-xs/5",
+			"text-sm/5",
+			"text-base/5",
+			"text-lg/5",
+			"text-xl/5",
+			"text-2xl/5",
+			"text-3xl/5",
+			"text-4xl/5",
+			"text-5xl/5",
+			"text-6xl/5",
+			"text-7xl/5",
+			"text-8xl/5",
+			"text-9xl/5",
+			"leading-none",
+			"leading-5"
+		],
+		"custom": [
+			"text-<size>/(<custom-property>)",
+			"text-<size>/[<value>]",
+			"leading-(<custom-property>)",
+			"leading-[<value>]"
+		]
+	},
+	"list-style-image": {
+		"regular": [
+			"list-image-none"
+		],
+		"custom": [
+			"list-image-(<custom-property>)",
+			"list-image-[<value>]"
+		]
+	},
+	"list-style-position": {
+		"regular": [
+			"list-inside",
+			"list-outside"
+		],
+		"custom": []
+	},
+	"list-style-type": {
+		"regular": [
+			"list-disc",
+			"list-decimal",
+			"list-none"
+		],
+		"custom": [
+			"list-(<custom-property>)",
+			"list-[<value>]"
+		]
+	},
+	"text-align": {
+		"regular": [
+			"text-left",
+			"text-center",
+			"text-right",
+			"text-justify",
+			"text-start",
+			"text-end"
+		],
+		"custom": []
+	},
+	"color": {
+		"regular": [
+			"text-white",
+			"text-red-50"
+		],
+		"custom": [
+			"text-(<custom-property>)",
+			"text-[<value>]"
+		]
+	},
+	"text-decoration-line": {
+		"regular": [
+			"underline",
+			"overline",
+			"line-through",
+			"no-underline"
+		],
+		"custom": []
+	},
+	"text-decoration-color": {
+		"regular": [
+			"decoration-white",
+			"decoration-red-50"
+		],
+		"custom": [
+			"decoration-(<custom-property>)",
+			"decoration-[<value>]"
+		]
+	},
+	"text-decoration-style": {
+		"regular": [
+			"decoration-solid",
+			"decoration-double",
+			"decoration-dotted",
+			"decoration-dashed",
+			"decoration-wavy"
+		],
+		"custom": []
+	},
+	"text-decoration-thickness": {
+		"regular": [
+			"decoration-5",
+			"decoration-from-font",
+			"decoration-auto"
+		],
+		"custom": [
+			"decoration-(<custom-property>)",
+			"decoration-[<value>]"
+		]
+	},
+	"text-underline-offset": {
+		"regular": [
+			"underline-offset-5",
+			"-underline-offset-5",
+			"underline-offset-auto"
+		],
+		"custom": [
+			"underline-offset-(<custom-property>)",
+			"underline-offset-[<value>]"
+		]
+	},
+	"text-transform": {
+		"regular": [
+			"uppercase",
+			"lowercase",
+			"capitalize",
+			"normal-case"
+		],
+		"custom": []
+	},
+	"text-overflow": {
+		"regular": [
+			"truncate",
+			"text-ellipsis",
+			"text-clip"
+		],
+		"custom": []
+	},
+	"text-wrap": {
+		"regular": [
+			"text-wrap",
+			"text-nowrap",
+			"text-balance",
+			"text-pretty"
+		],
+		"custom": []
+	},
+	"text-indent": {
+		"regular": [
+			"indent-5",
+			"-indent-5",
+			"indent-px",
+			"-indent-px"
+		],
+		"custom": [
+			"indent-(<custom-property>)",
+			"indent-[<value>]"
+		]
+	},
+	"vertical-align": {
+		"regular": [
+			"align-baseline",
+			"align-top",
+			"align-middle",
+			"align-bottom",
+			"align-text-top",
+			"align-text-bottom",
+			"align-sub",
+			"align-super"
+		],
+		"custom": [
+			"align-(<custom-property>)",
+			"align-[<value>]"
+		]
+	},
+	"white-space": {
+		"regular": [
+			"whitespace-normal",
+			"whitespace-nowrap",
+			"whitespace-pre",
+			"whitespace-pre-line",
+			"whitespace-pre-wrap",
+			"whitespace-break-spaces"
+		],
+		"custom": []
+	},
+	"word-break": {
+		"regular": [
+			"break-normal",
+			"break-words",
+			"break-all",
+			"break-keep"
+		],
+		"custom": []
+	},
+	"hyphens": {
+		"regular": [
+			"hyphens-none",
+			"hyphens-manual",
+			"hyphens-auto"
+		],
+		"custom": []
+	},
+	"content": {
+		"regular": [
+			"content-none"
+		],
+		"custom": [
+			"content-(<custom-property>)",
+			"content-[<value>]"
+		]
+	},
+	"background-attachment": {
+		"regular": [
+			"bg-fixed",
+			"bg-local",
+			"bg-scroll"
+		],
+		"custom": []
+	},
+	"background-clip": {
+		"regular": [
+			"bg-clip-border",
+			"bg-clip-padding",
+			"bg-clip-content",
+			"bg-clip-text"
+		],
+		"custom": []
+	},
+	"background-color": {
+		"regular": [
+			"bg-white",
+			"bg-red-50"
+		],
+		"custom": [
+			"bg-(<custom-property>)",
+			"bg-[<value>]"
+		]
+	},
+	"background-image": {
+		"regular": [
+			"bg-none",
+			"bg-linear-to-t",
+			"bg-linear-to-tr",
+			"bg-linear-to-r",
+			"bg-linear-to-br",
+			"bg-linear-to-b",
+			"bg-linear-to-bl",
+			"bg-linear-to-l",
+			"bg-linear-to-tl",
+			"bg-linear-10deg",
+			"-bg-linear-10deg",
+			"bg-radial",
+			"bg-conic-10deg",
+			"-bg-conic-10deg",
+			"from-white",
+			"from-red-50",
+			"from-10%",
+			"via-white",
+			"via-red-50",
+			"via-10%",
+			"to-white",
+			"to-red-50",
+			"to-10%"
+		],
+		"custom": [
+			"bg-(image:<custom-property>)",
+			"bg-[<value>]",
+			"bg-linear-(<custom-property>)",
+			"bg-linear-[<value>]",
+			"bg-radial-(<custom-property>)",
+			"bg-radial-[<value>]",
+			"bg-conic-(<custom-property>)",
+			"bg-conic-[<value>]",
+			"from-(<custom-property>)",
+			"from-[<value>]",
+			"via-(<custom-property>)",
+			"via-[<value>]",
+			"to-(<custom-property>)",
+			"to-[<value>]"
+		]
+	},
+	"background-origin": {
+		"regular": [
+			"bg-origin-border",
+			"bg-origin-padding",
+			"bg-origin-content"
+		],
+		"custom": []
+	},
+	"background-position": {
+		"regular": [
+			"bg-bottom",
+			"bg-center",
+			"bg-left",
+			"bg-left-bottom",
+			"bg-left-top",
+			"bg-right",
+			"bg-right-bottom",
+			"bg-right-top",
+			"bg-top"
+		],
+		"custom": [
+			"bg-(position:<custom-property>)",
+			"bg-[<value>]"
+		]
+	},
+	"background-repeat": {
+		"regular": [
+			"bg-repeat",
+			"bg-repeat-x",
+			"bg-repeat-y",
+			"bg-repeat-space",
+			"bg-repeat-round",
+			"bg-no-repeat"
+		],
+		"custom": []
+	},
+	"background-size": {
+		"regular": [
+			"bg-auto",
+			"bg-cover",
+			"bg-contain"
+		],
+		"custom": [
+			"bg-(length:<custom-property>)",
+			"bg-[<value>]"
+		]
+	},
+	"border-radius": {
+		"regular": [
+			"rounded-xs",
+			"rounded-sm",
+			"rounded-md",
+			"rounded-lg",
+			"rounded-xl",
+			"rounded-2xl",
+			"rounded-3xl",
+			"rounded-none",
+			"rounded-full",
+			"rounded-s-xs",
+			"rounded-s-sm",
+			"rounded-s-md",
+			"rounded-s-lg",
+			"rounded-s-xl",
+			"rounded-s-2xl",
+			"rounded-s-3xl",
+			"rounded-s-none",
+			"rounded-s-full",
+			"rounded-e-xs",
+			"rounded-e-sm",
+			"rounded-e-md",
+			"rounded-e-lg",
+			"rounded-e-xl",
+			"rounded-e-2xl",
+			"rounded-e-3xl",
+			"rounded-e-none",
+			"rounded-e-full",
+			"rounded-t-xs",
+			"rounded-t-sm",
+			"rounded-t-md",
+			"rounded-t-lg",
+			"rounded-t-xl",
+			"rounded-t-2xl",
+			"rounded-t-3xl",
+			"rounded-t-none",
+			"rounded-t-full",
+			"rounded-r-xs",
+			"rounded-r-sm",
+			"rounded-r-md",
+			"rounded-r-lg",
+			"rounded-r-xl",
+			"rounded-r-2xl",
+			"rounded-r-3xl",
+			"rounded-r-none",
+			"rounded-r-full",
+			"rounded-b-xs",
+			"rounded-b-sm",
+			"rounded-b-md",
+			"rounded-b-lg",
+			"rounded-b-xl",
+			"rounded-b-2xl",
+			"rounded-b-3xl",
+			"rounded-b-none",
+			"rounded-b-full",
+			"rounded-l-xs",
+			"rounded-l-sm",
+			"rounded-l-md",
+			"rounded-l-lg",
+			"rounded-l-xl",
+			"rounded-l-2xl",
+			"rounded-l-3xl",
+			"rounded-l-none",
+			"rounded-l-full",
+			"rounded-ss-xs",
+			"rounded-ss-sm",
+			"rounded-ss-md",
+			"rounded-ss-lg",
+			"rounded-ss-xl",
+			"rounded-ss-2xl",
+			"rounded-ss-3xl",
+			"rounded-ss-none",
+			"rounded-ss-full",
+			"rounded-se-xs",
+			"rounded-se-sm",
+			"rounded-se-md",
+			"rounded-se-lg",
+			"rounded-se-xl",
+			"rounded-se-2xl",
+			"rounded-se-3xl",
+			"rounded-se-none",
+			"rounded-se-full",
+			"rounded-ee-xs",
+			"rounded-ee-sm",
+			"rounded-ee-md",
+			"rounded-ee-lg",
+			"rounded-ee-xl",
+			"rounded-ee-2xl",
+			"rounded-ee-3xl",
+			"rounded-ee-none",
+			"rounded-ee-full",
+			"rounded-es-xs",
+			"rounded-es-sm",
+			"rounded-es-md",
+			"rounded-es-lg",
+			"rounded-es-xl",
+			"rounded-es-2xl",
+			"rounded-es-3xl",
+			"rounded-es-none",
+			"rounded-es-full",
+			"rounded-tl-xs",
+			"rounded-tl-sm",
+			"rounded-tl-md",
+			"rounded-tl-lg",
+			"rounded-tl-xl",
+			"rounded-tl-2xl",
+			"rounded-tl-3xl",
+			"rounded-tl-none",
+			"rounded-tl-full",
+			"rounded-tr-xs",
+			"rounded-tr-sm",
+			"rounded-tr-md",
+			"rounded-tr-lg",
+			"rounded-tr-xl",
+			"rounded-tr-2xl",
+			"rounded-tr-3xl",
+			"rounded-tr-none",
+			"rounded-tr-full",
+			"rounded-br-xs",
+			"rounded-br-sm",
+			"rounded-br-md",
+			"rounded-br-lg",
+			"rounded-br-xl",
+			"rounded-br-2xl",
+			"rounded-br-3xl",
+			"rounded-br-none",
+			"rounded-br-full",
+			"rounded-bl-xs",
+			"rounded-bl-sm",
+			"rounded-bl-md",
+			"rounded-bl-lg",
+			"rounded-bl-xl",
+			"rounded-bl-2xl",
+			"rounded-bl-3xl",
+			"rounded-bl-none",
+			"rounded-bl-full"
+		],
+		"custom": [
+			"rounded-(<custom-property>)",
+			"rounded-[<value>]",
+			"rounded-s-(<custom-property>)",
+			"rounded-s-[<value>]",
+			"rounded-e-(<custom-property>)",
+			"rounded-e-[<value>]",
+			"rounded-t-(<custom-property>)",
+			"rounded-t-[<value>]",
+			"rounded-r-(<custom-property>)",
+			"rounded-r-[<value>]",
+			"rounded-b-(<custom-property>)",
+			"rounded-b-[<value>]",
+			"rounded-l-(<custom-property>)",
+			"rounded-l-[<value>]",
+			"rounded-ss-(<custom-property>)",
+			"rounded-ss-[<value>]",
+			"rounded-se-(<custom-property>)",
+			"rounded-se-[<value>]",
+			"rounded-ee-(<custom-property>)",
+			"rounded-ee-[<value>]",
+			"rounded-es-(<custom-property>)",
+			"rounded-es-[<value>]",
+			"rounded-tl-(<custom-property>)",
+			"rounded-tl-[<value>]",
+			"rounded-tr-(<custom-property>)",
+			"rounded-tr-[<value>]",
+			"rounded-br-(<custom-property>)",
+			"rounded-br-[<value>]",
+			"rounded-bl-(<custom-property>)",
+			"rounded-bl-[<value>]"
+		]
+	},
+	"border-width": {
+		"regular": [
+			"border",
+			"border-5",
+			"border-x",
+			"border-x-5",
+			"border-y",
+			"border-y-5",
+			"border-s",
+			"border-s-5",
+			"border-e",
+			"border-e-5",
+			"border-t",
+			"border-t-5",
+			"border-r",
+			"border-r-5",
+			"border-b",
+			"border-b-5",
+			"border-l",
+			"border-l-5",
+			"divide-x",
+			"divide-x-5",
+			"divide-y",
+			"divide-y-5",
+			"divide-x-reverse",
+			"divide-y-reverse"
+		],
+		"custom": [
+			"border-(length:<custom-property>)",
+			"border-[<value>]",
+			"border-x-(length:<custom-property>)",
+			"border-x-[<value>]",
+			"border-y-(length:<custom-property>)",
+			"border-y-[<value>]",
+			"border-s-(length:<custom-property>)",
+			"border-s-[<value>]",
+			"border-e-(length:<custom-property>)",
+			"border-e-[<value>]",
+			"border-t-(length:<custom-property>)",
+			"border-t-[<value>]",
+			"border-r-(length:<custom-property>)",
+			"border-r-[<value>]",
+			"border-b-(length:<custom-property>)",
+			"border-b-[<value>]",
+			"border-l-(length:<custom-property>)",
+			"border-l-[<value>]",
+			"divide-x-(length:<custom-property>)",
+			"divide-x-[<value>]",
+			"divide-y-(length:<custom-property>)",
+			"divide-y-[<value>]"
+		]
+	},
+	"border-color": {
+		"regular": [
+			"border-white",
+			"border-red-50",
+			"border-x-white",
+			"border-x-red-50",
+			"border-y-white",
+			"border-y-red-50",
+			"border-s-white",
+			"border-s-red-50",
+			"border-e-white",
+			"border-e-red-50",
+			"border-t-white",
+			"border-t-red-50",
+			"border-r-white",
+			"border-r-red-50",
+			"border-b-white",
+			"border-b-red-50",
+			"border-l-white",
+			"border-l-red-50",
+			"divide-white",
+			"divide-red-50"
+		],
+		"custom": [
+			"border-(<custom-property>)",
+			"border-[<value>]",
+			"border-x-(<custom-property>)",
+			"border-x-[<value>]",
+			"border-y-(<custom-property>)",
+			"border-y-[<value>]",
+			"border-s-(<custom-property>)",
+			"border-s-[<value>]",
+			"border-e-(<custom-property>)",
+			"border-e-[<value>]",
+			"border-t-(<custom-property>)",
+			"border-t-[<value>]",
+			"border-r-(<custom-property>)",
+			"border-r-[<value>]",
+			"border-b-(<custom-property>)",
+			"border-b-[<value>]",
+			"border-l-(<custom-property>)",
+			"border-l-[<value>]",
+			"divide-(<custom-property>)",
+			"divide-[<value>]"
+		]
+	},
+	"border-style": {
+		"regular": [
+			"border-solid",
+			"border-dashed",
+			"border-dotted",
+			"border-double",
+			"border-hidden",
+			"border-none",
+			"divide-solid",
+			"divide-dashed",
+			"divide-dotted",
+			"divide-double",
+			"divide-hidden",
+			"divide-none"
+		],
+		"custom": []
+	},
+	"outline-width": {
+		"regular": [
+			"outline",
+			"outline-5"
+		],
+		"custom": [
+			"outline-(length:<custom-property>)",
+			"outline-[<value>]"
+		]
+	},
+	"outline-color": {
+		"regular": [
+			"outline-white",
+			"outline-red-50"
+		],
+		"custom": [
+			"outline-(<custom-property>)",
+			"outline-[<value>]"
+		]
+	},
+	"outline-style": {
+		"regular": [
+			"outline-solid",
+			"outline-dashed",
+			"outline-dotted",
+			"outline-double",
+			"outline-none",
+			"outline-hidden"
+		],
+		"custom": []
+	},
+	"outline-offset": {
+		"regular": [
+			"outline-offset-5",
+			"-outline-offset-5"
+		],
+		"custom": [
+			"outline-offset-(<custom-property>)",
+			"outline-offset-[<value>]"
+		]
+	},
+	"box-shadow": {
+		"regular": [
+			"shadow-2xs",
+			"shadow-xs",
+			"shadow-sm",
+			"shadow-md",
+			"shadow-lg",
+			"shadow-xl",
+			"shadow-2xl",
+			"shadow-none",
+			"shadow-white",
+			"shadow-red-50",
+			"inset-shadow-2xs",
+			"inset-shadow-xs",
+			"inset-shadow-sm",
+			"inset-shadow-none",
+			"inset-shadow-white",
+			"inset-shadow-red-50",
+			"ring",
+			"ring-5",
+			"ring-white",
+			"ring-red-50",
+			"inset-ring",
+			"inset-ring-5",
+			"inset-ring-white",
+			"inset-ring-red-50"
+		],
+		"custom": [
+			"shadow-(<custom-property>)",
+			"shadow-(color:<custom-property>)",
+			"inset-shadow-(<custom-property>)",
+			"shadow-[<value>]",
+			"inset-shadow-[<value>]",
+			"ring-(<custom-property>)",
+			"inset-ring-(<custom-property>)",
+			"ring-[<value>]",
+			"inset-ring-[<value>]"
+		]
+	},
+	"opacity": {
+		"regular": [
+			"opacity-5"
+		],
+		"custom": [
+			"opacity-(<custom-property>)",
+			"opacity-[<value>]"
+		]
+	},
+	"mix-blend-mode": {
+		"regular": [
+			"mix-blend-normal",
+			"mix-blend-multiply",
+			"mix-blend-screen",
+			"mix-blend-overlay",
+			"mix-blend-darken",
+			"mix-blend-lighten",
+			"mix-blend-color-dodge",
+			"mix-blend-color-burn",
+			"mix-blend-hard-light",
+			"mix-blend-soft-light",
+			"mix-blend-difference",
+			"mix-blend-exclusion",
+			"mix-blend-hue",
+			"mix-blend-saturation",
+			"mix-blend-color",
+			"mix-blend-luminosity",
+			"mix-blend-plus-darker",
+			"mix-blend-plus-lighter"
+		],
+		"custom": []
+	},
+	"background-blend-mode": {
+		"regular": [
+			"bg-blend-normal",
+			"bg-blend-multiply",
+			"bg-blend-screen",
+			"bg-blend-overlay",
+			"bg-blend-darken",
+			"bg-blend-lighten",
+			"bg-blend-color-dodge",
+			"bg-blend-color-burn",
+			"bg-blend-hard-light",
+			"bg-blend-soft-light",
+			"bg-blend-difference",
+			"bg-blend-exclusion",
+			"bg-blend-hue",
+			"bg-blend-saturation",
+			"bg-blend-color",
+			"bg-blend-luminosity"
+		],
+		"custom": []
+	},
+	"filter": {
+		"regular": [
+			"filter-none"
+		],
+		"custom": [
+			"filter-(<custom-property>)",
+			"filter-[<value>]"
+		]
+	},
+	"filter-blur": {
+		"regular": [
+			"blur-xs",
+			"blur-sm",
+			"blur-md",
+			"blur-lg",
+			"blur-xl",
+			"blur-2xl",
+			"blur-3xl",
+			"blur-none"
+		],
+		"custom": [
+			"blur-(<custom-property>)",
+			"blur-[<value>]"
+		]
+	},
+	"filter-brightness": {
+		"regular": [
+			"brightness-5"
+		],
+		"custom": [
+			"brightness-(<custom-property>)",
+			"brightness-[<value>]"
+		]
+	},
+	"filter-contrast": {
+		"regular": [
+			"contrast-5"
+		],
+		"custom": [
+			"contrast-(<custom-property>)",
+			"contrast-[<value>]"
+		]
+	},
+	"filter-drop-shadow": {
+		"regular": [
+			"drop-shadow-xs",
+			"drop-shadow-sm",
+			"drop-shadow-md",
+			"drop-shadow-lg",
+			"drop-shadow-xl",
+			"drop-shadow-2xl",
+			"drop-shadow-none"
+		],
+		"custom": [
+			"drop-shadow-(<custom-property>)",
+			"drop-shadow-[<value>]"
+		]
+	},
+	"filter-grayscale": {
+		"regular": [
+			"grayscale",
+			"grayscale-5"
+		],
+		"custom": [
+			"grayscale-(<custom-property>)",
+			"grayscale-[<value>]"
+		]
+	},
+	"filter-hue-rotate": {
+		"regular": [
+			"hue-rotate-5",
+			"-hue-rotate-5"
+		],
+		"custom": [
+			"hue-rotate-(<custom-property>)",
+			"hue-rotate-[<value>]"
+		]
+	},
+	"filter-invert": {
+		"regular": [
+			"invert",
+			"invert-5"
+		],
+		"custom": [
+			"invert-(<custom-property>)",
+			"invert-[<value>]"
+		]
+	},
+	"filter-saturate": {
+		"regular": [
+			"saturate-5"
+		],
+		"custom": [
+			"saturate-(<custom-property>)",
+			"saturate-[<value>]"
+		]
+	},
+	"filter-sepia": {
+		"regular": [
+			"sepia",
+			"sepia-5"
+		],
+		"custom": [
+			"sepia-(<custom-property>)",
+			"sepia-[<value>]"
+		]
+	},
+	"backdrop-filter": {
+		"regular": [
+			"backdrop-filter-none"
+		],
+		"custom": [
+			"backdrop-filter-(<custom-property>)",
+			"backdrop-filter-[<value>]"
+		]
+	},
+	"backdrop-filter-blur": {
+		"regular": [
+			"backdrop-blur-xs",
+			"backdrop-blur-sm",
+			"backdrop-blur-md",
+			"backdrop-blur-lg",
+			"backdrop-blur-xl",
+			"backdrop-blur-2xl",
+			"backdrop-blur-3xl",
+			"backdrop-blur-none"
+		],
+		"custom": [
+			"backdrop-blur-(<custom-property>)",
+			"backdrop-blur-[<value>]"
+		]
+	},
+	"backdrop-filter-brightness": {
+		"regular": [
+			"backdrop-brightness-5"
+		],
+		"custom": [
+			"backdrop-brightness-(<custom-property>)",
+			"backdrop-brightness-[<value>]"
+		]
+	},
+	"backdrop-filter-contrast": {
+		"regular": [
+			"backdrop-contrast-5"
+		],
+		"custom": [
+			"backdrop-contrast-(<custom-property>)",
+			"backdrop-contrast-[<value>]"
+		]
+	},
+	"backdrop-filter-grayscale": {
+		"regular": [
+			"backdrop-grayscale",
+			"backdrop-grayscale-5"
+		],
+		"custom": [
+			"backdrop-grayscale-(<custom-property>)",
+			"backdrop-grayscale-[<value>]"
+		]
+	},
+	"backdrop-filter-hue-rotate": {
+		"regular": [
+			"backdrop-hue-rotate-5",
+			"-backdrop-hue-rotate-5"
+		],
+		"custom": [
+			"backdrop-hue-rotate-(<custom-property>)",
+			"backdrop-hue-rotate-[<value>]"
+		]
+	},
+	"backdrop-filter-invert": {
+		"regular": [
+			"backdrop-invert",
+			"backdrop-invert-5"
+		],
+		"custom": [
+			"backdrop-invert-(<custom-property>)",
+			"backdrop-invert-[<value>]"
+		]
+	},
+	"backdrop-filter-opacity": {
+		"regular": [
+			"backdrop-opacity-5"
+		],
+		"custom": [
+			"backdrop-opacity-(<custom-property>)",
+			"backdrop-opacity-[<value>]"
+		]
+	},
+	"backdrop-filter-saturate": {
+		"regular": [
+			"backdrop-saturate-5"
+		],
+		"custom": [
+			"backdrop-saturate-(<custom-property>)",
+			"backdrop-saturate-[<value>]"
+		]
+	},
+	"backdrop-filter-sepia": {
+		"regular": [
+			"backdrop-sepia",
+			"backdrop-sepia-5"
+		],
+		"custom": [
+			"backdrop-sepia-(<custom-property>)",
+			"backdrop-sepia-[<value>]"
+		]
+	},
+	"border-collapse": {
+		"regular": [
+			"border-collapse",
+			"border-separate"
+		],
+		"custom": []
+	},
+	"border-spacing": {
+		"regular": [
+			"border-spacing-5",
+			"border-spacing-x-5",
+			"border-spacing-y-5"
+		],
+		"custom": [
+			"border-spacing-(<custom-property>)",
+			"border-spacing-[<value>]",
+			"border-spacing-x-(<custom-property>)",
+			"border-spacing-x-[<value>]",
+			"border-spacing-y-(<custom-property>)",
+			"border-spacing-y-[<value>]"
+		]
+	},
+	"table-layout": {
+		"regular": [
+			"table-auto",
+			"table-fixed"
+		],
+		"custom": []
+	},
+	"caption-side": {
+		"regular": [
+			"caption-top",
+			"caption-bottom"
+		],
+		"custom": []
+	},
+	"transition-property": {
+		"regular": [
+			"transition",
+			"transition-all",
+			"transition-colors",
+			"transition-opacity",
+			"transition-shadow",
+			"transition-transform",
+			"transition-none"
+		],
+		"custom": [
+			"transition-(<custom-property>)",
+			"transition-[<value>]"
+		]
+	},
+	"transition-behavior": {
+		"regular": [
+			"transition-normal",
+			"transition-discrete"
+		],
+		"custom": []
+	},
+	"transition-duration": {
+		"regular": [
+			"duration-5",
+			"duration-initial"
+		],
+		"custom": [
+			"duration-(<custom-property>)",
+			"duration-[<value>]"
+		]
+	},
+	"transition-timing-function": {
+		"regular": [
+			"ease-linear",
+			"ease-in",
+			"ease-out",
+			"ease-in-out",
+			"ease-initial"
+		],
+		"custom": [
+			"ease-(<custom-property>)",
+			"ease-[<value>]"
+		]
+	},
+	"transition-delay": {
+		"regular": [
+			"delay-5"
+		],
+		"custom": [
+			"delay-(<custom-property>)",
+			"delay-[<value>]"
+		]
+	},
+	"animation": {
+		"regular": [
+			"animate-spin",
+			"animate-ping",
+			"animate-pulse",
+			"animate-bounce",
+			"animate-none"
+		],
+		"custom": [
+			"animate-(<custom-property>)",
+			"animate-[<value>]"
+		]
+	},
+	"backface-visibility": {
+		"regular": [
+			"backface-hidden",
+			"backface-visible"
+		],
+		"custom": []
+	},
+	"perspective": {
+		"regular": [
+			"perspective-dramatic",
+			"perspective-near",
+			"perspective-normal",
+			"perspective-midrange",
+			"perspective-distant",
+			"perspective-none"
+		],
+		"custom": [
+			"perspective-(<custom-property>)",
+			"perspective-[<value>]"
+		]
+	},
+	"perspective-origin": {
+		"regular": [
+			"perspective-origin-center",
+			"perspective-origin-top",
+			"perspective-origin-top-right",
+			"perspective-origin-right",
+			"perspective-origin-bottom-right",
+			"perspective-origin-bottom",
+			"perspective-origin-bottom-left",
+			"perspective-origin-left",
+			"perspective-origin-top-left"
+		],
+		"custom": [
+			"perspective-origin-(<custom-property>)",
+			"perspective-origin-[<value>]"
+		]
+	},
+	"rotate": {
+		"regular": [
+			"rotate-none",
+			"rotate-5",
+			"-rotate-5",
+			"rotate-x-5",
+			"-rotate-x-5",
+			"rotate-y-5",
+			"-rotate-y-5",
+			"rotate-z-5",
+			"-rotate-z-5"
+		],
+		"custom": [
+			"rotate-(<custom-property>)",
+			"rotate-[<value>]",
+			"rotate-x-(<custom-property>)",
+			"rotate-x-[<value>]",
+			"rotate-y-(<custom-property>)",
+			"rotate-y-[<value>]",
+			"rotate-z-(<custom-property>)",
+			"rotate-z-[<value>]"
+		]
+	},
+	"scale": {
+		"regular": [
+			"scale-none",
+			"scale-5",
+			"-scale-5",
+			"scale-x-5",
+			"-scale-x-5",
+			"scale-y-5",
+			"-scale-y-5",
+			"scale-z-5",
+			"-scale-z-5",
+			"scale-3d"
+		],
+		"custom": [
+			"scale-(<custom-property>)",
+			"scale-[<value>]",
+			"scale-x-(<custom-property>)",
+			"scale-x-[<value>]",
+			"scale-y-(<custom-property>)",
+			"scale-y-[<value>]",
+			"scale-z-(<custom-property>)",
+			"scale-z-[<value>]"
+		]
+	},
+	"skew": {
+		"regular": [
+			"skew-5",
+			"-skew-5",
+			"skew-x-5",
+			"-skew-x-5",
+			"skew-y-5",
+			"-skew-y-5"
+		],
+		"custom": [
+			"skew-(<custom-property>)",
+			"skew-[<value>]",
+			"skew-x-(<custom-property>)",
+			"skew-x-[<value>]",
+			"skew-y-(<custom-property>)",
+			"skew-y-[<value>]"
+		]
+	},
+	"transform": {
+		"regular": [
+			"transform-none",
+			"transform-gpu",
+			"transform-cpu"
+		],
+		"custom": [
+			"transform-(<custom-property>)",
+			"transform-[<value>]"
+		]
+	},
+	"transform-origin": {
+		"regular": [
+			"origin-center",
+			"origin-top",
+			"origin-top-right",
+			"origin-right",
+			"origin-bottom-right",
+			"origin-bottom",
+			"origin-bottom-left",
+			"origin-left",
+			"origin-top-left"
+		],
+		"custom": [
+			"origin-(<custom-property>)",
+			"origin-[<value>]"
+		]
+	},
+	"transform-style": {
+		"regular": [
+			"transform-3d",
+			"transform-flat"
+		],
+		"custom": []
+	},
+	"translate": {
+		"regular": [
+			"translate-5",
+			"-translate-5",
+			"translate-1/2",
+			"-translate-1/2",
+			"translate-full",
+			"-translate-full",
+			"translate-px",
+			"-translate-px",
+			"translate-x-5",
+			"-translate-x-5",
+			"translate-x-1/2",
+			"-translate-x-1/2",
+			"translate-x-full",
+			"-translate-x-full",
+			"translate-x-px",
+			"-translate-x-px",
+			"translate-y-5",
+			"-translate-y-5",
+			"translate-y-1/2",
+			"-translate-y-1/2",
+			"translate-y-full",
+			"-translate-y-full",
+			"translate-y-px",
+			"-translate-y-px",
+			"translate-z-5",
+			"-translate-z-5",
+			"translate-z-px",
+			"-translate-z-px",
+			"translate-none"
+		],
+		"custom": [
+			"translate-(<custom-property>)",
+			"translate-[<value>]",
+			"translate-x-(<custom-property>)",
+			"translate-x-[<value>]",
+			"translate-y-(<custom-property>)",
+			"translate-y-[<value>]",
+			"translate-z-(<custom-property>)",
+			"translate-z-[<value>]"
+		]
+	},
+	"accent-color": {
+		"regular": [
+			"accent-white",
+			"accent-red-50"
+		],
+		"custom": [
+			"accent-(<custom-property>)",
+			"accent-[<value>]"
+		]
+	},
+	"appearance": {
+		"regular": [
+			"appearance-none",
+			"appearance-auto"
+		],
+		"custom": []
+	},
+	"caret-color": {
+		"regular": [
+			"caret-white",
+			"caret-red-50"
+		],
+		"custom": [
+			"caret-(<custom-property>)",
+			"caret-[<value>]"
+		]
+	},
+	"color-scheme": {
+		"regular": [
+			"scheme-normal",
+			"scheme-dark",
+			"scheme-light",
+			"scheme-light-dark",
+			"scheme-only-dark",
+			"scheme-only-light"
+		],
+		"custom": []
+	},
+	"cursor": {
+		"regular": [
+			"cursor-auto",
+			"cursor-default",
+			"cursor-pointer",
+			"cursor-wait",
+			"cursor-text",
+			"cursor-move",
+			"cursor-help",
+			"cursor-not-allowed",
+			"cursor-none",
+			"cursor-context-menu",
+			"cursor-progress",
+			"cursor-cell",
+			"cursor-crosshair",
+			"cursor-vertical-text",
+			"cursor-alias",
+			"cursor-copy",
+			"cursor-no-drop",
+			"cursor-grab",
+			"cursor-grabbing",
+			"cursor-all-scroll",
+			"cursor-col-resize",
+			"cursor-row-resize",
+			"cursor-n-resize",
+			"cursor-e-resize",
+			"cursor-s-resize",
+			"cursor-w-resize",
+			"cursor-ne-resize",
+			"cursor-nw-resize",
+			"cursor-se-resize",
+			"cursor-sw-resize",
+			"cursor-ew-resize",
+			"cursor-ns-resize",
+			"cursor-nesw-resize",
+			"cursor-nwse-resize",
+			"cursor-zoom-in",
+			"cursor-zoom-out"
+		],
+		"custom": [
+			"cursor-(<custom-property>)",
+			"cursor-[<value>]"
+		]
+	},
+	"field-sizing": {
+		"regular": [
+			"field-sizing-fixed",
+			"field-sizing-content"
+		],
+		"custom": []
+	},
+	"pointer-events": {
+		"regular": [
+			"pointer-events-auto",
+			"pointer-events-none"
+		],
+		"custom": []
+	},
+	"resize": {
+		"regular": [
+			"resize-none",
+			"resize",
+			"resize-y",
+			"resize-x"
+		],
+		"custom": []
+	},
+	"scroll-behavior": {
+		"regular": [
+			"scroll-auto",
+			"scroll-smooth"
+		],
+		"custom": []
+	},
+	"scroll-margin": {
+		"regular": [
+			"scroll-m-5",
+			"-scroll-m-5",
+			"scroll-mx-5",
+			"-scroll-mx-5",
+			"scroll-my-5",
+			"-scroll-my-5",
+			"scroll-ms-5",
+			"-scroll-ms-5",
+			"scroll-me-5",
+			"-scroll-me-5",
+			"scroll-mt-5",
+			"-scroll-mt-5",
+			"scroll-mr-5",
+			"-scroll-mr-5",
+			"scroll-mb-5",
+			"-scroll-mb-5",
+			"scroll-ml-5",
+			"-scroll-ml-5"
+		],
+		"custom": [
+			"scroll-m-(<custom-property>)",
+			"scroll-m-[<value>]",
+			"scroll-mx-(<custom-property>)",
+			"scroll-mx-[<value>]",
+			"scroll-my-(<custom-property>)",
+			"scroll-my-[<value>]",
+			"scroll-ms-(<custom-property>)",
+			"scroll-ms-[<value>]",
+			"scroll-me-(<custom-property>)",
+			"scroll-me-[<value>]",
+			"scroll-mt-(<custom-property>)",
+			"scroll-mt-[<value>]",
+			"scroll-mr-(<custom-property>)",
+			"scroll-mr-[<value>]",
+			"scroll-mb-(<custom-property>)",
+			"scroll-mb-[<value>]",
+			"scroll-ml-(<custom-property>)",
+			"scroll-ml-[<value>]"
+		]
+	},
+	"scroll-padding": {
+		"regular": [
+			"scroll-p-5",
+			"-scroll-p-5",
+			"scroll-px-5",
+			"-scroll-px-5",
+			"scroll-py-5",
+			"-scroll-py-5",
+			"scroll-ps-5",
+			"-scroll-ps-5",
+			"scroll-pe-5",
+			"-scroll-pe-5",
+			"scroll-pt-5",
+			"-scroll-pt-5",
+			"scroll-pr-5",
+			"-scroll-pr-5",
+			"scroll-pb-5",
+			"-scroll-pb-5",
+			"scroll-pl-5",
+			"-scroll-pl-5"
+		],
+		"custom": [
+			"scroll-p-(<custom-property>)",
+			"scroll-p-[<value>]",
+			"scroll-px-(<custom-property>)",
+			"scroll-px-[<value>]",
+			"scroll-py-(<custom-property>)",
+			"scroll-py-[<value>]",
+			"scroll-ps-(<custom-property>)",
+			"scroll-ps-[<value>]",
+			"scroll-pe-(<custom-property>)",
+			"scroll-pe-[<value>]",
+			"scroll-pt-(<custom-property>)",
+			"scroll-pt-[<value>]",
+			"scroll-pr-(<custom-property>)",
+			"scroll-pr-[<value>]",
+			"scroll-pb-(<custom-property>)",
+			"scroll-pb-[<value>]",
+			"scroll-pl-(<custom-property>)",
+			"scroll-pl-[<value>]"
+		]
+	},
+	"scroll-snap-align": {
+		"regular": [
+			"snap-start",
+			"snap-end",
+			"snap-center",
+			"snap-align-none"
+		],
+		"custom": []
+	},
+	"scroll-snap-stop": {
+		"regular": [
+			"snap-normal",
+			"snap-always"
+		],
+		"custom": []
+	},
+	"scroll-snap-type": {
+		"regular": [
+			"snap-none",
+			"snap-x",
+			"snap-y",
+			"snap-both",
+			"snap-mandatory",
+			"snap-proximity"
+		],
+		"custom": []
+	},
+	"touch-action": {
+		"regular": [
+			"touch-auto",
+			"touch-none",
+			"touch-pan-x",
+			"touch-pan-left",
+			"touch-pan-right",
+			"touch-pan-y",
+			"touch-pan-up",
+			"touch-pan-down",
+			"touch-pinch-zoom",
+			"touch-manipulation"
+		],
+		"custom": []
+	},
+	"user-select": {
+		"regular": [
+			"select-none",
+			"select-text",
+			"select-all",
+			"select-auto"
+		],
+		"custom": []
+	},
+	"will-change": {
+		"regular": [
+			"will-change-auto",
+			"will-change-scroll",
+			"will-change-contents",
+			"will-change-transform"
+		],
+		"custom": [
+			"will-change-(<custom-property>)",
+			"will-change-[<value>]"
+		]
+	},
+	"fill": {
+		"regular": [
+			"fill-none",
+			"fill-white",
+			"fill-red-50"
+		],
+		"custom": [
+			"fill-(<custom-property>)",
+			"fill-[<color>]"
+		]
+	},
+	"stroke": {
+		"regular": [
+			"stroke-none",
+			"stroke-white",
+			"stroke-red-50"
+		],
+		"custom": [
+			"stroke-(<custom-property>)",
+			"stroke-[<color>]"
+		]
+	},
+	"stroke-width": {
+		"regular": [
+			"stroke-5"
+		],
+		"custom": [
+			"stroke-(length:<custom-property>)",
+			"stroke-[<value>]"
+		]
+	},
+	"forced-color-adjust": {
+		"regular": [
+			"forced-color-adjust-auto",
+			"forced-color-adjust-none"
+		],
+		"custom": []
+	}
+}

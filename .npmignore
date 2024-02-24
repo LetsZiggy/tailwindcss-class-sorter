@@ -1,0 +1,9 @@
+*
+
+!dist/
+!package.json
+!README.md
+!LICENSE
+!.npmignore
+!.npmrc
+!pnpm-lock.yaml

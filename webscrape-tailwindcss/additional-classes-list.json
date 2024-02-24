@@ -1,0 +1,28 @@
+{
+	"3rd-party": {
+		"tailwindcss-forms": {
+			"links": ["https://github.com/tailwindlabs/tailwindcss-forms"],
+			"regular": ["form-input", "form-textarea", "form-select", "form-multiselect", "form-checkbox", "form-radio"],
+			"custom": []
+		},
+		"tailwindcss-typography": {
+			"links": ["https://github.com/tailwindlabs/tailwindcss-typography"],
+			"regular": [
+				"prose",
+				"not-prose",
+				"prose-invert",
+				"prose-sm",
+				"prose-base",
+				"prose-lg",
+				"prose-xl",
+				"prose-2xl",
+				"prose-gray",
+				"prose-slate",
+				"prose-zinc",
+				"prose-neutral",
+				"prose-stone"
+			],
+			"custom": []
+		}
+	}
+}

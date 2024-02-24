@@ -1,0 +1,55 @@
+{
+	"include": [".*.js", ".*.cjs", ".*.mjs", ".*.ts", "*.js", "*.cjs", "*.mjs", "*.ts"],
+	"exclude": ["bower_components", "jspm_packages", "node_modules", "vendor", "venv", "dist"],
+	"compilerOptions": {
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictBuiltinIteratorReturn": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"useUnknownInCatchVariables": true,
+
+		"baseUrl": "./",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"resolveJsonModule": true,
+		"rootDir": "./",
+		"types": ["node"],
+
+		"declaration": false,
+		"importHelpers": true,
+		"removeComments": true,
+		"sourceMap": true,
+
+		"allowJs": true,
+		"checkJs": true,
+
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		"emitDecoratorMetadata": false,
+		"experimentalDecorators": false,
+		"lib": ["ESNext"],
+		"target": "esnext",
+
+		"skipLibCheck": true
+	},
+	"$schema": "https://json.schemastore.org/tsconfig"
+}

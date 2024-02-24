@@ -1,0 +1,4 @@
+#!/bin/bash
+
+git rev-parse --show-toplevel | ( read rootpath; rm -rf $rootpath/dist/*/; ) && \
+git rev-parse --show-toplevel | ( read rootpath; rm -rf $rootpath/npm/tailwindcss-class-sorter.wasm; )

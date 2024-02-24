@@ -1,0 +1,31 @@
+{
+	"name": "tailwindcss-class-sorter",
+	"version": "0.0.0",
+	"description": " tailwindcss Class Sorter ",
+	"keywords": [
+		"tailwindcss",
+		"formatter",
+		"cli",
+		"wasm"
+	],
+	"license": "MIT",
+	"contributors": [
+		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
+	],
+	"main": "./dist/wasm_exec_node.js",
+	"bin": {
+		"tailwindcss-class-sorter": "./dist/wasm_exec_node.js",
+		"twcs": "./dist/wasm_exec_node.js"
+	},
+	"files": [
+		"./dist/twcs.wasm",
+		"./dist/go_js_wasm_exec",
+		"./dist/wasm_exec.js",
+		"./dist/wasm_exec_node.js"
+	],
+	"_golang": {
+		"go_js_wasm_exec": "$(go env GOROOT)/misc/wasm/go_js_wasm_exec",
+		"wasm_exec": "$(go env GOROOT)/misc/wasm/wasm_exec.js",
+		"wasm_exec_node": "$(go env GOROOT)/misc/wasm/wasm_exec_node.js"
+	}
+}

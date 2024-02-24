@@ -10,8 +10,13 @@
 		"fix:eslint": "./node_modules/.bin/eslint --config ./eslint.config.js --max-warnings 0 --no-warn-ignored --fix .",
 		"fix:prettier": "./node_modules/.bin/prettier --config ./prettier.config.js --write .",
 		"fix:stylelint": "./node_modules/.bin/stylelint --max-warnings 0 --fix .",
+		"generate": "pnpm run transpile && pnpm run generate:tailwindcss && pnpm run prepare:css && pnpm run generate:order-lists",
+		"generate:order-lists": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && node ./dist/generate-order-list.js --src ./style.css --stylelintrc ./dist/stylelint.config.js --out $rootpath/dist/order_list.json )",
+		"generate:tailwindcss": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && NODE_ENV=development node_modules/.bin/tailwindcss -i ./tailwind.css -c ./dist/tailwind.config.js -o ./style-raw.css )",
 		"preinstall": "npx only-allow pnpm",
-		"lint:commit": "./node_modules/.bin/commitlint --edit $1"
+		"lint:commit": "./node_modules/.bin/commitlint --edit $1",
+		"prepare:css": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && node ./dist/prepare-css.js --in ./style-raw.css --out ./style.css )",
+		"transpile": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && tsc --target esnext --outdir ./dist )"
 	},
 	"commitlint": {
 		"extends": [
@@ -40,6 +45,14 @@
 		"@eslint/js": "^9.22.0",
 		"@stylistic/eslint-plugin": "^4.2.0",
 		"@stylistic/eslint-plugin-migrate": "^4.2.0",
+		"@tailwindcss/aspect-ratio": "^0.4.2",
+		"@tailwindcss/container-queries": "^0.1.1",
+		"@tailwindcss/forms": "^0.5.10",
+		"@tailwindcss/typography": "^0.5.16",
+		"@total-typescript/ts-reset": "^0.6.1",
+		"@total-typescript/tsconfig": "^1.0.4",
+		"@types/node": "^22.13.10",
+		"autoprefixer": "^10.4.21",
 		"commitizen": "^4.3.1",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^9.22.0",
@@ -50,6 +63,8 @@
 		"eslint-plugin-sort-class-members": "^1.21.0",
 		"eslint-plugin-sort-destructure-keys": "^2.0.0",
 		"eslint-plugin-unicorn": "^57.0.0",
+		"globals": "^16.0.0",
+		"postcss": "^8.5.3",
 		"prettier": "^3.5.3",
 		"prettier-plugin-organize-attributes": "^1.0.0",
 		"prettier-plugin-packagejson": "^2.5.10",
@@ -58,6 +73,10 @@
 		"stylelint-config-property-sort-order-smacss": "^10.0.0",
 		"stylelint-config-recess-order": "^6.0.0",
 		"stylelint-order": "^6.0.4",
+		"tailwindcss": "3.4.17",
+		"tslib": "^2.8.1",
+		"type-fest": "^4.37.0",
+		"typescript": "^5.8.2",
 		"typescript-eslint": "^8.26.1"
 	},
 	"engines": {

@@ -1,0 +1,77 @@
+{
+	"include": [".*.js", ".*.cjs", ".*.mjs", ".*.ts", "*.js", "*.cjs", "*.mjs", "*.ts"],
+	"exclude": [
+		"bower_components",
+		"jspm_packages",
+		"node_modules",
+		"vendor",
+		".env",
+		"env",
+		".venv",
+		"venv",
+		".env.bak",
+		"env.bak",
+		".venv.bak",
+		"venv.bak",
+		"ENV",
+		"__pycache__",
+		"dist"
+	],
+	"compilerOptions": {
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictBuiltinIteratorReturn": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"useUnknownInCatchVariables": true,
+
+		"baseUrl": "./",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"paths": {},
+		"resolveJsonModule": true,
+		"rootDir": "./",
+		"types": ["node"],
+
+		"declaration": false,
+		"importHelpers": true,
+		"outDir": "dist",
+		"removeComments": true,
+		"sourceMap": true,
+
+		"allowJs": true,
+		"checkJs": true,
+
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": false,
+		"lib": ["ESNext"],
+		"moduleDetection": "force",
+		"target": "esnext",
+
+		"incremental": true,
+		"tsBuildInfoFile": ".tsbuildinfo",
+
+		"skipLibCheck": true
+	},
+	"$schema": "https://json.schemastore.org/tsconfig"
+}

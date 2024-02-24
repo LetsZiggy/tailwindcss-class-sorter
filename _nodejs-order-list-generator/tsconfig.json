@@ -1,0 +1,45 @@
+{
+	"include": [".*.js", ".*.ts", "*.js", "*.ts"],
+	"exclude": ["node_modules", "scripts"],
+	"compilerOptions": {
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+		"strictPropertyInitialization": false,
+
+		"module": "commonjs",
+		"moduleResolution": "nodenext",
+		"resolveJsonModule": true,
+		"rootDir": ".",
+		"baseUrl": ".",
+		"paths": {},
+		"types": ["node"],
+
+		"declaration": false,
+		"importHelpers": true,
+		"removeComments": true,
+		"sourceMap": true,
+
+		"allowJs": true,
+		"checkJs": true,
+
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+
+		"emitDecoratorMetadata": true,
+		"experimentalDecorators": true,
+		"lib": ["esnext"],
+		"target": "esnext",
+
+		"incremental": true,
+		"tsBuildInfoFile": ".tsbuildinfo",
+
+		"skipLibCheck": true
+	}
+}

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# Upgrade go version (go.mod)
+go version | sed -e 's/.*go\([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/g' | ( read version; go mod edit -go=${version}; ) && \
+cat go.mod | sed -n '3p' | sed -e 's/go \([0-9]\+\.[0-9]\+\.[0-9]\+\)/v\1/g'

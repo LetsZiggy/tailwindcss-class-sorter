@@ -44,6 +44,7 @@
 		"contrast-more",
 		"motion-reduce",
 		"motion-safe",
+		"forced-colors",
 		"landscape",
 		"portrait",
 		"dark",
@@ -101,6 +102,7 @@
 		"only",
 		"last",
 		"first",
+		"has-[*]",
 		"target",
 		"visited",
 		"active",
@@ -121,6 +123,7 @@
 		"prose-figcaption",
 		"prose-strong",
 		"prose-em",
+		"prose-kbd",
 		"prose-code",
 		"prose-pre",
 		"prose-ol",
@@ -135,7 +138,8 @@
 		"prose-video",
 		"prose-hr",
 		"[&_*]",
-		"[&:*]"
+		"[&:*]",
+		"*"
 	],
 	"breakpoint_order": [
 		"@xs",  "@xs/*",

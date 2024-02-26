@@ -29,6 +29,7 @@ const order: Record<string, string[]> = {
 	"flex-grow": [],
 	"flex-shrink": [],
 	"flex-wrap": [],
+	// "-webkit-box-orient": [], // Vendor prefix
 	"grid": [],
 	"grid-area": [],
 	"grid-template": [],
@@ -144,6 +145,10 @@ const order: Record<string, string[]> = {
 	"hyphens": [],
 	"line-height": [],
 	"color": [],
+	// "-webkit-text-fill-color": [], // Vendor prefix
+	// "-webkit-text-stroke": [], // Vendor prefix
+	// "-webkit-text-stroke-width": [], // Vendor prefix
+	// "-webkit-text-stroke-color": [], // Vendor prefix
 	"text-align": [],
 	"text-align-last": [],
 	"text-emphasis": [],
@@ -160,10 +165,11 @@ const order: Record<string, string[]> = {
 	"text-indent": [],
 	"text-justify": [],
 	"text-outline": [],
-	// "-ms-text-overflow": [], // Vendor prefix
 	"text-overflow": [],
 	"text-overflow-ellipsis": [],
 	"text-overflow-mode": [],
+	// "-webkit-line-clamp": [], // Vendor prefix
+	"line-clamp": [],
 	"text-shadow": [],
 	"text-transform": [],
 	"text-wrap": [],
@@ -209,7 +215,37 @@ const order: Record<string, string[]> = {
 	"counter-set": [],
 	"counter-increment": [],
 	"resize": [],
+	"scroll-behaviour": [],
+	"scroll-snap-type": [],
+	"scroll-snap-align": [],
+	"scroll-snap-stop": [],
+	"scroll-padding": [],
+	"scroll-padding-inline": [],
+	"scroll-padding-inline-start": [],
+	"scroll-padding-inline-end": [],
+	"scroll-padding-block": [],
+	"scroll-padding-block-start": [],
+	"scroll-padding-block-end": [],
+	"scroll-padding-top": [],
+	"scroll-padding-right": [],
+	"scroll-padding-bottom": [],
+	"scroll-padding-left": [],
+	"scroll-margin": [],
+	"scroll-margin-inline": [],
+	"scroll-margin-inline-start": [],
+	"scroll-margin-inline-end": [],
+	"scroll-margin-block": [],
+	"scroll-margin-block-start": [],
+	"scroll-margin-block-end": [],
+	"scroll-margin-top": [],
+	"scroll-margin-right": [],
+	"scroll-margin-bottom": [],
+	"scroll-margin-left": [],
+	"scrollbar-color": [],
+	"scrollbar-gutter": [],
+	"scrollbar-width": [],
 	"user-select": [],
+	// "-webkit-user-select": [], // Vendor prefix
 	"nav-index": [],
 	"nav-up": [],
 	"nav-right": [],
@@ -225,6 +261,7 @@ const order: Record<string, string[]> = {
 	"background": [],
 	"background-color": [],
 	"background-image": [],
+	// "-ms-filter:\\'progid:DXImageTransform.Microsoft.gradient": [], // Vendor prefix
 	// "filter:progid:DXImageTransform.Microsoft.gradient": [], // Vendor prefix
 	// "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader": [], // Vendor prefix
 	// "filter": [], // Shifted (previous position)
@@ -300,6 +337,7 @@ const order: Record<string, string[]> = {
 	"box-shadow": [],
 	"mix-blend-mode": [],
 	// "filter:progid:DXImageTransform.Microsoft.Alpha(Opacity": [], // Vendor prefix
+	// "-ms-filter:\\'progid:DXImageTransform.Microsoft.Alpha": [], // Vendor prefix
 	"opacity": [],
 	"mask-border": [],
 	"mask-border-source": [],
@@ -368,6 +406,11 @@ const order: Record<string, string[]> = {
 	"animation-iteration-count": [],
 	"animation-direction": [],
 	"will-change": [],
+	"break-before": [],
+	"break-inside": [],
+	"break-after": [],
+	"orphans": [],
+	"widows": [],
 }
 
 export async function generateRecess (source: string, stylelintrcPath: string): Promise<Record<"order", OrderData[]>> {

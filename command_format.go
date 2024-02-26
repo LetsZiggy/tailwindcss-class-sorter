@@ -164,6 +164,10 @@ func sortVariants(sl []string, variantOrder []string) string {
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "max-*")
 
+		case strings.Index(v, "has-[") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "has-[*]")
+
 		default:
 			variantListSorting[i].s = v
 			variantListSorting[i].i = 99999

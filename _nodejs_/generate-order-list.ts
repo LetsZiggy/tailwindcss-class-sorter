@@ -15,13 +15,11 @@ interface JoinUpArraysOptions {
 	mergeTo?: number,
 }
 
-/*
 interface JoinDownArraysOptions {
 	start?: number,
 	excludes?: number[],
 	mergeTo?: number,
 }
-*/
 
 function getRepeatedProperty (data: OrderData[]): Array<[string, number]> {
 	const repeatedGroupNameCount: Record<string, number> = data
@@ -75,7 +73,6 @@ function joinUpArrays (data: OrderData[], propertyName: string, { end = 999, exc
 	return data
 }
 
-/*
 function joinDownArrays (data: OrderData[], propertyName: string, { excludes = [], mergeTo = 999, start = -1 }: JoinDownArraysOptions = {}) {
 	const indexList: number[] = data
 		.map((current: OrderData) => current.group_name)
@@ -110,7 +107,6 @@ function joinDownArrays (data: OrderData[], propertyName: string, { excludes = [
 
 	return data
 }
-/* */
 
 function reorderStyles (data: OrderData[], order: string[]): OrderData[] {
 	const indexList: number[] = order
@@ -207,6 +203,7 @@ await (async function () {
 	recess.order = joinUpArrays(recess.order, "from")
 	recess.order = joinUpArrays(recess.order, "to")
 	recess.order = joinUpArrays(recess.order, "via")
+	recess.order = joinDownArrays(recess.order, "aspect")
 
 	recess.order = reorderStyles(recess.order, positionStyleOrder)
 	recess.order = reorderStyles(recess.order, displayStyleOrder)
@@ -261,7 +258,7 @@ await (async function () {
 	concentric.order = joinUpArrays(concentric.order, "ml")
 	concentric.order = joinUpArrays(concentric.order, "space")
 	concentric.order = joinUpArrays(concentric.order, "bg")
-	concentric.order = joinUpArrays(concentric.order, "text")
+	concentric.order = joinUpArrays(concentric.order, "text", { excludes: [3] }) // excludes `Text Wrap`
 	concentric.order = joinUpArrays(concentric.order, "break")
 	concentric.order = joinUpArrays(concentric.order, "decoration")
 	concentric.order = joinUpArrays(concentric.order, "underline")
@@ -286,6 +283,7 @@ await (async function () {
 	concentric.order = joinUpArrays(concentric.order, "from")
 	concentric.order = joinUpArrays(concentric.order, "to")
 	concentric.order = joinUpArrays(concentric.order, "via")
+	concentric.order = joinDownArrays(concentric.order, "aspect")
 
 	concentric.order = reorderStyles(concentric.order, positionStyleOrder)
 	concentric.order = reorderStyles(concentric.order, displayStyleOrder)
@@ -366,6 +364,7 @@ await (async function () {
 	smacss.order = joinUpArrays(smacss.order, "from")
 	smacss.order = joinUpArrays(smacss.order, "to")
 	smacss.order = joinUpArrays(smacss.order, "via")
+	smacss.order = joinDownArrays(smacss.order, "aspect")
 
 	smacss.order = reorderStyles(smacss.order, positionStyleOrder)
 	smacss.order = reorderStyles(smacss.order, displayStyleOrder)

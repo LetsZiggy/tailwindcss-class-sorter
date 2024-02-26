@@ -28,6 +28,7 @@
 		"rtl",
 		"landscape",
 		"portrait",
+		"forced-colors",
 		"motion-safe",
 		"motion-reduce",
 		"contrast-more",
@@ -54,6 +55,7 @@
 		"active",
 		"visited",
 		"target",
+		"has-[*]",
 		"peer-*",
 		"group-*",
 		"[@media(*)]",
@@ -121,6 +123,7 @@
 		"prose-figcaption",
 		"prose-strong",
 		"prose-em",
+		"prose-kbd",
 		"prose-code",
 		"prose-pre",
 		"prose-ol",
@@ -135,7 +138,8 @@
 		"prose-video",
 		"prose-hr",
 		"[&_*]",
-		"[&:*]"
+		"[&:*]",
+		"*"
 	],
 	"breakpoint_order": [
 		"@xs",  "@xs/*",

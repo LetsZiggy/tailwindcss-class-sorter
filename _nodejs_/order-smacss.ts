@@ -22,7 +22,7 @@ const order: Record<string, string[]> = {
 	"inset-block-end": [], // Added
 	"inset-inline-start": [], // Added
 	"inset-inline-end": [], // Added
-	"box-sizing": [], // Added
+	"box-sizing": [],
 	"grid": [],
 	"grid-after": [],
 	"grid-area": [],

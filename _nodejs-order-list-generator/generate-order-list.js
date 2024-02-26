@@ -221,7 +221,7 @@ function reorderStyles (data, order) {
 	concentric.order = joinArrays(concentric.order, "ml")
 	concentric.order = joinArrays(concentric.order, "space")
 	concentric.order = joinArrays(concentric.order, "bg")
-	concentric.order = joinArrays(concentric.order, "text")
+	concentric.order = joinArrays(concentric.order, "text", { excludes: [ 3 ]}) // excludes `Text Wrap`
 	concentric.order = joinArrays(concentric.order, "break")
 	concentric.order = joinArrays(concentric.order, "decoration")
 	concentric.order = joinArrays(concentric.order, "underline")

@@ -22,9 +22,9 @@
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/forms": "^0.5.7",
 		"@tailwindcss/typography": "^0.5.10",
-		"@types/node": "^20.11.19",
+		"@types/node": "^20.11.20",
 		"autoprefixer": "^10.4.17",
-		"eslint": "^8.56.0",
+		"eslint": "^8.57.0",
 		"eslint-config-standard-with-typescript": "^43.0.1",
 		"eslint-import-resolver-typescript": "^3.6.1",
 		"eslint-plugin-import": "^2.29.1",
@@ -37,7 +37,7 @@
 		"stylelint-config-property-sort-order-smacss": "^10.0.0",
 		"stylelint-config-recess-order": "^4.6.0",
 		"stylelint-order": "^6.0.4",
-		"tailwindcss": "3.3.7",
+		"tailwindcss": "3.4.1",
 		"typescript": "^5.3.3"
 	}
 }

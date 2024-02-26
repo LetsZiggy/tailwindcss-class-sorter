@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
 
+import aspectRatioPlugin from "@tailwindcss/aspect-ratio"
 import containerQueriesPlugin from "@tailwindcss/container-queries"
 import formsPlugin from "@tailwindcss/forms"
 import typographyPlugin from "@tailwindcss/typography"
@@ -109,9 +110,22 @@ export default {
 	safelist: [{ pattern: /.+/ }],
 	presets: [],
 	darkMode: "media", // "media" | "class"
-	theme: trimTheme(stub.theme),
+	// theme: trimTheme(stub.theme),
+	/* */
+	theme: {
+		...trimTheme(stub.theme),
+		// https://github.com/tailwindlabs/tailwindcss-aspect-ratio?tab=readme-ov-file#compatibility-with-default-aspect-ratio-utilities
+		aspectRatio: {
+			auto: "auto",
+			square: "1 / 1",
+			video: "16 / 9",
+			0: "0",
+		},
+	},
+	/* */
 	// corePlugins: [],
 	plugins: [
+		aspectRatioPlugin,
 		formsPlugin({ strategy: "class" }),
 		containerQueriesPlugin,
 		typographyPlugin,

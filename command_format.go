@@ -43,6 +43,8 @@ func cleanup(input string, removeList []string, checkFromTail bool) string {
 
 /*
 eg: [@supports(display:grid)]:
+
+eg: has-[:focus]:
 */
 func mergeDynamicVariantParts(sl []string) []string {
 	var (
@@ -140,6 +142,11 @@ func sortVariants(sl []string, variantOrder []string) string {
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "group-aria-*")
 
+		// group-has-*
+		case strings.Index(v, "group-has-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "group-has-*")
+
 		// group-*
 		case strings.Index(v, "group-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
@@ -149,6 +156,11 @@ func sortVariants(sl []string, variantOrder []string) string {
 		case strings.Index(v, "peer-aria-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "peer-aria-*")
+
+		// peer-has-*
+		case strings.Index(v, "peer-has-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "peer-has-*")
 
 		// peer-*
 		case strings.Index(v, "peer-") == 0 && !slices.Contains(variantOrder, v):
@@ -162,6 +174,10 @@ func sortVariants(sl []string, variantOrder []string) string {
 		case strings.Index(v, "data-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "data-*")
+
+		case strings.Index(v, "has-[") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "has-[*]")
 
 		case strings.Index(v, "min-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v

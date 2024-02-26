@@ -83,6 +83,12 @@ await (async function () {
 		/* */
 		/* */
 		.then((string_: string) => string_
+			.replaceAll(/(\.aspect[^ ]+ {) ([^a}])/g, "$1 aspect-ratio: auto; $2")
+			.replaceAll(/(\.aspect[^ ]+) { }/g, "$1 { aspect-ratio: auto; position: relative; }"),
+		) // Handle .aspect classes
+		/* */
+		/* */
+		.then((string_: string) => string_
 			.replaceAll(String.raw`.\@`, ".@"), // Convert all .\\@container to .@container
 		) // Handle .@container classes
 		/* */

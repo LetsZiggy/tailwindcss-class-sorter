@@ -24,3 +24,108 @@ tasks:
         git add .
         git commit -m "feat: tailwindcss $(sed -E -e 's/\.[0-9]+$/\.\*/' <<< {{.CLI_ARGS}}) test"
         git tag -a "v{{.CLI_ARGS}}" -m "tailwindcss v$(sed -E -e 's/\.[0-9]+$/\.\*/' <<< {{.CLI_ARGS}}) support"
+
+  build:
+    desc: task build -- [VERSION]
+    cmds:
+      - task: clean:binary
+      - task: minify-dist/config.json-dist/config.min.json
+      - task: minify-dist/order_list.json-dist/order_list.min.json
+      - task: build:darwin-arm64
+      - task: build:darwin-amd64
+      - task: build:linux-arm64
+      - task: build:linux-386
+      - task: build:linux-amd64
+      - task: build:windows-arm64
+      - task: build:windows-386
+      - task: build:windows-amd64
+      - task: build:js-wasm
+
+  clean:binary:
+    desc: task clean:binary
+    cmds:
+      - rm -rf {{.TASKFILE_DIR}}/dist/*/
+      - rm -rf {{.TASKFILE_DIR}}/npm/*.wasm
+
+  minify-*-*:
+    desc: task minify-[INPUT_FILE]-[OUTPUT_FILE]
+    vars:
+      SOURCE: '{{.ROOT_DIR}}/{{index .MATCH 0}}'
+      DESTINATION: '{{.ROOT_DIR}}/{{index .MATCH 1}}'
+    cmds:
+      - cat {{.SOURCE}} | jq -r tostring > {{.DESTINATION}}
+
+  build:darwin-arm64:
+    desc: task build:darwin-arm64 -- [VERSION]
+    cmds:
+      - |
+        GOOS=darwin  GOARCH=arm64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-arm-64/twcs
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-arm-64/twcs
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-arm-64/twcs.gz
+
+  build:darwin-amd64:
+    desc: task build:darwin-amd64 -- [VERSION]
+    cmds:
+      - |
+        GOOS=darwin  GOARCH=amd64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-x86-64/twcs
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-x86-64/twcs
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/darwin-x86-64/twcs.gz
+
+  build:linux-arm64:
+    desc: task build:linux-arm64 -- [VERSION]
+    cmds:
+      - |
+        GOOS=linux   GOARCH=arm64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-arm-64/twcs
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-arm-64/twcs
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-arm-64/twcs.gz
+
+  build:linux-386:
+    desc: task build:linux-386 -- [VERSION]
+    cmds:
+      - |
+        GOOS=linux   GOARCH=386   go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-32/twcs
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-32/twcs
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-32/twcs.gz
+
+  build:linux-amd64:
+    desc: task build:linux-amd64 -- [VERSION]
+    cmds:
+      - |
+        GOOS=linux   GOARCH=amd64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-64/twcs
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-64/twcs
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/linux-x86-64/twcs.gz
+
+  build:windows-arm64:
+    desc: task build:windows-arm64 -- [VERSION]
+    cmds:
+      - |
+        GOOS=windows GOARCH=arm64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-arm-64/twcs.exe
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-arm-64/twcs.exe
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-arm-64/twcs.exe.gz
+
+  build:windows-386:
+    desc: task build:windows-386 -- [VERSION]
+    cmds:
+      - |
+        GOOS=windows GOARCH=386   go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-32/twcs.exe
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-32/twcs.exe
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-32/twcs.exe.gz
+
+  build:windows-amd64:
+    desc: task build:windows-amd64 -- [VERSION]
+    cmds:
+      - |
+        GOOS=windows GOARCH=amd64 go build -o {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-64/twcs.exe
+        gzip --best                           {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-64/twcs.exe
+        chmod 755                             {{.TASKFILE_DIR}}/dist/{{.CLI_ARGS}}/windows-x86-64/twcs.exe.gz
+
+  build:js-wasm:
+    desc: task build:js-wasm -- [VERSION]
+    cmds:
+      - |
+        sed -E -i -e 's/"version": "[0-9]+\.[0-9]+\.[0-9]+"/"version": "{{.CLI_ARGS}}"/' {{.TASKFILE_DIR}}/npm/package.json
+        cp -rf {{.TASKFILE_DIR}}/LICENSE   {{.TASKFILE_DIR}}/npm/LICENSE
+        cp -rf {{.TASKFILE_DIR}}/README.md {{.TASKFILE_DIR}}/npm/README.md
+        sed -E -i -z -e 's,<!-- NPM::START -->.*<!-- NPM::END -->,<!-- NPM::START -->\n## Installation\n\n```bash\nnpm install --save-dev github:LetsZiggy/tailwindcss-class-sorter/npm\n\npnpm add --save-dev github:LetsZiggy/tailwindcss-class-sorter/npm\n```\n<!-- NPM::END -->,' {{.TASKFILE_DIR}}/npm/README.md
+        GOOS=js GOARCH=wasm go build -o    {{.TASKFILE_DIR}}/npm/twcs.wasm
+        chmod 755                          {{.TASKFILE_DIR}}/npm/twcs.wasm

@@ -1,20 +1,21 @@
 #!/bin/bash
 
-GOOS="darwin"  GOARCH="arm64" go build -o "./dist/${1}/darwin-arm-64/tailwindcss-class-sorter"      && \
-GOOS="darwin"  GOARCH="amd64" go build -o "./dist/${1}/darwin-x86-64/tailwindcss-class-sorter"      && \
-GOOS="linux"   GOARCH="arm64" go build -o "./dist/${1}/linux-arm-64/tailwindcss-class-sorter"       && \
-GOOS="linux"   GOARCH="386"   go build -o "./dist/${1}/linux-x86-32/tailwindcss-class-sorter"       && \
-GOOS="linux"   GOARCH="amd64" go build -o "./dist/${1}/linux-x86-64/tailwindcss-class-sorter"       && \
-GOOS="windows" GOARCH="arm64" go build -o "./dist/${1}/windows-arm-64/tailwindcss-class-sorter.exe" && \
-GOOS="windows" GOARCH="386"   go build -o "./dist/${1}/windows-x86-32/tailwindcss-class-sorter.exe" && \
-GOOS="windows" GOARCH="amd64" go build -o "./dist/${1}/windows-x86-64/tailwindcss-class-sorter.exe" && \
-gzip --best "./dist/${1}/darwin-arm-64/tailwindcss-class-sorter"      && \
-gzip --best "./dist/${1}/darwin-x86-64/tailwindcss-class-sorter"      && \
-gzip --best "./dist/${1}/linux-arm-64/tailwindcss-class-sorter"       && \
-gzip --best "./dist/${1}/linux-x86-32/tailwindcss-class-sorter"       && \
-gzip --best "./dist/${1}/linux-x86-64/tailwindcss-class-sorter"       && \
-gzip --best "./dist/${1}/windows-arm-64/tailwindcss-class-sorter.exe" && \
-gzip --best "./dist/${1}/windows-x86-32/tailwindcss-class-sorter.exe" && \
-gzip --best "./dist/${1}/windows-x86-64/tailwindcss-class-sorter.exe" && \
+# Build
+GOOS="darwin"  GOARCH="arm64" go build -o "./dist/${1}/darwin-arm-64/twcs"      && \
+GOOS="darwin"  GOARCH="amd64" go build -o "./dist/${1}/darwin-x86-64/twcs"      && \
+GOOS="linux"   GOARCH="arm64" go build -o "./dist/${1}/linux-arm-64/twcs"       && \
+GOOS="linux"   GOARCH="386"   go build -o "./dist/${1}/linux-x86-32/twcs"       && \
+GOOS="linux"   GOARCH="amd64" go build -o "./dist/${1}/linux-x86-64/twcs"       && \
+GOOS="windows" GOARCH="arm64" go build -o "./dist/${1}/windows-arm-64/twcs.exe" && \
+GOOS="windows" GOARCH="386"   go build -o "./dist/${1}/windows-x86-32/twcs.exe" && \
+GOOS="windows" GOARCH="amd64" go build -o "./dist/${1}/windows-x86-64/twcs.exe" && \
+gzip --best "./dist/${1}/darwin-arm-64/twcs"      && \
+gzip --best "./dist/${1}/darwin-x86-64/twcs"      && \
+gzip --best "./dist/${1}/linux-arm-64/twcs"       && \
+gzip --best "./dist/${1}/linux-x86-32/twcs"       && \
+gzip --best "./dist/${1}/linux-x86-64/twcs"       && \
+gzip --best "./dist/${1}/windows-arm-64/twcs.exe" && \
+gzip --best "./dist/${1}/windows-x86-32/twcs.exe" && \
+gzip --best "./dist/${1}/windows-x86-64/twcs.exe" && \
 sed -i "s/\"version\": \"[0-9]\+.[0-9]\+.[0-9]\"/\"version\": \"${1}\"/g" package.json && \
-GOOS="js" GOARCH=wasm go build -o "./npm/tailwindcss-class-sorter.wasm"
+GOOS="js" GOARCH=wasm go build -o "./npm/twcs.wasm"

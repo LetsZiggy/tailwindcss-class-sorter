@@ -1,6 +1,6 @@
 module tailwindcss-class-sorter
 
-go 1.22.3
+go 1.23.0
 
 require (
 	github.com/dlclark/regexp2 v1.10.0

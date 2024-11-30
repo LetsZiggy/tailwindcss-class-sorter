@@ -3,13 +3,13 @@
 		{
 			"path": ".",
 			"name": "root",
-			"folder_exclude_patterns": [ ".svn", ".git", ".hg", "CVS", "_nodejs-order-list-generator", "dist", "tests" ],
+			"folder_exclude_patterns": [".svn", ".git", ".hg", "CVS", "_nodejs-order-list-generator", "dist", "tests"],
 			"follow_symlinks": true,
 		},
 		{
 			"path": "_nodejs-order-list-generator",
 			"name": "_nodejs-order-list-generator",
-			"folder_exclude_patterns": [ "node_modules", "_golang-implementation_incomplete" ],
+			"folder_exclude_patterns": ["node_modules", "_golang-implementation_incomplete"],
 			"follow_symlinks": true,
 		},
 		{
@@ -38,9 +38,27 @@
 		"use_tab_stops": true,
 		"word_wrap": true,
 
+		/* JsPrettier */
+		"js_prettier": {
+			"debug": false,
+			"auto_format_on_save": true,
+			// "auto_format_on_save_excludes": [],
+			"auto_format_on_save_requires_prettier_config": true,
+			"allow_inline_formatting": true,
+			"additional_cli_args": {
+				"--config": "${project_path}/_nodejs-order-list-generator/prettier.config.js",
+				"--config-precedence": "prefer-file",
+				"--ignore-path": "${project_path}/_nodejs-order-list-generator/.prettierignore",
+			},
+		},
+
 		/* LSP */
-		"lsp_format_on_save": true,
+		"lsp_format_on_save": false,
 		"lsp_code_actions_on_save": {
+			"source.addMissingImports.ts": false,
+			"source.fixAll.ts": false,
+			"source.organizeImports.ts": false,
+			"source.removeUnused.ts": false,
 			"source.fixAll.json": false,
 			"source.fixAll.eslint": true,
 		},
@@ -51,7 +69,7 @@
 				"enabled": true,
 				"settings": {
 					"gopls.gofumpt": true,
-					"gopls.directoryFilters": [ "-**/node_modules", "-${project_path}/_nodejs-order-list-generator" ],
+					"gopls.directoryFilters": ["-**/node_modules", "-${project_path}/_nodejs-order-list-generator"],
 					// "gopls.env": {
 					// 	"GOPATH": "${project_path}",
 					// },
@@ -63,18 +81,18 @@
 				"enabled": true,
 				"settings": {
 					"options": {
-						"overrideConfigFile": "${project_path}/_nodejs-order-list-generator/.eslintrc.js",
+						"overrideConfigFile": "${project_path}/_nodejs-order-list-generator/eslint.config.js",
 					},
-					"probe": [ "javascript", "typescript" ],
-					"validate": [ "javascript", "typescript" ],
-					"workingDirectories": [ "${project_path}/_nodejs-order-list-generator", ],
+					"probe": ["javascript", "typescript"],
+					"validate": ["javascript", "typescript"],
+					"workingDirectories": ["${project_path}/_nodejs-order-list-generator"],
 				},
 				"selector": "source.js | source.ts",
 			},
 
 			/* LSP-typescript */
 			"LSP-typescript": {
-				"enabled": false,
+				"enabled": true,
 				"settings": {
 					"javascript.format.insertSpaceAfterCommaDelimiter": false,
 					"javascript.format.insertSpaceAfterConstructor": false,

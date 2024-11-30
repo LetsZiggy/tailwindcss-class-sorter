@@ -6,9 +6,15 @@ Comes with [recess](https://github.com/stormwarning/stylelint-config-recess-orde
 
 ## Installation
 
+<strong>npm</strong>:
+
 ```bash
 npm install --save-dev LetsZiggy/tailwindcss-class-sorter
+```
 
+<strong>pnpm</strong>:
+
+```bash
 pnpm add --save-dev LetsZiggy/tailwindcss-class-sorter
 ```
 
@@ -127,12 +133,14 @@ Placement of non-tailwindcss classes.
 Options: `front` | `back`.
 
 If `front` is selected, pseudo-elements (classes with `before:` | `after:` variants) will be placed right after non-tailwindcss classes:
+
 ```html
 <div class="custom-class print:before:hover:content-['*'] print:after:hover:content-['*'] block ltr:dark:sm:block rtl:dark:2xl:block m-2 dark:sm:active:hover:m-2 dark:2xl:active:hover:m-2 text-red-50/50">
 </div>
 ```
 
 If `back` is selected, pseudo-elements (classes with `before:` | `after:` variants) will be placed right before non-tailwindcss classes:
+
 ```html
 <div class="block ltr:dark:sm:block rtl:dark:2xl:block m-2 dark:sm:active:hover:m-2 dark:2xl:active:hover:m-2 text-red-50/50 print:before:hover:content-['*'] print:after:hover:content-['*'] custom-class">
 </div>
@@ -170,11 +178,13 @@ Set file extensions to format.
 ```
 
 This example uses the aurelia.js templating engine:
+
 ```html
 <div class="sm:!inset-1/2 inset-y-1/2 ${ condition === comparator ? '-inset-x-px' : 'inset-x-0.5' } box-content !block -translate-x-0"></div>
 ```
 
 Config for the example above:
+
 ```jsonc
 {
 	"extensions_regex": {
@@ -198,7 +208,8 @@ Explanation:
 
 `separator` is required if classes are not separated by spaces (separator character will also be prefixed to the first sorted class - see `pug templating language` below).
 
-pug (eg):
+<strong>pug (eg)</strong>:
+
 ```pug
 div.before:block.before:w-2.before:h-2.block.w-4.h-4
    ^^^^^^^^^^^^^ ➙ `this would be the first sorted class`
@@ -207,24 +218,28 @@ div.before:block.before:w-2.before:h-2.block.w-4.h-4
 `conditional_split_character` is the character used to split ternary expression or complex class bindings by templating engine. This is required if classes are complex templating engine expression.
 
 if classes are dynamically added through templating engine string interpolation (please note classes must be surrounded by quotes `` " | ' | ` ``):
+
 ```html
 <div class="${ condition === comparator ? 'block' : 'inline' } text-white"></div>
                                         ^ ➙ `conditional_split_character`
 ```
 
-vue.js (eg):
+<strong>vue.js (eg)</strong>:
+
 ```html
                ∨-----∨ ➙ `must have quotes`
 <div :class="{ 'block': condition } text-white"></div>
                       ^ ➙ `conditional_split_character`
 ```
 
-aurelia.js (eg):
+<strong>aurelia.js (eg)</strong>:
+
 ```html
                ∨-----∨ ➙ `must have quotes`
 <div class="${ 'block' | valueConverter:param1 } text-white"></div>
                        ^ ➙ `conditional_split_character`
 ```
+
 `conditional_class_location` can only be either `before` or `after`. It is used to determine where the classes resides in the complex expression after splitting using the `conditional_split_character`. This is required if classes are complex templating engine expression.
 
 ### order_type
@@ -285,6 +300,7 @@ Edits will be applied in the order of `overwrite` then `amend` then `append`.
 `overwrite` the whole group's regex in place.
 
 Example default `order_list`:
+
 ```jsonc
 [
 	{
@@ -295,6 +311,7 @@ Example default `order_list`:
 ```
 
 Expected edited `order_list`:
+
 ```jsonc
 [
 	{
@@ -306,6 +323,7 @@ Expected edited `order_list`:
 ```
 
 Config for the example above:
+
 ```jsonc
 {
 	"edit_order": {
@@ -330,6 +348,7 @@ Explanation:
 `amend` adds new regex(es) to the group.
 
 Example default `order_list`:
+
 ```jsonc
 [
 	{
@@ -340,6 +359,7 @@ Example default `order_list`:
 ```
 
 Expected edited `order_list`:
+
 ```jsonc
 [
 	{
@@ -351,6 +371,7 @@ Expected edited `order_list`:
 ```
 
 Config for the example above:
+
 ```jsonc
 {
 	"edit_order": {
@@ -378,6 +399,7 @@ Explanation:
 `append` adds new group(s) to the order list.
 
 Example default `order_list`:
+
 ```jsonc
 [
 	{
@@ -396,6 +418,7 @@ Example default `order_list`:
 ```
 
 Expected edited `order_list`:
+
 ```jsonc
 [
 	{
@@ -423,6 +446,7 @@ Expected edited `order_list`:
 ```
 
 Config for the example above:
+
 ```jsonc
 {
 	"edit_order": {
@@ -473,16 +497,19 @@ Both grouping options will put classes without any breakpoint variant first.
 The order of `breakpoint` grouping depends on `breakpoint_order` in the config.
 
 Example:
+
 ```html
 <div class="p-2 lg:p-6 m-2 md:m-6 lg:m-8 bg-hidden bg-black sm:block"></div>
 ```
 
 `style`:
+
 ```html
 <div class="bg-hidden sm:block p-2 lg:p-6 m-2 md:m-6 lg:m-8 bg-black"></div>
 ```
 
 `breakpoint`:
+
 ```html
 <div class="bg-hidden p-2 m-2 bg-black sm:block md:m-6 lg:p-6 lg:m-8"></div>
 ```
@@ -594,4 +621,3 @@ Order list used if `order_type` is set to `custom`.
 
 - Where is `v1.*.*` and `v2.*.*`?
 	- Releases will follow tailwindcss versions.
-<br>

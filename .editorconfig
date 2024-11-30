@@ -14,11 +14,13 @@ max_line_length = 120
 
 [*.md]
 trim_trailing_whitespace = false
-indent_size = 4
-tab_width = 4
 
-[*.json]
-insert_final_newline = false
+# prettier doesn't respect .editorconfig options
+;[*.json]
+;insert_final_newline = false
 
 [*.{yml,yaml}]
+indent_style = space
+
+[MakeFile]
 indent_style = space

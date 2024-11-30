@@ -1,43 +1,85 @@
 {
 	"name": "tailwindcss-node",
-	"description": "tailwindcss-node",
 	"version": "0.1.0",
+	"description": "tailwindcss-node",
 	"contributors": [
 		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
 	],
+	"type": "module",
 	"scripts": {
-		"generate-tailwindcss": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs-order-list-generator && NODE_ENV=development node_modules/.bin/tailwindcss -i ./tailwind.css -c ./tailwind.config.js -o ./style.css )",
-		"prepare-css": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs-order-list-generator && node prepare-css.js --src ./style.css )",
-		"generate-order-lists": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs-order-list-generator && node generate-order-list.js --src ./style.css --stylelintrc ./.stylelintrc.js --out $rootpath/dist/order_list.json )",
-		"generate": "pnpm run generate-tailwindcss && pnpm run prepare-css && pnpm run generate-order-lists"
+		"cz": "cz",
+		"fix:eslint": "./node_modules/.bin/eslint --config ./eslint.config.js --max-warnings 0 --no-warn-ignored --fix .",
+		"fix:prettier-html": "./node_modules/.bin/prettier --write . && tailwindcss-class-sorter format --embedded-config --config ./package.json .",
+		"fix:prettier-json": "./node_modules/.bin/prettier --write .",
+		"fix:stylelint": "./node_modules/.bin/stylelint --max-warnings 0 --fix .",
+		"generate": "pnpm run generate:tailwindcss && pnpm run prepare:css && pnpm run generate:order-lists",
+		"generate:order-lists": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs-order-list-generator && node generate-order-list.js --src ./style.css --stylelintrc ./.stylelintrc.js --out $rootpath/dist/order_list.json )",
+		"generate:tailwindcss": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs-order-list-generator && NODE_ENV=development node_modules/.bin/tailwindcss -i ./tailwind.css -c ./tailwind.config.js -o ./style.css )",
+		"lint:commit": "./node_modules/.bin/commitlint --edit ${1}",
+		"prepare:css": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs-order-list-generator && node prepare-css.js --src ./style.css )",
+		"transpile": "tsc --target esnext --outfile index.js"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		],
+		"rules": {
+			"scope-case": [
+				2,
+				"always",
+				"lower-case"
+			]
+		}
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog",
+			"maxHeaderWidth": 100
+		}
 	},
 	"browserslist": [
 		"defaults"
 	],
-	"engines": {
-		"node": ">=16.20.2"
-	},
 	"devDependencies": {
-		"@stylistic/eslint-plugin": "^1.6.2",
+		"@commitlint/cli": "^19.6.0",
+		"@commitlint/config-conventional": "^19.6.0",
+		"@eslint/js": "^9.16.0",
+		"@stylistic/eslint-plugin": "^2.11.0",
+		"@stylistic/eslint-plugin-migrate": "^2.11.0",
+		"@tailwindcss/aspect-ratio": "^0.4.2",
 		"@tailwindcss/container-queries": "^0.1.1",
-		"@tailwindcss/forms": "^0.5.7",
-		"@tailwindcss/typography": "^0.5.10",
+		"@tailwindcss/forms": "^0.5.9",
+		"@tailwindcss/typography": "^0.5.15",
+		"@total-typescript/ts-reset": "^0.6.1",
+		"@total-typescript/tsconfig": "^1.0.4",
 		"@types/node": "^20.11.20",
 		"autoprefixer": "^10.4.17",
-		"eslint": "^8.57.0",
-		"eslint-config-standard-with-typescript": "^43.0.1",
-		"eslint-import-resolver-typescript": "^3.6.1",
-		"eslint-plugin-import": "^2.29.1",
-		"eslint-plugin-n": "^16.6.2",
-		"eslint-plugin-promise": "^6.1.1",
-		"eslint-plugin-unicorn": "^51.0.1",
+		"commitizen": "^4.3.1",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^9.16.0",
+		"eslint-import-resolver-typescript": "^3.6.3",
+		"eslint-plugin-import": "^2.31.0",
+		"eslint-plugin-n": "^17.14.0",
+		"eslint-plugin-promise": "^7.2.1",
+		"eslint-plugin-sort-class-members": "^1.21.0",
+		"eslint-plugin-sort-destructure-keys": "^2.0.0",
+		"eslint-plugin-unicorn": "^56.0.1",
+		"globals": "^15.12.0",
 		"postcss": "^8.4.35",
-		"stylelint": "^16.2.1",
+		"prettier": "^3.4.1",
+		"prettier-plugin-organize-attributes": "^1.0.0",
+		"prettier-plugin-packagejson": "^2.5.6",
+		"prettier-plugin-tailwindcss": "^0.6.9",
+		"stylelint": "^16.11.0",
 		"stylelint-config-concentric-order": "^5.2.0",
 		"stylelint-config-property-sort-order-smacss": "^10.0.0",
-		"stylelint-config-recess-order": "^4.6.0",
+		"stylelint-config-recess-order": "^5.1.1",
 		"stylelint-order": "^6.0.4",
-		"tailwindcss": "3.4.1",
-		"typescript": "^5.3.3"
+		"tailwindcss": "3.4.15",
+		"typescript": "^5.3.3",
+		"typescript-eslint": "^8.16.0"
+	},
+	"engines": {
+		"node": ">=22.8.0"
 	}
 }

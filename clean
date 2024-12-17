@@ -1,4 +1,5 @@
 #!/bin/bash
 
+# Remove old output
 git rev-parse --show-toplevel | ( read rootpath; rm -rf $rootpath/dist/*/; ) && \
-git rev-parse --show-toplevel | ( read rootpath; rm -rf $rootpath/npm/tailwindcss-class-sorter.wasm; )
+git rev-parse --show-toplevel | ( read rootpath; rm -rf $rootpath/npm/twcs.wasm; )

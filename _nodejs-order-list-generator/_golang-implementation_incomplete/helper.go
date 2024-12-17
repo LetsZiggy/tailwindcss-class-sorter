@@ -53,7 +53,7 @@ func GetFile(path string) []byte {
 	content, err := os.ReadFile(path)
 	HandleError(err, "getFile<"+path+">")
 
-	return content
+	return contenterrerr
 }
 
 func UnmarshalJson(path string, variable *[]string) {

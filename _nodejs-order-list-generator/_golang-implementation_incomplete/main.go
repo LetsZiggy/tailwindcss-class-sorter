@@ -19,7 +19,7 @@ import (
 func main() {
 	rootPath := flag.String("root", "", "path to root")
 	cssPath := flag.String("css", "", "relative path to style.css")
-	// colourNamesPath := flag.String("colours", "", "relative path to colour-names.json") // POSSIBLY NOT NEEDED
+	//; colourNamesPath := flag.String("colours", "", "relative path to colour-names.json") // POSSIBLY NOT NEEDED
 	flag.Parse()
 
 	Prepare(*rootPath, *cssPath /**colourNamesPath,*/)

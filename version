@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# git commit; git tag
 git add . && \
 echo "${1}" | ( read version; echo "${version}" | sed 's/\.[0-9]\+$/\.\*/g' | ( read edited; git commit -m "feat: tailwindcss ${edited} support"; ); ) && \
 echo "${1}" | ( read version; echo "${version}" | sed 's/\.[0-9]\+$/\.\*/g' | ( read edited; git tag -a "v${version}" -m "tailwindcss ${edited} support"; ); )

@@ -1,0 +1,48 @@
+{
+	"order_type": "custom",
+	"edit_order": {
+		"overwrite": [],
+		"amend": [
+			{
+				"group_index": 0,
+				"position": "end",
+				"regex": ["-{0,1}inset-x-full","-{0,1}inset-x-px","-{0,1}inset-y-full","-{0,1}inset-y-px"]
+			}
+		],
+		"append": [
+			{
+				"group_index": 0,
+				"group_name": "sr",
+				"position": "before",
+				"append_order": 1,
+				"regex": ["sr-only","not-sr-only"]
+			},
+			{
+				"group_index": 0,
+				"group_name": "z",
+				"position": "after",
+				"append_order": 2,
+				"regex": ["z-auto"]
+			},
+			{
+				"group_index": 0,
+				"group_name": "box",
+				"position": "after",
+				"append_order": 3,
+				"regex": ["box-border","box-content"]
+			}
+		]
+	},
+	"custom_order": [
+		{
+			"group_name": "inset",
+			"regex": [
+				"inset-auto",
+				"inset-x-auto",
+				"inset-y-auto",
+				"-{0,1}inset-full",
+				"-{0,1}inset-px"
+			]
+		}
+	]
+}

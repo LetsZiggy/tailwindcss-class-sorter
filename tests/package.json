@@ -1,0 +1,15 @@
+{
+	"name": "tailwindcss-tests",
+	"version": "0.0.0",
+	"description": "tailwindcss-tests",
+	"contributors": [
+		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
+	],
+	"type": "module",
+	"scripts": {
+		"twcs": "twcs"
+	},
+	"devDependencies": {
+		"tailwindcss-class-sorter": "link:.."
+	}
+}

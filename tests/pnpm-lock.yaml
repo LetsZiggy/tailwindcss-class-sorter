@@ -1,0 +1,16 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+overrides:
+  tailwindcss-class-sorter: link:../npm
+
+importers:
+
+  .:
+    dependencies:
+      tailwindcss-class-sorter:
+        specifier: link:../npm
+        version: link:../npm

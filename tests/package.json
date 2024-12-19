@@ -1,0 +1,11 @@
+{
+	"name": "tailwindcss-tests",
+	"type": "module",
+	"scripts": {
+		"tailwindcss-class-sorter": "tailwindcss-class-sorter",
+		"twcs": "twcs"
+	},
+	"dependencies": {
+		"tailwindcss-class-sorter": "link:../npm"
+	}
+}

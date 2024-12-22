@@ -16,6 +16,7 @@
 		"preinstall": "npx only-allow pnpm",
 		"lint:commit": "./node_modules/.bin/commitlint --edit $1",
 		"prepare:css": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && node ./dist/prepare-css.js --in ./style-raw.css --out ./style.css )",
+		"prepare:prettier": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && node ./dist/prepare-prettier.js --in ./style-raw.css --out ./content-prettier.html )",
 		"transpile": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/_nodejs_ && tsc --target esnext --outdir ./dist )"
 	},
 	"commitlint": {

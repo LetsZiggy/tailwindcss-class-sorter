@@ -7,15 +7,15 @@
 			"follow_symlinks": true,
 		},
 		{
-			"path": "_python_",
-			"name": "_python_",
-			"folder_exclude_patterns": [],
-			"follow_symlinks": true,
-		},
-		{
 			"path": "_nodejs_",
 			"name": "_nodejs_",
 			"folder_exclude_patterns": ["node_modules", "_golang-implementation_incomplete", "dist"],
+			"follow_symlinks": true,
+		},
+		{
+			"path": "_python_",
+			"name": "_python_",
+			"folder_exclude_patterns": ["venv", "__pycache__"],
 			"follow_symlinks": true,
 		},
 		{

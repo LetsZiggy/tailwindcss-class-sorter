@@ -607,12 +607,12 @@ Order list used if `order_type` is set to `custom`.
 ]
 ```
 
-`group_name` may repeat (eg. `content` group_name in [`recess` list](https://github.com/LetsZiggy/tailwindcss-class-sorter/blob/main/dist/order_list.json)).
+`group_name` may repeat (eg. `content` group name in [`recess` list](https://github.com/LetsZiggy/tailwindcss-class-sorter/blob/main/dist/order_list.json)).
 
 ## FAQ
 
 - Are official plugins supported?
-	- [Typography](https://github.com/tailwindlabs/tailwindcss-typography), [Forms](https://github.com/tailwindlabs/tailwindcss-forms), and [Container Queries](https://github.com/tailwindlabs/tailwindcss-container-queries) are supported
+	- [Typography](https://github.com/tailwindlabs/tailwindcss-typography) and [Forms](https://github.com/tailwindlabs/tailwindcss-forms) are supported
 
 - Where is `v1.*.*` and `v2.*.*`?
 	- Releases will follow tailwindcss versions.

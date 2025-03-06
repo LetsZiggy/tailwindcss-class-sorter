@@ -1,0 +1,54 @@
+{
+	"angle-unit": [
+		"deg",
+		"grad",
+		"rad",
+		"turn"
+	],
+	"colour-absolute": [
+		"inherit",
+		"current",
+		"transparent",
+		"black",
+		"white"
+	],
+	"colour-relative": [
+		"red",
+		"orange",
+		"amber",
+		"yellow",
+		"lime",
+		"green",
+		"emerald",
+		"teal",
+		"cyan",
+		"sky",
+		"blue",
+		"indigo",
+		"violet",
+		"purple",
+		"fuchsia",
+		"pink",
+		"rose",
+		"slate",
+		"gray",
+		"zinc",
+		"neutral",
+		"stone"
+	],
+	"text-size": [
+		"xs",
+		"sm",
+		"base",
+		"lg",
+		"xl",
+		"2xl",
+		"3xl",
+		"4xl",
+		"5xl",
+		"6xl",
+		"7xl",
+		"8xl",
+		"9xl"
+	]
+}

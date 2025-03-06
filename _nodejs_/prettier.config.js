@@ -4,7 +4,7 @@ export default {
 	plugins: [
 		"prettier-plugin-organize-attributes",
 		"prettier-plugin-packagejson",
-		"prettier-plugin-tailwindcss",
+		// "prettier-plugin-tailwindcss",
 	],
 
 	// ---Options--- //
@@ -35,7 +35,7 @@ export default {
 
 	// ---prettier-plugin-tailwindcss--- //
 
-	tailwindConfig: "./tailwind.config.js",
+	// tailwindConfig: "./tailwind.config.js",
 
 	// ---Overrides--- //
 

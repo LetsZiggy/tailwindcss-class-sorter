@@ -3,8 +3,7 @@
 import { exec } from "node:child_process"
 import { readFile, writeFile } from "node:fs/promises"
 import { promisify } from "node:util"
-import tailwindColours from "tailwindcss/colors.js"
-import tailwindConfig from "./tailwind.config.js"
+import defaults from "./defaults-list.json" with { type: "json" }
 import type { Config as StylelintConfig } from "stylelint"
 
 interface GeneratorArguments {
@@ -112,7 +111,7 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 		})
 
 	// Ensure screens are grouped together for breakpoint sorting excluding [2xl, ...]
-	const screenList = ["xs", ...Object.keys(tailwindConfig.theme.screens)]
+	const screenList = defaults["screen-size"]
 		.filter((current: string): boolean => current.search(/\dxl/g) === -1)
 		.map((current: string): string => `(?:${ current })`)
 		.join("|")
@@ -190,13 +189,12 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 	// const xyEndRegex = new RegExp(`-(?<!\\()(${ xyList })(?![a-z]|\\))$`)
 
 	// Ensure colours are grouped together
-	const colourMonoList = ["inherit", "transparent", "current", "black", "white"]
+	const colourMonoList = defaults["colour-absolute"]
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const colourMonoRegex = new RegExp(`-(?<!\\()(${ colourMonoList })(?![a-z]|\\))`)
 
-	const colourShadeList = Object.keys(tailwindColours)
-		.filter((current: string) => !["inherit", "transparent", "current", "black", "white"].includes(current))
+	const colourShadeList = defaults["colour-relative"]
 		.sort((a: string, b: string) => (a.length < b.length) ? 1 : -1)
 		.map((current: string) => current.toLowerCase())
 		.map((current: string) => `(?:${ current })`)
@@ -204,21 +202,21 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 	const colourShadeRegex = new RegExp(`-(?<!\\()(${ colourShadeList })(?![a-z]|\\))`)
 
 	// Ensure fontWeight are grouped together
-	const fontWeightList = Object.keys(tailwindConfig.theme.fontWeight)
+	const fontWeightList = defaults["font-weight"]
 		.sort((a: string, b: string) => (a.length < b.length) ? 1 : -1)
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const fontWeightRegex = new RegExp(`(?<=font)-(?<!\\()(${ fontWeightList })(?![a-z]|\\))`)
 
 	// Ensure letterSpacing are grouped together
-	const letterSpacingList = Object.keys(tailwindConfig.theme.letterSpacing)
+	const letterSpacingList = defaults["letter-spacing"]
 		.sort((a: string, b: string) => (a.length < b.length) ? 1 : -1)
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const letterSpacingRegex = new RegExp(`(?<=tracking)-(?<!\\()(${ letterSpacingList })(?![a-z]|\\))`)
 
 	// Ensure lineHeight are grouped together
-	const lineHeightList = Object.keys(tailwindConfig.theme.lineHeight)
+	const lineHeightList = defaults["line-height"]
 		.filter((current: string) => !Number.isInteger(Number(current)))
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
@@ -226,13 +224,13 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 
 	// Ensure fontSize and lineHeight shorthand is available
 	const fontSizeList = [
-		...Object.keys(tailwindConfig.theme.fontSize).filter((current: string) => current.search(/^\d+xl/) === -1),
+		...defaults["font-size"].filter((current: string) => current.search(/^\d+xl/) === -1),
 		String.raw`\d{1,4}xl`,
 	]
 	.map((current: string) => `(?:${ current })`)
 	.join("|")
 	const lineHeightListNumber = [
-		...Object.keys(tailwindConfig.theme.lineHeight).filter((current: string) => !Number.isInteger(Number(current))),
+		...defaults["line-height"].filter((current: string) => !Number.isInteger(Number(current))),
 		String.raw`\d{1,4}`,
 	]
 	.map((current: string) => `(?:${ current })`)

@@ -57,6 +57,9 @@ _nodejs_/style.css
 _nodejs_/style-raw.css
 _nodejs_/content-prettier.html
 
+# Typescript
+_nodejs_/.tsbuildinfo
+
 # ------------------------------ #
 # ------------Python------------ #
 # ------------------------------ #

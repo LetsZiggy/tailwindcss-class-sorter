@@ -59,7 +59,7 @@ type TEmbeddedConfigInput struct {
 type TConfigInput struct {
 	NonTailwindcssPlacement string                     `json:"non_tailwindcss_placement,omitempty" options:"front|back" default:"front"`
 	ExtensionsRegex         map[string]TExtensionRegex `json:"extensions_regex,omitempty"`
-	OrderType               string                     `json:"order_type,omitempty" options:"recess|concentric|smacss" default:"recess"`
+	OrderType               string                     `json:"order_type,omitempty" options:"recess|concentric" default:"recess"`
 	EditOrder               TEditOrder                 `json:"edit_order,omitempty"`
 	BreakpointGrouping      string                     `json:"breakpoint_grouping,omitempty" options:"style|breakpoint" default:"style"`
 	VariantOrdering         []string                   `json:"variant_ordering,omitempty"`

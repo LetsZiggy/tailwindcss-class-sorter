@@ -2,7 +2,7 @@
 
 Sorts tailwindcss classes along with their variants. If you don't care about having [variants sorted](https://github.com/tailwindlabs/tailwindcss-intellisense/issues/357#issuecomment-878224144), use the official [tailwindcss formatter](https://github.com/tailwindlabs/prettier-plugin-tailwindcss).
 
-Comes with [recess](https://github.com/stormwarning/stylelint-config-recess-order), [concentric](https://github.com/chaucerbao/stylelint-config-concentric-order), and [smacss](https://github.com/cahamilton/css-property-sort-order-smacss) ordering. Or you can customise your own.
+Comes with [recess](https://github.com/stormwarning/stylelint-config-recess-order) and [concentric](https://github.com/chaucerbao/stylelint-config-concentric-order) ordering. Or you can customise your own.
 
 ## Installation
 
@@ -247,7 +247,7 @@ Sorting order type.
 }
 ```
 
-Options: `recess` | `concentric` | `smacss` | `custom`.
+Options: `recess` | `concentric` | `custom`.
 
 `custom` order type uses `custom_order` below instead of an order from [order_list.json](https://github.com/LetsZiggy/tailwindcss-class-sorter/blob/main/dist/order_list.json).
 
@@ -615,7 +615,7 @@ Order list used if `order_type` is set to `custom`.
 	- Releases will follow tailwindcss versions.
 
 - Are official plugins supported?
-	- [Aspect Ratio](https://github.com/tailwindlabs/tailwindcss-aspect-ratio), [Container Queries](https://github.com/tailwindlabs/tailwindcss-container-queries), [Forms](https://github.com/tailwindlabs/tailwindcss-forms), and [Typography](https://github.com/tailwindlabs/tailwindcss-typography) are supported
+	- [Forms](https://github.com/tailwindlabs/tailwindcss-forms) and [Typography](https://github.com/tailwindlabs/tailwindcss-typography) are supported
 
 ## Development
 

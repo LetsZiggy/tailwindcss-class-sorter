@@ -127,12 +127,50 @@ func sortVariants(sl []string, variantOrder []string) string {
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, s)
 
-		// @xs/* | @sm/* | @md/* | @lg/* | @xl/* | @2xl/* | @3xl/* | @4xl/* | @5xl/* | @6xl/* | @7xl/*
+		// @min-[*]
+		case strings.Index(v, "@min-[") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "@min-[*]")
+
+		// @min-3xs/* | @min-2xs/* | @min-xs/* | @min-sm/* | @min-md/* | @min-lg/* | @min-xl/* | @min-2xl/* | @min-3xl/* | @min-4xl/* | @min-5xl/* | @min-6xl/* | @min-7xl/*
+		case strings.Index(v, "@min-") == 0 && strings.Contains(v, "/"):
+			s = strings.Split(v, "/")[0] + "/*"
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, s)
+
+		// @min-*
+		case strings.Index(v, "@min-") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "@min-*")
+
+		// @max-[*]
+		case strings.Index(v, "@max-[") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "@max-[*]")
+
+		// @max-3xs/* | @max-2xs/* | @max-xs/* | @max-sm/* | @max-md/* | @max-lg/* | @max-xl/* | @max-2xl/* | @max-3xl/* | @max-4xl/* | @max-5xl/* | @max-6xl/* | @max-7xl/*
+		case strings.Index(v, "@max-") == 0 && strings.Contains(v, "/"):
+			s = strings.Split(v, "/")[0] + "/*"
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, s)
+
+		// @max-*
+		case strings.Index(v, "@max-") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "@max-*")
+
+		// @3xs/* | @2xs/* | @xs/* | @sm/* | @md/* | @lg/* | @xl/* | @2xl/* | @3xl/* | @4xl/* | @5xl/* | @6xl/* | @7xl/*
 		case strings.Index(v, "@") == 0 && strings.Contains(v, "/"):
 			s = strings.Split(v, "/")[0] + "/*"
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, s)
 
+		// supports-[*]
+		case strings.Index(v, "supports-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "supports-[*]")
+
+		// supports-*
 		case strings.Index(v, "supports-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "supports-*")
@@ -146,6 +184,11 @@ func sortVariants(sl []string, variantOrder []string) string {
 		case strings.Index(v, "group-has-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "group-has-*")
+
+		// group-[*]
+		case strings.Index(v, "group-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "group-[*]")
 
 		// group-*
 		case strings.Index(v, "group-") == 0 && !slices.Contains(variantOrder, v):
@@ -162,30 +205,115 @@ func sortVariants(sl []string, variantOrder []string) string {
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "peer-has-*")
 
+		// peer-[*]
+		case strings.Index(v, "peer-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "peer-[*]")
+
 		// peer-*
 		case strings.Index(v, "peer-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "peer-*")
 
+		// aria-[*]
+		case strings.Index(v, "aria-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "aria-[*]")
+
+		// aria-*
 		case strings.Index(v, "aria-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "aria-*")
 
+		// data-[*]
+		case strings.Index(v, "data-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "data-*")
+
+		// data-*
 		case strings.Index(v, "data-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "data-*")
 
+		// has-[*]
 		case strings.Index(v, "has-[") == 0:
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "has-[*]")
 
+		// has-*
+		case strings.Index(v, "has-") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "has-*")
+
+		// min-[*]
+		case strings.Index(v, "min-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "min-[*]")
+
+		// min-*
 		case strings.Index(v, "min-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "min-*")
 
+		// max-[*]
+		case strings.Index(v, "max-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "max-[*]")
+
+		// max-*
 		case strings.Index(v, "max-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "max-*")
+
+		// in-*
+		case strings.Index(v, "in-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "in-*")
+
+		// not-*
+		case strings.Index(v, "not-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "not-*")
+
+		// nth-last-of-type-[*]
+		case strings.Index(v, "nth-last-of-type-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-last-of-type-[*]")
+
+		// nth-last-of-type-*
+		case strings.Index(v, "nth-last-of-type-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-last-of-type-*")
+
+		// nth-of-type-[*]
+		case strings.Index(v, "nth-of-type-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-of-type-[*]")
+
+		// nth-of-type-*
+		case strings.Index(v, "nth-of-type-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-of-type-*")
+
+		// nth-last-[*]
+		case strings.Index(v, "nth-last-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-last-[*]")
+
+		// nth-last-*
+		case strings.Index(v, "nth-last-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-last-*")
+
+		// nth-[*]
+		case strings.Index(v, "nth-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-[*]")
+
+		// nth-*
+		case strings.Index(v, "nth-") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "nth-*")
 
 		default:
 			variantListSorting[i].s = v

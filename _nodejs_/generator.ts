@@ -3,8 +3,8 @@
 import { exec } from "node:child_process"
 import { readFile, writeFile } from "node:fs/promises"
 import { promisify } from "node:util"
-import tailwindColours from "tailwindcss/colors.js"
-import tailwindConfig from "./tailwind.config.js"
+import defaults from "./defaults-list.json" with { type: "json" }
+import { sorting } from "./helper.js"
 import type { Config as StylelintConfig } from "stylelint"
 
 interface GeneratorArguments {
@@ -23,34 +23,6 @@ interface SortedClassNames {
 }
 
 const asyncExec = promisify(exec)
-
-function sorting (a: string, b: string): (-1 | 0 | 1) {
-	const lastCount: number = Math.min(a.length, b.length) - 1
-	let count = 0
-	let sort: -1 | 0 | 1 = 0
-
-	while (count <= lastCount) {
-		if (a[count] !== b[count]) {
-			/** a is shorter than b */
-			if (Number.isNaN(Number(a[count])) && !Number.isNaN(Number(b[count]))) {
-				sort = -1
-			}
-			/** b is shorter than a */
-			else if (!Number.isNaN(Number(a[count])) && Number.isNaN(Number(b[count]))) {
-				sort = 1
-			}
-			else {
-				sort = (a[count]! < b[count]!) ? -1 : 1
-			}
-
-			break
-		}
-
-		count++
-	}
-
-	return sort
-}
 
 export async function generator ({ config, order, source, stylelintrcPath }: GeneratorArguments): Promise<Record<"order", OrderData[]>> {
 	await writeFile(stylelintrcPath, `export default ${ JSON.stringify(config) }`, { encoding: "utf8", flag: "w" })
@@ -107,12 +79,13 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 						return ((lengthA > lengthB) ? -1 : 1)
 					}
 
-					return (sorting(baseA, baseB))
+					return (sorting<string>(baseA, baseB))
 				})
 		})
 
 	// Ensure screens are grouped together for breakpoint sorting excluding [2xl, ...]
-	const screenList = ["xs", ...Object.keys(tailwindConfig.theme.screens)]
+	const screenList = defaults["screen-size"]
+		.map((current: string) => current.toLowerCase())
 		.filter((current: string): boolean => current.search(/\dxl/g) === -1)
 		.map((current: string): string => `(?:${ current })`)
 		.join("|")
@@ -190,35 +163,38 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 	// const xyEndRegex = new RegExp(`-(?<!\\()(${ xyList })(?![a-z]|\\))$`)
 
 	// Ensure colours are grouped together
-	const colourMonoList = ["inherit", "transparent", "current", "black", "white"]
+	const colourMonoList = defaults["colour-absolute"]
+		.map((current: string) => current.toLowerCase())
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const colourMonoRegex = new RegExp(`-(?<!\\()(${ colourMonoList })(?![a-z]|\\))`)
 
-	const colourShadeList = Object.keys(tailwindColours)
-		.filter((current: string) => !["inherit", "transparent", "current", "black", "white"].includes(current))
-		.sort((a: string, b: string) => (a.length < b.length) ? 1 : -1)
+	const colourShadeList = defaults["colour-relative"]
 		.map((current: string) => current.toLowerCase())
+		.sort(sorting<string>)
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const colourShadeRegex = new RegExp(`-(?<!\\()(${ colourShadeList })(?![a-z]|\\))`)
 
 	// Ensure fontWeight are grouped together
-	const fontWeightList = Object.keys(tailwindConfig.theme.fontWeight)
-		.sort((a: string, b: string) => (a.length < b.length) ? 1 : -1)
+	const fontWeightList = defaults["font-weight"]
+		.map((current: string) => current.toLowerCase())
+		.sort(sorting<string>)
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const fontWeightRegex = new RegExp(`(?<=font)-(?<!\\()(${ fontWeightList })(?![a-z]|\\))`)
 
 	// Ensure letterSpacing are grouped together
-	const letterSpacingList = Object.keys(tailwindConfig.theme.letterSpacing)
-		.sort((a: string, b: string) => (a.length < b.length) ? 1 : -1)
+	const letterSpacingList = defaults["letter-spacing"]
+		.map((current: string) => current.toLowerCase())
+		.sort(sorting<string>)
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
 	const letterSpacingRegex = new RegExp(`(?<=tracking)-(?<!\\()(${ letterSpacingList })(?![a-z]|\\))`)
 
 	// Ensure lineHeight are grouped together
-	const lineHeightList = Object.keys(tailwindConfig.theme.lineHeight)
+	const lineHeightList = defaults["line-height"]
+		.map((current: string) => current.toLowerCase())
 		.filter((current: string) => !Number.isInteger(Number(current)))
 		.map((current: string) => `(?:${ current })`)
 		.join("|")
@@ -226,13 +202,17 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 
 	// Ensure fontSize and lineHeight shorthand is available
 	const fontSizeList = [
-		...Object.keys(tailwindConfig.theme.fontSize).filter((current: string) => current.search(/^\d+xl/) === -1),
+		...defaults["font-size"]
+			.map((current: string) => current.toLowerCase())
+			.filter((current: string) => current.search(/^\d+xl/) === -1),
 		String.raw`\d{1,4}xl`,
 	]
 	.map((current: string) => `(?:${ current })`)
 	.join("|")
 	const lineHeightListNumber = [
-		...Object.keys(tailwindConfig.theme.lineHeight).filter((current: string) => !Number.isInteger(Number(current))),
+		...defaults["line-height"]
+			.map((current: string) => current.toLowerCase())
+			.filter((current: string) => !Number.isInteger(Number(current))),
 		String.raw`\d{1,4}`,
 	]
 	.map((current: string) => `(?:${ current })`)
@@ -247,7 +227,7 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 					.split(" {")[0]! // Remove all but class names /* current.includes(" >") ? " >" : " {"*/
 					.slice(1) // Removes dot (css class identifier)
 					// .replaceAll("\\", "\\") // Escape backslash in css names - NEED TO RE-EVALUATE REGEX
-					.replaceAll(/\d+/g, String.raw`\d{1,4}`) // Replace numbers to \d{4}
+					.replaceAll(/\d+/g, String.raw`\d{1,4}`) // Replace numbers to \d{1,4}
 					.replace(screenRegex, `-(${ screenList })`)
 					// .replace(cornerWordVerticalInsetRegex, `-(${ cornerWordVerticalList })-`)
 					// .replace(cornerWordVerticalEndRegex, `-(${ cornerWordVerticalList })`)
@@ -276,7 +256,13 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 					.replace(fontWeightRegex, `-(${ fontWeightList })`)
 					.replace(letterSpacingRegex, `-(${ letterSpacingList })`)
 					.replace(lineHeightRegex, `-(${ lineHeightList })`)
-					.replace(fontSizeShorthandRegex, `-(${ fontSizeList })\\/((${ lineHeightListNumber })|(\\[\\d{1,4}[A-Za-z]{1,4}\\])){0,1}`))
+					.replace(fontSizeShorthandRegex, `-(${ fontSizeList })\\/((${ lineHeightListNumber })|(\\[\\d{1,4}[A-Za-z]{1,4}\\])){0,1}`)
+
+					/* --- ESCAPE HATCHES --- */
+					.replace(String.raw`scale-\d{1,4}d`, "scale-3d") // https://tailwindcss.com/docs/scale
+					.replace(String.raw`transform-\d{1,4}d`, "transform-3d"), // https://tailwindcss.com/docs/transform-style
+					/* --- ESCAPE HATCHES --- */
+				) // eslint-disable-line @stylistic/function-paren-newline
 				.map((current: string) => (current.startsWith("-")
 					? `-{0,1}${ current.slice(1) }`
 					: current)) // Add optional negative `-{0,1}` for classes with negative prefix
@@ -314,7 +300,7 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 						return (-1)
 					}
 
-					return (sorting(baseA, baseB))
+					return (sorting<string>(baseA, baseB))
 				})
 		})
 
@@ -343,7 +329,7 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 				return (-1)
 			}
 
-			return (sorting(baseA, baseB))
+			return (sorting<string>(baseA, baseB))
 		})
 
 	// Flatten sorted arrays
@@ -368,18 +354,6 @@ export async function generator ({ config, order, source, stylelintrcPath }: Gen
 			switch (key) {
 				case accumulator?.at(-1)?.group_name: {
 					accumulator.at(-1)!.regex.push(current)
-
-					break
-				}
-
-				case accumulator?.at(-2)?.group_name: {
-					accumulator.at(-2)!.regex.push(current)
-
-					break
-				}
-
-				case accumulator?.at(-3)?.group_name: {
-					accumulator.at(-3)!.regex.push(current)
 
 					break
 				}

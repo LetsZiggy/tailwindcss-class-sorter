@@ -301,7 +301,7 @@ func normaliseConfig(input []byte, isEmbedded, toOutputErr bool) TConfigInput {
 	}
 
 	/* ---OrderType--- */
-	if !slices.Contains([]string{"recess", "concentric", "smacss", "custom"}, configInput.OrderType) {
+	if !slices.Contains([]string{"recess", "concentric", "custom"}, configInput.OrderType) {
 		configInput.OrderType = "recess"
 	}
 

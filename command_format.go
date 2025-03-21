@@ -127,7 +127,7 @@ func sortVariants(sl []string, variantOrder []string) string {
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, s)
 
-		// @(xs | sm | md | lg | xl | 2xl | 3xl | 4xl | 5xl | 6xl | 7xl)/*
+		// @(3xs | 2xs | xs | sm | md | lg | xl | 2xl | 3xl | 4xl | 5xl | 6xl | 7xl)/*
 		case strings.Index(v, "@") == 0 && strings.Contains(v, "/"):
 			s = strings.Split(v, "/")[0] + "/*"
 			variantListSorting[i].s = v

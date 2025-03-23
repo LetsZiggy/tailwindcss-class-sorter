@@ -41,6 +41,11 @@ func cleanup(input string, removeList []string, checkFromTail bool) string {
 	return input
 }
 
+/*
+eg: has-[:focus]:
+
+eg: [@supports(display:grid)]:
+*/
 func mergeDynamicVariantParts(sl []string) []string {
 	var (
 		isBracketOpen bool     = false

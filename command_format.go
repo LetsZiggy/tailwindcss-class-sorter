@@ -161,9 +161,17 @@ func sortVariants(sl []string, variantOrder []string) string {
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "data-*")
 
+		case strings.Index(v, "min-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "min-[*]")
+
 		case strings.Index(v, "min-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "min-*")
+
+		case strings.Index(v, "max-[") == 0 && !slices.Contains(variantOrder, v):
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "max-[*]")
 
 		case strings.Index(v, "max-") == 0 && !slices.Contains(variantOrder, v):
 			variantListSorting[i].s = v
@@ -172,6 +180,10 @@ func sortVariants(sl []string, variantOrder []string) string {
 		case strings.Index(v, "has-[") == 0:
 			variantListSorting[i].s = v
 			variantListSorting[i].i = slices.Index(variantOrder, "has-[*]")
+
+		case strings.Index(v, "has-") == 0:
+			variantListSorting[i].s = v
+			variantListSorting[i].i = slices.Index(variantOrder, "has-*")
 
 		default:
 			variantListSorting[i].s = v

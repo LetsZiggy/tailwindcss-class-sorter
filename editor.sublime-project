@@ -64,7 +64,7 @@
 			"source.fixAll.eslint": true,
 			"source.fixAll.json": false,
 			"source.fixAll.ruff": true,
-			"source.organizeImports.ruff": true,
+			"source.organizeImports.ruff": false,
 			"source.addMissingImports.ts": false,
 			"source.fixAll.ts": false,
 			"source.organizeImports.ts": false,
@@ -162,6 +162,7 @@
 				"settings": {
 					"python.pythonPath": "${project_path}/_python_/venv/bin/python",
 					"python.venvPath": "${project_path}/_python_/venv",
+					"basedpyright.disableOrganizeImports": true,
 				},
 			},
 

@@ -156,6 +156,16 @@ await (async function () {
 						break
 					}
 
+					// ### TYPOGRAPHY ###
+
+					// https://github.com/tailwindlabs/tailwindcss/pull/19157
+					// --- WORD-BREAK | OVERFLOW-WRAP ---
+					case (c === ".break-words"): {
+						cssProperties.add("word-break: inherit;")
+
+						break
+					}
+
 					// ### BACKGROUNDS ###
 
 					// --- BACKGROUND-IMAGE ---
@@ -254,6 +264,26 @@ await (async function () {
 					): {
 						emptyClasses.delete(c)
 						cssProperties.add("box-shadow: inherit;")
+
+						break
+					}
+
+					// --- TEXT-SHADOW ---
+					case (c.startsWith(".text-shadow-")): {
+						emptyClasses.delete(c)
+						cssProperties.add("text-shadow: inherit;")
+
+						break
+					}
+
+					// --- MASK-IMAGE ---
+					case (
+						c.startsWith(".mask-circle")
+						|| c.startsWith(".mask-ellipse")
+						|| c.startsWith(".mask-radial-")
+					): {
+						emptyClasses.delete(c)
+						cssProperties.add("mask-image: inherit;")
 
 						break
 					}

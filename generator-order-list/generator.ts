@@ -38,7 +38,7 @@ const endSortOrder: NonEmptyArray<string> = [
 	"-up", "-right", "-down", "-left",
 	"-t", "-tr", "-r", "-br", "-b", "-bl", "-l", "-tl",
 	"-x", "-y",
-	"-fr", "-px", "-vh", "-vw", "-dvw", "-dvh", "-svw", "-svh", "-lvw", "-lvh",
+	"-fr", "-px", "-vh", "-vw", "-dvw", "-dvh", "-svw", "-svh", "-lvw", "-lvh", "-lh",
 	r`-\d{1,4}xs`, r`-\d{1,4}xs\/\d{1,4}`, "-xs", r`-xs\/\d{1,4}`,
 	"-sm", r`-sm\/\d{1,4}`,
 	"-base", r`-base\/\d{1,4}`, "-md", r`-md\/\d{1,4}`,
@@ -54,7 +54,7 @@ const separatorSortOrders: NonEmptyArray<Prettify<ClassnameGrouping>> = [
 
 	{ include: ["-ultra-condensed", "-extra-condensed", "-semi-condensed", "-semi-expanded", "-extra-expanded", "-ultra-expanded"], regex: ["-ultra-condensed", "-extra-condensed", "-condensed", "-semi-condensed", "-normal", "-semi-expanded", "-expanded", "-extra-expanded", "-ultra-expanded"] },
 
-	{ include: ["-conic-", "-linear-", "-radial-"], regex: ["-conic-", "-linear-", "-radial-"] },
+	{ include: ["-t-from-", "-b-to-", "-x-from-", "-y-to-", "-conic-", "-linear-", "-radial-"], regex: ["-t-from-", "-t-to-", "-r-from-", "-r-to-", "-b-from-", "-b-to-", "-l-from-", "-l-to-", "-x-from-", "-x-to-", "-y-from-", "-y-to-", "-conic-from-", "-conic-to-", "-conic-", "-linear-from-", "-linear-to-", "-linear-", "-radial-closest-", "-radial-farthest-", "-radial-from-", "-radial-to-", "-radial-at-center", "-radial-at-top", "-radial-at-top-right", "-radial-at-right", "-radial-at-bottom-right", "-radial-at-bottom", "-radial-at-bottom-left", "-radial-at-left", "-radial-at-top-left", "-radial-"] },
 
 	{ include: ["-blur-", "-brightness-", "-contrast-", "-filter-", "-grayscale-", "-hue-rotate-", "-invert-", "-opacity-", "-saturate-", "-sepia-"], regex: ["-blur-", "-brightness-", "-contrast-", "-filter", "-filter-", "-grayscale", "-grayscale-", "-hue-rotate-", "-invert", "-invert-", "-opacity-", "-saturate-", "-sepia", "-sepia-"] },
 
@@ -95,8 +95,8 @@ const separatorSortOrders: NonEmptyArray<Prettify<ClassnameGrouping>> = [
 	{ include: ["-x", "-y"], exclude: ["-x-", "-y-"], regex: ["-x", "-y"] },
 	{ include: ["-x-", "-y-"], exclude: ["-x", "-y"], regex: ["-x-", "-y-"] },
 
-	{ include: ["-right-top", "-right-bottom", "-left-bottom", "-left-top"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-center", "-top", "-right-top", "-right", "-right-bottom", "-bottom", "-left-bottom", "-left", "-left-top"] },
-	{ include: ["-top-right", "-bottom-right", "-bottom-left", "-top-left"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-center", "-top", "-top-right", "-right", "-bottom-right", "-bottom", "-bottom-left", "-left", "-top-left"] },
+	{ include: ["-right-top", "-right-bottom", "-left-bottom", "-left-top"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-center", "-top", "-top-right", "-right-top", "-right", "-bottom-right", "-right-bottom", "-bottom", "-bottom-left", "-left-bottom", "-left", "-top-left", "-left-top"] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/<17378,17437>
+	{ include: ["-top-right", "-bottom-right", "-bottom-left", "-top-left"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-center", "-top", "-top-right", "-right-top", "-right", "-bottom-right", "-right-bottom", "-bottom", "-bottom-left", "-left-bottom", "-left", "-top-left", "-left-top"] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/<17378,17437>
 
 	{ include: ["-center", "-top", "-right", "-bottom", "-left"], exclude: ["-down", "-end", "-footer"], regex: ["-center", "-center-", "-top", "-top-", "-right", "-right-", "-bottom", "-bottom-", "-left", "-left-"] },
 

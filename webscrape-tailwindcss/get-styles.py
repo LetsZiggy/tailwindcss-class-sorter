@@ -8,7 +8,7 @@ from typing import Literal, cast
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from helper import T_ADDITIONAL_CLASSES, T_DEFAULTS, T_STYLES, BColours, abs_path, init_webdriver
+from helper import T_ADDITIONAL_CLASSES, T_DEFAULTS, T_STYLES, BColours, abs_path, dedup_list, init_webdriver
 
 
 def get_class_names(td_elements: list[WebElement], defaults: T_DEFAULTS) -> list[str]:  # noqa: C901, PLR0912
@@ -233,6 +233,27 @@ def main(
 			)
 
 		get_url_styles_count += 1
+
+	# add deprecated classes
+	deprecated_classes = {
+		pk: {sk: sv for (sk, sv) in pv.items() if sk != "links"}
+		for (pk, pv) in additional_classes.get("deprecated", {}).items()
+	}
+
+	for deprecated_class_key in deprecated_classes:
+		if deprecated_class_key in styles_dict:
+			styles_dict[deprecated_class_key]["regular"] = dedup_list(
+				[
+					*styles_dict.get(deprecated_class_key, {"regular": []}).get("regular", []),
+					*deprecated_classes.get(deprecated_class_key, {"regular": []}).get("regular", []),
+				]
+			)
+			styles_dict[deprecated_class_key]["custom"] = dedup_list(
+				[
+					*styles_dict.get(deprecated_class_key, {"custom": []}).get("custom", []),
+					*deprecated_classes.get(deprecated_class_key, {"custom": []}).get("custom", []),
+				]
+			)
 
 	styles_list_path: str = abs_path(output_path)
 	with open(styles_list_path, mode="w+", encoding="utf-8") as file:

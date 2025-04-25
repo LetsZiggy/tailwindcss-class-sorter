@@ -8,7 +8,7 @@ export interface StylelintConfigOrder {
 
 // https://github.com/stormwarning/stylelint-config-recess-order/blob/main/index.js
 // https://github.com/stormwarning/stylelint-config-recess-order/blob/main/groups.js
-// commit: 33f7e8d7460ca99b5dcf82f6e4aba4806b79c8cf
+// commit: b4cd7db6ce868f91e9e1cb4d150cdb4140ecceab
 export const recessConfigOrder: StylelintConfigOrder = {
 	config: {
 		...baseConfig,
@@ -90,6 +90,11 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"min-height": [],
 		"max-height": [],
 		"aspect-ratio": [],
+		"contain-intrinsic-inline-size": [],
+		"contain-intrinsic-block-size": [],
+		"contain-intrinsic-size": [], // Shorthand for `-width` & `-height`.
+		"contain-intrinsic-width": [],
+		"contain-intrinsic-height": [],
 		"padding": [],
 		"padding-block": [],
 		"padding-block-start": [],
@@ -112,6 +117,19 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"margin-right": [],
 		"margin-bottom": [],
 		"margin-left": [],
+		"anchor-name": [],
+		"anchor-scope": [],
+		"position-area": [],
+		"position-anchor": [],
+		"position-try": [],
+		"position-try-order": [],
+		"position-try-fallbacks": [],
+		"position-visibility": [],
+		"contain": [],
+		"container": [],
+		"container-name": [],
+		"container-type": [],
+		"content-visibility": [],
 		"overflow": [],
 		"overflow-block": [], // Shifted up one
 		"overflow-inline": [], // Shifted down one
@@ -125,7 +143,7 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"text-overflow": [],
 		"-webkit-line-clamp": [], // Vendor prefix
 		"line-clamp": [],
-		"scroll-behavior": [], // scroll-behaviour -> scroll-behavior
+		"scroll-behavior": [],
 		"overscroll-behavior": [],
 		"overscroll-behavior-block": [], // Shifted up one
 		"overscroll-behavior-inline": [], // Shifted down one
@@ -152,11 +170,18 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"-webkit-font-smoothing": [], // Vendor prefix
 		"-moz-osx-font-smoothing": [], // Vendor prefix
 		"font-smooth": [],
+		"font-synthesis": [],
+		"font-synthesis-weight": [],
+		"font-synthesis-style": [],
+		"font-synthesis-small-caps": [],
 		"line-height": [],
 		"vertical-align": [],
 		"alignment-baseline": [],
 		"baseline-shift": [],
 		"dominant-baseline": [],
+		"base-palette": [],
+		"override-colors": [],
+		"font-palette": [],
 		"color": [],
 		"-webkit-text-fill-color": [], // Vendor prefix
 		"-webkit-text-stroke": [], // Vendor prefix
@@ -170,12 +195,17 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"word-spacing": [],
 		"letter-spacing": [],
 		"hyphens": [],
+		"hyphenate-character": [],
+		"line-break": [],
 		"word-break": [],
 		"text-wrap": [],
+		"text-wrap-mode": [],
+		"text-wrap-style": [],
 		"word-wrap": [], // Legacy name for `overflow-wrap`
 		"overflow-wrap": [],
 		"tab-size": [],
 		"white-space": [],
+		"white-space-collapse": [],
 		"text-emphasis": [],
 		"text-emphasis-color": [],
 		"text-emphasis-style": [],
@@ -185,9 +215,12 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"text-decoration-thickness": [],
 		"text-decoration-style": [],
 		"text-decoration-color": [],
+		"text-decoration-skip-ink": [],
 		"text-underline-position": [],
 		"text-underline-offset": [],
 		"text-shadow": [],
+		"ruby-position": [],
+		"ruby-align": [],
 		"src": [],
 		"font-display": [],
 		"unicode-range": [],
@@ -217,6 +250,8 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"outline-color": [],
 		"outline-offset": [],
 		"color-scheme": [],
+		"forced-color-adjust": [],
+		"print-color-adjust": [],
 		"table-layout": [],
 		"empty-cells": [],
 		"caption-side": [],
@@ -316,6 +351,23 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"border-left-color": [],
 		"border-left-style": [],
 		"border-left-width": [],
+		"corner": [], // Shorthand includes `border-radius`.
+		"corner-block-start": [],
+		"corner-block-end": [],
+		"corner-inline-start": [],
+		"corner-inline-end": [],
+		"corner-start-start": [],
+		"corner-start-end": [],
+		"corner-end-start": [],
+		"corner-end-end": [],
+		"corner-top": [],
+		"corner-right": [],
+		"corner-bottom": [],
+		"corner-left": [],
+		"corner-top-left": [],
+		"corner-top-right": [],
+		"corner-bottom-right": [],
+		"corner-bottom-left": [],
 		"border-radius": [],
 		"border-start-start-radius": [],
 		"border-start-end-radius": [],
@@ -325,6 +377,23 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"border-top-right-radius": [],
 		"border-bottom-right-radius": [],
 		"border-bottom-left-radius": [],
+		"corner-shape": [],
+		"corner-block-start-shape": [],
+		"corner-block-end-shape": [],
+		"corner-inline-start-shape": [],
+		"corner-inline-end-shape": [],
+		"corner-start-start-shape": [],
+		"corner-start-end-shape": [],
+		"corner-end-start-shape": [],
+		"corner-end-end-shape": [],
+		"corner-top-shape": [],
+		"corner-right-shape": [],
+		"corner-bottom-shape": [],
+		"corner-left-shape": [],
+		"corner-top-left-shape": [],
+		"corner-top-right-shape": [],
+		"corner-bottom-right-shape": [],
+		"corner-bottom-left-shape": [],
 		"border-image": [],
 		"border-image-source": [],
 		"border-image-slice": [],
@@ -342,6 +411,7 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"backdrop-filter": [],
 		"clip": [],
 		"clip-path": [],
+		"clip-rule": [],
 		"mask-border": [],
 		"mask-border-source": [],
 		"mask-border-slice": [],
@@ -358,7 +428,15 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"mask-origin": [],
 		"mask-size": [],
 		"mask-composite": [],
+		"mask-type": [],
+		"shape-outside": [],
+		"shape-image-threshold": [],
+		"shape-margin": [],
+		"direction": [],
+		"unicode-bidi": [],
 		"writing-mode": [],
+		"text-orientation": [],
+		"text-combine-upright": [],
 		"text-anchor": [],
 		"fill": [],
 		"fill-rule": [],
@@ -376,24 +454,32 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"flood-color": [],
 		"flood-opacity": [],
 		"lighting-color": [],
+		"marker": [],
 		"marker-start": [],
 		"marker-mid": [],
 		"marker-end": [],
 		"stop-color": [],
 		"stop-opacity": [],
+		"paint-order": [],
 		"shape-rendering": [],
+		"text-rendering": [],
 		"transform": [],
 		"transform-origin": [],
+		"transform-box": [],
+		"transform-style": [],
 		"rotate": [],
 		"scale": [],
 		"translate": [],
 		"perspective": [],
 		"perspective-origin": [],
+		"backface-visibility": [],
 		"transition": [],
 		"transition-delay": [],
 		"transition-timing-function": [],
 		"transition-duration": [],
 		"transition-property": [],
+		"view-transition-name": [],
+		"view-transition-class": [],
 		"animation": [],
 		"animation-name": [],
 		"animation-duration": [],
@@ -401,7 +487,15 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"animation-delay": [],
 		"animation-iteration-count": [],
 		"animation-direction": [],
+		"animation-fill-mode": [],
 		"animation-play-state": [],
+		"animation-composition": [],
+		"offset": [],
+		"offset-position": [],
+		"offset-path": [],
+		"offset-distance": [],
+		"offset-rotate": [],
+		"offset-anchor": [],
 		"will-change": [],
 		"break-before": [],
 		"break-after": [],
@@ -412,7 +506,7 @@ export const recessConfigOrder: StylelintConfigOrder = {
 }
 
 // https://github.com/chaucerbao/stylelint-config-concentric-order/blob/master/src/index.js
-// commit: 8a7ee43e5986dbbf699df1c73fb0eeb345ff6e99
+// commit: b6561f98bd8142aa84aa15263dc90889aa79ca71
 export const concentricConfigOrder: StylelintConfigOrder = {
 	config: {
 		...baseConfig,
@@ -686,7 +780,7 @@ export const concentricConfigOrder: StylelintConfigOrder = {
 }
 
 // https://github.com/cahamilton/css-property-sort-order-smacss/blob/master/src/index.ts
-// commit: d0f7f45bb51f9245bcf27de0c68ffb99b33948e0
+// commit: a53dad53d5f087628a1171cf26f347f02e7f4ea1
 export const smacssConfigOrder: StylelintConfigOrder = {
 	config: {
 		...baseConfig,

@@ -46,7 +46,7 @@ type T_DEFAULT_KEYS = Literal[
 # fmt: on
 type T_DEFAULTS = dict[T_DEFAULT_KEYS, list[str]]
 
-type T_ADDITIONAL_CLASSES_P_KEYS = Literal["3rd-party"]
+type T_ADDITIONAL_CLASSES_P_KEYS = Literal["3rd-party", "deprecated"]
 type T_ADDITIONAL_CLASSES_S_KEYS = Literal["links", "regular", "custom"]
 type T_ADDITIONAL_CLASSES = dict[T_ADDITIONAL_CLASSES_P_KEYS, dict[str, dict[T_ADDITIONAL_CLASSES_S_KEYS, list[str]]]]
 
@@ -82,6 +82,10 @@ def abs_path(p: str | list[str]) -> str:
 		return path.abspath(path.expanduser(path.normpath(p)))
 
 	return path.abspath(path.expanduser(path.normpath(path.join(*p))))
+
+
+def dedup_list[T](l: list[T]) -> list[T]:  # noqa: E741, RUF100
+	return list(dict.fromkeys(l))
 
 
 # https://stackoverflow.com/a/287944/7641789

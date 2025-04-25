@@ -76,6 +76,7 @@ https://tailwindcss.com/docs/text-indent
 https://tailwindcss.com/docs/vertical-align
 https://tailwindcss.com/docs/white-space
 https://tailwindcss.com/docs/word-break
+https://tailwindcss.com/docs/overflow-wrap
 https://tailwindcss.com/docs/hyphens
 https://tailwindcss.com/docs/content
 https://tailwindcss.com/docs/background-attachment
@@ -95,9 +96,19 @@ https://tailwindcss.com/docs/outline-color
 https://tailwindcss.com/docs/outline-style
 https://tailwindcss.com/docs/outline-offset
 https://tailwindcss.com/docs/box-shadow
+https://tailwindcss.com/docs/text-shadow
 https://tailwindcss.com/docs/opacity
 https://tailwindcss.com/docs/mix-blend-mode
 https://tailwindcss.com/docs/background-blend-mode
+https://tailwindcss.com/docs/mask-clip
+https://tailwindcss.com/docs/mask-composite
+https://tailwindcss.com/docs/mask-image
+https://tailwindcss.com/docs/mask-mode
+https://tailwindcss.com/docs/mask-origin
+https://tailwindcss.com/docs/mask-position
+https://tailwindcss.com/docs/mask-repeat
+https://tailwindcss.com/docs/mask-size
+https://tailwindcss.com/docs/mask-type
 https://tailwindcss.com/docs/filter
 https://tailwindcss.com/docs/filter-blur
 https://tailwindcss.com/docs/filter-brightness

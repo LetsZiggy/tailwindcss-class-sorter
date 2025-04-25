@@ -1,7 +1,7 @@
 /**
  * https://github.com/stormwarning/stylelint-config-recess-order/blob/main/index.js
  * https://github.com/stormwarning/stylelint-config-recess-order/blob/main/groups.js
- * commit: 33f7e8d7460ca99b5dcf82f6e4aba4806b79c8cf
+ * commit: e7f31c7666291823fa4531a6eaac1e50657031df
  */
 
 import { generator } from "./generator.js"
@@ -85,6 +85,11 @@ const order: Record<string, string[]> = {
 	"min-height": [],
 	"max-height": [],
 	"aspect-ratio": [],
+	"contain-intrinsic-block-size": [], // Shifted up one
+	"contain-intrinsic-inline-size": [], // Shifted down one
+	"contain-intrinsic-size": [],
+	"contain-intrinsic-width": [],
+	"contain-intrinsic-height": [],
 	"padding": [],
 	"padding-block": [],
 	"padding-block-start": [],
@@ -107,6 +112,11 @@ const order: Record<string, string[]> = {
 	"margin-right": [],
 	"margin-bottom": [],
 	"margin-left": [],
+	"contain": [],
+	"container": [],
+	"container-name": [],
+	"container-type": [],
+	"content-visibility": [],
 	"overflow": [],
 	"overflow-block": [], // Shifted up one
 	"overflow-inline": [], // Shifted down one

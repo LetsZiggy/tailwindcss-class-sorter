@@ -61,6 +61,11 @@ await (async function () {
 			if ((/^ {2}}$/).test(line)) {
 				const c = className.trim().slice(0, -2)
 
+				// Add opacity to classes with /100
+				if (c.endsWith(String.raw`\/100`)) {
+					cssProperties.add("opacity: 0;")
+				}
+
 				if (cssProperties.size > 0) {
 					emptyClasses.delete(c)
 				}
@@ -159,6 +164,27 @@ await (async function () {
 							break
 						}
 
+						case (c.startsWith(".mask-radial-")): {
+							emptyClasses.delete(c)
+							cssProperties.add("mask-image: none;")
+
+							break
+						}
+
+						case (c.startsWith(".drop-shadow-")): {
+							emptyClasses.delete(c)
+							cssProperties.add("filter: drop-shadow(0 0 #0000);")
+
+							break
+						}
+
+						case (c.startsWith(".text-shadow-")): {
+							emptyClasses.delete(c)
+							cssProperties.add("text-shadow: none;")
+
+							break
+						}
+
 						case (c.startsWith(".prose-")): {
 							emptyClasses.delete(c)
 							cssProperties.add("font-size: inherits;")
@@ -191,6 +217,7 @@ await (async function () {
 			else if (
 				(/^ {4}:where/).test(line)
 				|| (/^ {4,6}@media/).test(line)
+				|| (/^ {4,6}@supports/).test(line)
 				|| (/^ {4,6}&:/).test(line)
 			) {
 				linesToSkip += 1

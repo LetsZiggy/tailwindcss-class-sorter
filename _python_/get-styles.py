@@ -162,6 +162,18 @@ def main(driver_path: str | None):
 				"regular": list(regular_classes),
 				"custom": list(custom_classes),
 			}
+			### --- SPECIAL CASES --- ###
+			# https://github.com/tailwindlabs/tailwindcss/pull/17378
+			# https://tailwindcss.com/docs/background-position
+			styles_dict["background-position"]["regular"].extend(
+				["bg-left-bottom", "bg-left-top", "bg-right-bottom", "bg-right-top"]
+			)
+			# https://github.com/tailwindlabs/tailwindcss/pull/17437
+			# https://tailwindcss.com/docs/object-position
+			styles_dict["object-position"]["regular"].extend(
+				["object-left-bottom", "object-left-top", "object-right-bottom", "object-right-top"]
+			)
+			### --- SPECIAL CASES --- ###
 		# try: driver.get(page.strip())
 		finally:
 			driver.close()

@@ -17,3 +17,6 @@
 - [v4.0.&#42;](https://github.com/tailwindlabs/tailwindcss.com/tree/980ac97c93143f49cde209ea840405c0b8aef51a)
 	- v4.0.17
 	- 980ac97c93143f49cde209ea840405c0b8aef51a
+- [v4.1.&#42;](https://github.com/tailwindlabs/tailwindcss.com/tree/a344e79c3bb4aecd4ba70f57a925aa35f461262f)
+	- v4.1.18
+	- a344e79c3bb4aecd4ba70f57a925aa35f461262f

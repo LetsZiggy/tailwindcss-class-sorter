@@ -6,7 +6,6 @@ import path from "node:path"
 import eslint from "@eslint/js"
 import stylisticPlugin from "@stylistic/eslint-plugin"
 import stylisticMigratePlugin from "@stylistic/eslint-plugin-migrate"
-// @ts-expect-error: package type error
 import importPlugin from "eslint-plugin-import"
 import nodePlugin from "eslint-plugin-n"
 // @ts-expect-error: package type error
@@ -73,6 +72,8 @@ const rootRules = {
 	"sort-destructure-keys/sort-destructure-keys": ["error", { caseSensitive: true }], // Set
 
 	// ---unicorn--- //
+
+	"unicorn/better-regex": ["error", { sortCharacterClasses: true }], // Set
 
 	"unicorn/filename-case": ["error", { cases: { kebabCase: true }}], // Overwrite unicorn
 
@@ -184,7 +185,7 @@ const rootRules = {
 
 	"@stylistic/object-curly-spacing": ["error", "always", { arraysInObjects: true, objectsInObjects: false }],
 
-	"@stylistic/object-property-newline": ["error", { allowMultiplePropertiesPerLine: true, allowAllPropertiesOnSameLine: false }],
+	"@stylistic/object-property-newline": ["error", { allowAllPropertiesOnSameLine: true }],
 
 	"@stylistic/one-var-declaration-per-line": ["error", "initializations"],
 
@@ -196,7 +197,7 @@ const rootRules = {
 
 	"@stylistic/quote-props": ["error", "consistent-as-needed", { keywords: true }],
 
-	"@stylistic/quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
+	"@stylistic/quotes": ["error", "double", { avoidEscape: true, allowTemplateLiterals: "always" }],
 
 	"@stylistic/rest-spread-spacing": ["error", "never"],
 
@@ -224,7 +225,7 @@ const rootRules = {
 
 	"@stylistic/template-tag-spacing": ["error", "never"],
 
-	"@stylistic/type-annotation-spacing": ["error", { before: false, after: true, overrides: { arrow: { before: true, after: true }}}],
+	"@stylistic/type-annotation-spacing": ["error", { before: false, after: true, overrides: { colon: { before: false, after: true }}}],
 
 	"@stylistic/type-generic-spacing": ["error"],
 
@@ -264,9 +265,10 @@ export default tseslint.config(
 			"**/venv.bak",
 			"**/ENV",
 			"**/__pycache__",
-
 			"**/dist",
 		],
+	},
+	{
 		plugins: {
 			// "import": importPlugin, // uncomment if not using recommended
 			"n": nodePlugin, // uncomment if not using recommended

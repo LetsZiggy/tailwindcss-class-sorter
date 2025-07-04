@@ -1,21 +1,35 @@
 {
-	"include": [".*.js", ".*.cjs", ".*.mjs", ".*.ts", "*.js", "*.cjs", "*.mjs", "*.ts"],
+	"$schema": "https://json.schemastore.org/tsconfig.json",
+	"include": [
+		"**/.*.js",
+		"**/.*.cjs",
+		"**/.*.mjs",
+		"**/*.js",
+		"**/*.cjs",
+		"**/*.mjs",
+		"**/.*.ts",
+		"**/.*.cts",
+		"**/.*.mts",
+		"**/*.ts",
+		"**/*.cts",
+		"**/*.mts"
+	],
 	"exclude": [
-		"bower_components",
-		"jspm_packages",
-		"node_modules",
-		"vendor",
-		".env",
-		"env",
-		".venv",
-		"venv",
-		".env.bak",
-		"env.bak",
-		".venv.bak",
-		"venv.bak",
-		"ENV",
-		"__pycache__",
-		"dist"
+		"**/bower_components/**",
+		"**/jspm_packages/**",
+		"**/node_modules/**",
+		"**/vendor/**",
+		"**/.env/**",
+		"**/env/**",
+		"**/.venv/**",
+		"**/venv/**",
+		"**/.env.bak/**",
+		"**/env.bak/**",
+		"**/.venv.bak/**",
+		"**/venv.bak/**",
+		"**/ENV/**",
+		"**/__pycache__/**",
+		"**/dist/**"
 	],
 	"compilerOptions": {
 		"allowUnreachableCode": false,
@@ -38,7 +52,6 @@
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
 		"useUnknownInCatchVariables": true,
-
 		"baseUrl": "./",
 		"module": "nodenext",
 		"moduleResolution": "nodenext",
@@ -46,32 +59,25 @@
 		"resolveJsonModule": true,
 		"rootDir": "./",
 		"types": ["node"],
-
 		"declaration": false,
 		"importHelpers": true,
 		"outDir": "dist",
 		"removeComments": true,
 		"sourceMap": true,
-
 		"allowJs": true,
 		"checkJs": true,
-
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
-
-		"emitDecoratorMetadata": true,
+		"emitDecoratorMetadata": false,
 		"experimentalDecorators": false,
 		"lib": ["ESNext"],
 		"moduleDetection": "force",
 		"target": "esnext",
-
 		"incremental": true,
 		"tsBuildInfoFile": ".tsbuildinfo",
-
 		"skipLibCheck": true
-	},
-	"$schema": "https://json.schemastore.org/tsconfig"
+	}
 }

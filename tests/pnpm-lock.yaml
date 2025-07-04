@@ -7,7 +7,7 @@ settings:
 importers:
 
   .:
-    devDependencies:
+    dependencies:
       tailwindcss-class-sorter:
         specifier: link:..
         version: link:..

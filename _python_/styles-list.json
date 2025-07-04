@@ -650,7 +650,7 @@
 			"self-center-safe",
 			"self-stretch",
 			"self-baseline",
-			"self-baseline"
+			"self-baseline-last"
 		],
 		"custom": []
 	},
@@ -960,6 +960,7 @@
 			"h-min",
 			"h-max",
 			"h-fit",
+			"h-lh",
 			"size-5",
 			"size-1/2",
 			"size-auto",
@@ -998,7 +999,8 @@
 			"min-h-auto",
 			"min-h-min",
 			"min-h-max",
-			"min-h-fit"
+			"min-h-fit",
+			"min-h-lh"
 		],
 		"custom": [
 			"min-h-(<custom-property>)",
@@ -1021,7 +1023,8 @@
 			"max-h-svw",
 			"max-h-min",
 			"max-h-max",
-			"max-h-fit"
+			"max-h-fit",
+			"max-h-lh"
 		],
 		"custom": [
 			"max-h-(<custom-property>)",
@@ -1746,7 +1749,7 @@
 			"decoration-auto"
 		],
 		"custom": [
-			"decoration-(<custom-property>)",
+			"decoration-(length:<custom-property>)",
 			"decoration-[<value>]"
 		]
 	},
@@ -7161,8 +7164,8 @@
 			"mask-radial-to-zinc-50",
 			"mask-radial-to-neutral-50",
 			"mask-radial-to-stone-50",
-			"mask-radial-circle",
-			"mask-radial-ellipse",
+			"mask-circle",
+			"mask-ellipse",
 			"mask-radial-closest-corner",
 			"mask-radial-closest-side",
 			"mask-radial-farthest-corner",

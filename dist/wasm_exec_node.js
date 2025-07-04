@@ -1,4 +1,5 @@
 #!/usr/bin/env -S node --stack-size=8192
+
 // Copyright 2021 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -14,6 +15,7 @@ if (process.argv.length < 3) {
 
 globalThis.require = require;
 globalThis.fs = require("fs");
+globalThis.path = require("path");
 globalThis.TextEncoder = require("util").TextEncoder;
 globalThis.TextDecoder = require("util").TextDecoder;
 

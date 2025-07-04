@@ -1,31 +1,32 @@
 {
+	"$schema": "https://json.schemastore.org/package.json",
 	"name": "tailwindcss-class-sorter",
 	"version": "4.1.0",
 	"description": " tailwindcss Class Sorter ",
+	"contributors": [
+		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
+	],
+	"license": "MIT",
+	"bin": {
+		"tailwindcss-class-sorter": "./dist/wasm_exec_node.js",
+		"twcs": "./dist/wasm_exec_node.js"
+	},
+	"main": "./dist/wasm_exec_node.js",
+	"files": [
+		"./dist/go_js_wasm_exec",
+		"./dist/twcs.wasm",
+		"./dist/wasm_exec.js",
+		"./dist/wasm_exec_node.js"
+	],
 	"keywords": [
 		"tailwindcss",
 		"formatter",
 		"cli",
 		"wasm"
 	],
-	"license": "MIT",
-	"contributors": [
-		"Shafiq Tahir <shafiqtahir.khan@gmail.com>"
-	],
-	"main": "./dist/wasm_exec_node.js",
-	"bin": {
-		"tailwindcss-class-sorter": "./dist/wasm_exec_node.js",
-		"twcs": "./dist/wasm_exec_node.js"
-	},
-	"files": [
-		"./dist/twcs.wasm",
-		"./dist/go_js_wasm_exec",
-		"./dist/wasm_exec.js",
-		"./dist/wasm_exec_node.js"
-	],
 	"_golang": {
-		"go_js_wasm_exec": "$(go env GOROOT)/misc/wasm/go_js_wasm_exec",
-		"wasm_exec": "$(go env GOROOT)/misc/wasm/wasm_exec.js",
-		"wasm_exec_node": "$(go env GOROOT)/misc/wasm/wasm_exec_node.js"
+		"go_js_wasm_exec": "$(go env GOROOT)/lib/wasm/go_js_wasm_exec",
+		"wasm_exec": "$(go env GOROOT)/lib/wasm/wasm_exec.js",
+		"wasm_exec_node": "$(go env GOROOT)/lib/wasm/wasm_exec_node.js"
 	}
 }

@@ -109,7 +109,11 @@ await (async function () {
 							break
 						}
 
-						case (c.startsWith(".from-")): {
+						case (
+							c.startsWith(".from-")
+							|| c.startsWith(".via-")
+							|| c.startsWith(".to-")
+						): {
 							emptyClasses.delete(c)
 							cssProperties.add("transition-property: inherit;")
 							cssProperties.add("transition-timing-function: inherit;")
@@ -118,53 +122,23 @@ await (async function () {
 							break
 						}
 
-						case (c.startsWith(".via-")): {
-							emptyClasses.delete(c)
-							cssProperties.add("transition-property: inherit;")
-							cssProperties.add("transition-timing-function: inherit;")
-							cssProperties.add("transition-duration: inherit;")
-
-							break
-						}
-
-						case (c.startsWith(".to-")): {
-							emptyClasses.delete(c)
-							cssProperties.add("transition-property: inherit;")
-							cssProperties.add("transition-timing-function: inherit;")
-							cssProperties.add("transition-duration: inherit;")
-
-							break
-						}
-
-						case (c.startsWith(".shadow-")): {
+						case (
+							c.startsWith(".inset-shadow-")
+							|| c.startsWith(".shadow-")
+							|| c.startsWith(".inset-ring-")
+							|| c.startsWith(".ring-")
+						): {
 							emptyClasses.delete(c)
 							cssProperties.add("box-shadow: inherit;")
 
 							break
 						}
 
-						case (c.startsWith(".inset-shadow-")): {
-							emptyClasses.delete(c)
-							cssProperties.add("box-shadow: inherit;")
-
-							break
-						}
-
-						case (c.startsWith(".ring-")): {
-							emptyClasses.delete(c)
-							cssProperties.add("box-shadow: inherit;")
-
-							break
-						}
-
-						case (c.startsWith(".inset-ring-")): {
-							emptyClasses.delete(c)
-							cssProperties.add("box-shadow: inherit;")
-
-							break
-						}
-
-						case (c.startsWith(".mask-radial-")): {
+						case (
+							c.startsWith(".mask-circle")
+							|| c.startsWith(".mask-ellipse")
+							|| c.startsWith(".mask-radial-")
+						): {
 							emptyClasses.delete(c)
 							cssProperties.add("mask-image: none;")
 
@@ -282,23 +256,23 @@ function setDefaults (line = ""): string {
 		// replace quotes value to none
 		.replaceAll(new RegExp(`quotes: [^;]+;`, "g"), "quotes: none;")
 		// replace url value to ""
-		.replaceAll(new RegExp(`url\\("[^"]+"\\)`, "g"), "url(\"\")")
+		.replaceAll(new RegExp(String.raw`url\("[^"]+"\)`, "g"), "url(\"\")")
 		// replace custom property in var
-		.replaceAll(new RegExp(`var\\(--[^,\\)]+([,\\)])`, "g"), "var(--tmp$1")
+		.replaceAll(new RegExp(String.raw`var\(--[^,\)]+([,\)])`, "g"), "var(--tmp$1")
 		// replace oklch value to #000
-		.replaceAll(new RegExp(`oklch\\([^\\)]+\\)`, "g"), "#000")
+		.replaceAll(new RegExp(String.raw`oklch\([^\)]+\)`, "g"), "#000")
 		// replace auto value to 0
-		.replaceAll(new RegExp(`([ \\(])auto`, "g"), "$10")
+		.replaceAll(new RegExp(String.raw`([ \(])auto`, "g"), "$10")
 		// replace css unit numeric value to 0
-		.replaceAll(new RegExp(`([ \\(])(-?)\\d+(?:\\.\\d+)?((?:%)|${ units })`, "g"), "$1$20$3")
+		.replaceAll(new RegExp(String.raw`([ \(])(-?)\d+(?:\.\d+)?((?:%)|${ units })`, "g"), "$1$20$3")
 		// replace numeric value to 0
-		.replaceAll(new RegExp(`([ \\(])(-?)\\d+(?:\\.\\d+)?`, "g"), "$1$20")
+		.replaceAll(new RegExp(String.raw`([ \(])(-?)\d+(?:\.\d+)?`, "g"), "$1$20")
 		// replace fraction value to 0/0
-		.replaceAll(new RegExp(`\\d+/\\d+`, "g"), "0/0")
+		.replaceAll(new RegExp(String.raw`\d+/\d+`, "g"), "0/0")
 		// replace color value #000
-		.replaceAll(new RegExp(`#[0-9a-zA-Z]+([ ;\\)])`, "g"), "#000$1")
+		.replaceAll(new RegExp(String.raw`#[0-9a-zA-Z]+([ ;\)])`, "g"), "#000$1")
 		// replace content property to none
-		.replaceAll(new RegExp(`content: [^;]+([ ;\\)])`, "g"), "content: none$1")
+		.replaceAll(new RegExp(String.raw`content: [^;]+([ ;\)])`, "g"), "content: none$1")
 		// replace var(--tmp,) to var(--tmp)
 		// .replaceAll(new RegExp(`,\\)`, "g"), ")")
 	)

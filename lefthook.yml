@@ -1,36 +1,58 @@
-# prepare-commit-msg:
-#   commands:
-#     commitizen:
-#       interactive: true
-#       run: exec < /dev/tty && pnpm --dir _nodejs_ run cz --hook || true
-#       env:
-#         LEFTHOOK: 0
+$schema: 'https://raw.githubusercontent.com/evilmartians/lefthook/master/schema.json'
 
 commit-msg:
   commands:
-    commitlint:
-      run: pnpm -dir _nodejs_ run lint:commit
+    go-gitlint:
+      run: >
+        go-gitlint
+        --path="$(git rev-parse --show-toplevel)"
+        --msg-file="$(git rev-parse
+        --show-toplevel)/{1}"
+        --since=$(date +"%Y-%m-%d")
+        --max-parents=1
+        --subject-regex="(?:^Initial commit$)|(?:^(?:fixup! )?(?:(?:feat)|(?:fix)|(?:docs)|(?:style)|(?:refactor)|(?:perf)|(?:test)|(?:build)|(?:ci)|(?:chore)|(?:revert))(?:\([^()A-Z\r\n]+\))?: (?:(?:LICENSE)|(?:README)|(?:[^A-Z\r\n ][^A-Z\r\n]+[^. ]))$)"
 
 pre-commit:
   # parallel: true
   commands:
     gofumpt:
       glob: '{.[!.],}*.go'
-      run: gofumpt -l -w {staged_files}
+      run: |
+        echo -e "staged_files >>> {staged_files}\n";
+        gofumpt -l -w {staged_files};
       stage_fixed: true
-    # eslint:
-    #   glob: "{.[!.],}*.{js,ts}"
-    #   run: pnpm --dir _nodejs_ run fix:eslint
-    #   stage_fixed: true
+    ruff:
+      glob: '{.[!.],}*.py'
+      run: |
+        echo -e "staged_files >>> {staged_files}\n";
+        uv --project _python_ run ruff format {staged_files};
+        uv --project _python_ run ruff check --fix {staged_files};
+      stage_fixed: true
+    eslint:
+      glob: '{.[!.],}*.{js,ts}'
+      run: |
+        GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+        STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,((^[^ ]+)|([^ ]+)),$GIT_ROOT_PATH/\1,g");
+        pnpm --dir _nodejs_ exec eslint --config eslint.config.js --max-warnings 0 --no-warn-ignored --fix $STAGED_FILES_ABS_PATH;
+      stage_fixed: true
     # stylelint:
-    #   glob: "{.[!.],}*.css"
-    #   run: pnpm --dir _nodejs_ run fix:stylelint
+    #   glob: '{.[!.],}*.css'
+    #   run: |
+    #     GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+    #     STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,((^[^ ]+)|([^ ]+)),$GIT_ROOT_PATH/\1,g");
+    #     pnpm --dir _nodejs_ exec stylelint --config stylelint-base.config.js --max-warnings 0 --fix $STAGED_FILES_ABS_PATH;
     #   stage_fixed: true
     prettier-json:
       glob: '{.[!.],}*.json'
-      run: pnpm --dir _nodejs_ run fix:prettier
+      run: |
+        GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+        STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,((^[^ ]+)|([^ ]+)),$GIT_ROOT_PATH/\1,g");
+        pnpm --dir _nodejs_ exec prettier --config prettier.config.js --write $STAGED_FILES_ABS_PATH;
       stage_fixed: true
     # prettier-html:
-    #   glob: "{.[!.],}*.html"
-    #   run: pnpm --dir _nodejs_ run fix:prettier
+    #   glob: '{.[!.],}*.html'
+    #   run: |
+    #     GIT_ROOT_PATH=$(git rev-parse --show-toplevel);
+    #     STAGED_FILES_ABS_PATH=$(echo "{staged_files}" | sed -E -e "s,((^[^ ]+)|([^ ]+)),$GIT_ROOT_PATH/\1,g");
+    #     pnpm --dir _nodejs_ exec prettier --config prettier.config.js --write $STAGED_FILES_ABS_PATH;
     #   stage_fixed: true

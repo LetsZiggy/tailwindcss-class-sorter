@@ -33,9 +33,11 @@
 editor.sublime-project
 editor.sublime-workspace
 package-lock.json
-pnpm-lock.yaml
-pnpm-lock.yml
+pnpm-lock.{yml,yaml}
 yarn.lock
+lefthook.{yml,yaml}
+taskfile*.{yml,yaml}
 
 style.css
 style-raw.css
+styles-list.json

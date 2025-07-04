@@ -1,2 +1,9 @@
-node_modules
-_nodejs_
+*
+
+!dist/
+!package.json
+!README.md
+!LICENSE
+!.npmignore
+!.npmrc
+!pnpm-lock.yaml

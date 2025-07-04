@@ -1,5 +1,5 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms" {
-	strategy: class;
+	strategy: "class";
 }
 @plugin "@tailwindcss/typography";

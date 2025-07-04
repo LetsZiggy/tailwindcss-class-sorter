@@ -170,3 +170,5 @@ _python_/.ruff_cache/
 _nodejs_/dist/
 _nodejs_/style.css
 _nodejs_/style-raw.css
+
+_python_/selenium-drivers/

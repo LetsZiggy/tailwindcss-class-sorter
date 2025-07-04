@@ -1,9 +1,13 @@
+/**
+ * @type {import("prettier").Config}
+ * @see https://prettier.io/docs/configuration
+ */
 export default {
 	// ---Plugins--- //
 
 	plugins: [
 		"prettier-plugin-organize-attributes",
-		"prettier-plugin-packagejson",
+		"prettier-plugin-pkg",
 		/* "prettier-plugin-tailwindcss", */
 	],
 

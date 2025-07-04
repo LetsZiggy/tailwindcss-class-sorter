@@ -1,21 +1,35 @@
 {
-	"include": [".*.js", ".*.cjs", ".*.mjs", ".*.ts", "*.js", "*.cjs", "*.mjs", "*.ts"],
+	"$schema": "https://json.schemastore.org/tsconfig.json",
+	"include": [
+		"**/.*.js",
+		"**/.*.cjs",
+		"**/.*.mjs",
+		"**/*.js",
+		"**/*.cjs",
+		"**/*.mjs",
+		"**/.*.ts",
+		"**/.*.cts",
+		"**/.*.mts",
+		"**/*.ts",
+		"**/*.cts",
+		"**/*.mts"
+	],
 	"exclude": [
-		"bower_components",
-		"jspm_packages",
-		"node_modules",
-		"vendor",
-		".env",
-		"env",
-		".venv",
-		"venv",
-		".env.bak",
-		"env.bak",
-		".venv.bak",
-		"venv.bak",
-		"ENV",
-		"__pycache__",
-		"dist"
+		"**/bower_components/**",
+		"**/jspm_packages/**",
+		"**/node_modules/**",
+		"**/vendor/**",
+		"**/.env/**",
+		"**/env/**",
+		"**/.venv/**",
+		"**/venv/**",
+		"**/.env.bak/**",
+		"**/env.bak/**",
+		"**/.venv.bak/**",
+		"**/venv.bak/**",
+		"**/ENV/**",
+		"**/__pycache__/**",
+		"**/dist/**"
 	],
 	"compilerOptions": {
 		"allowUnreachableCode": false,
@@ -72,6 +86,5 @@
 		"tsBuildInfoFile": ".tsbuildinfo",
 
 		"skipLibCheck": true
-	},
-	"$schema": "https://json.schemastore.org/tsconfig"
+	}
 }

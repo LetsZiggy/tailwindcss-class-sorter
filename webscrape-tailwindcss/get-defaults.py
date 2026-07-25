@@ -15,7 +15,7 @@ from helper import T_DEFAULTS, BColours, abs_path, init_webdriver
 
 def handle_colors(driver: WebDriver, defaults: T_DEFAULTS) -> T_DEFAULTS:
 	parent_element: WebElement = driver.find_element(
-		By.CSS_SELECTOR, r".not-prose.grid.grid-cols-\[auto_minmax\(0\,_1fr\)\].items-center.gap-4"
+		By.CSS_SELECTOR, r".not-prose.grid.grid-cols-\[auto_minmax\(0\,1fr\)\].items-center.gap-4"
 	)
 	sleep(0.2)
 	defaults["colour-relative"] = [f"{p.text.strip().lower()}" for p in parent_element.find_elements(By.TAG_NAME, "p")]

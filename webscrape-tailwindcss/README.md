@@ -20,3 +20,6 @@
 - [v4.1.&#42;](https://github.com/tailwindlabs/tailwindcss.com/tree/a344e79c3bb4aecd4ba70f57a925aa35f461262f)
 	- v4.1.18
 	- a344e79c3bb4aecd4ba70f57a925aa35f461262f
+- [v4.2.&#42;](https://github.com/tailwindlabs/tailwindcss.com/tree/1b1ca1a5c892bcf7369ebc4588ac4c4a8b8895b7)
+	- v4.2.4
+	- 1b1ca1a5c892bcf7369ebc4588ac4c4a8b8895b7

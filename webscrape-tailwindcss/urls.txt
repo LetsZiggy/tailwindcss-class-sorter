@@ -49,6 +49,12 @@ https://tailwindcss.com/docs/max-width
 https://tailwindcss.com/docs/height
 https://tailwindcss.com/docs/min-height
 https://tailwindcss.com/docs/max-height
+https://tailwindcss.com/docs/inline-size
+https://tailwindcss.com/docs/min-inline-size
+https://tailwindcss.com/docs/max-inline-size
+https://tailwindcss.com/docs/block-size
+https://tailwindcss.com/docs/min-block-size
+https://tailwindcss.com/docs/max-block-size
 https://tailwindcss.com/docs/font-family
 https://tailwindcss.com/docs/font-size
 https://tailwindcss.com/docs/font-smoothing
@@ -56,6 +62,7 @@ https://tailwindcss.com/docs/font-style
 https://tailwindcss.com/docs/font-weight
 https://tailwindcss.com/docs/font-stretch
 https://tailwindcss.com/docs/font-variant-numeric
+https://tailwindcss.com/docs/font-feature-settings
 https://tailwindcss.com/docs/letter-spacing
 https://tailwindcss.com/docs/line-clamp
 https://tailwindcss.com/docs/line-height

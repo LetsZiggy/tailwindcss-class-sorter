@@ -55,6 +55,33 @@
 			],
 			"regular": ["break-words"],
 			"custom": []
+		},
+		"top-right-bottom-left": {
+			"links": [
+				"https://github.com/tailwindlabs/tailwindcss/pull/19623",
+				"https://tailwindcss.com/docs/top-right-bottom-left"
+			],
+			"regular": [
+				"start-5",
+				"-start-5",
+				"start-1/2",
+				"-start-1/2",
+				"start-px",
+				"-start-px",
+				"start-full",
+				"-start-full",
+				"start-auto",
+				"end-5",
+				"-end-5",
+				"end-1/2",
+				"-end-1/2",
+				"end-px",
+				"-end-px",
+				"end-full",
+				"-end-full",
+				"end-auto"
+			],
+			"custom": ["start-(<custom-property>)", "start-[<value>]", "end-(<custom-property>)", "end-[<value>]"]
 		}
 	}
 }

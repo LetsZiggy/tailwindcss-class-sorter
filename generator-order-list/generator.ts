@@ -78,12 +78,13 @@ const separatorSortOrders: NonEmptyArray<Prettify<ClassnameGrouping>> = [
 	{ include: ["-col"], exclude: ["-columns", "-column", "-cols"], regex: ["-row", "-row-", "-col", "-col-"] },
 	{ include: ["-col-"], exclude: ["-columns-", "-column-", "-cols-"], regex: ["-row", "-row-", "-col", "-col-"] },
 
-	{ regex: ["-m-", "-ms-", "-me-", "-mx-", "-my-", "-mt-", "-mr-", "-mb-", "-ml-"] },
-	{ regex: ["-p-", "-ps-", "-pe-", "-px-", "-py-", "-pt-", "-pr-", "-pb-", "-pl-"] },
+	{ regex: ["-m-", "-mbs-", "-mbe-", "-ms-", "-me-", "-mx-", "-my-", "-mt-", "-mr-", "-mb-", "-ml-"] },
+	{ regex: ["-p-", "-pbs-", "-pbe-", "-ps-", "-pe-", "-px-", "-py-", "-pt-", "-pr-", "-pb-", "-pl-"] },
 
 	{ include: ["-nesw-", "-nwse-"], regex: ["-nesw-", "-nwse-", "-ns-", "-ew-", "-n-", "-ne-", "-e-", "-se-", "-s-", "-sw-", "-w-", "-nw-"] },
 	{ include: ["-ss-", "-ee-", "-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s-", "-e-", "-ss-", "-se-", "-ee-", "-es-", "-t-", "-tl-", "-l-", "-bl-", "-b-", "-br-", "-r-", "-tr-"] },
 	{ include: ["-ss-", "-ee-"], exclude: ["-s-", "-e-"], regex: ["-ss-", "-se-", "-ee-", "-es-", "-tl-", "-bl-", "-br-", "-tr-"] },
+	{ include: ["-bs-", "-be-", "-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-bs", "-bs-", "-be", "-be-", "-s", "-s-", "-e", "-e-"] },
 	{ include: ["-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s", "-s-", "-e", "-e-"] },
 
 	{ include: ["-tr", "-br", "-bl", "-tl"], regex: ["-t", "-tr", "-r", "-br", "-b", "-bl", "-l", "-tl"] },
@@ -91,6 +92,7 @@ const separatorSortOrders: NonEmptyArray<Prettify<ClassnameGrouping>> = [
 	{ include: ["-t-", "-b-"], exclude: ["-r-", "-l-"], regex: ["-t-", "-b-"] },
 	{ include: ["-r-", "-l-"], exclude: ["-t-", "-b-"], regex: ["-r-", "-l-"] },
 
+	{ include: ["-bs-", "-be-", "-x-", "-y-"], regex: ["-bs", "-bs-", "-be", "-be-", "-x", "-x-", "-y", "-y-"] },
 	{ include: ["-x", "-x-", "-y", "-y-"], regex: ["-x", "-x-", "-y", "-y-"] },
 	{ include: ["-x", "-y"], exclude: ["-x-", "-y-"], regex: ["-x", "-y"] },
 	{ include: ["-x-", "-y-"], exclude: ["-x", "-y"], regex: ["-x-", "-y-"] },
@@ -120,10 +122,10 @@ const separatorSortOrders: NonEmptyArray<Prettify<ClassnameGrouping>> = [
 const groupnameSortOrders: NonEmptyArray<NonEmptyArray<string>> = [
 	["form"],
 	["prose"],
-	["start", "end"],
+	["start", "end"], // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/19613
 	["top", "right", "bottom", "left"],
-	["p", "ps", "pe", "px", "py", "pt", "pr", "pb", "pl"],
-	["m", "ms", "me", "mx", "my", "mt", "mr", "mb", "ml"],
+	["p", "pbs", "pbe", "ps", "pe", "px", "py", "pt", "pr", "pb", "pl"],
+	["m", "mbs", "mbe", "ms", "me", "mx", "my", "mt", "mr", "mb", "ml"],
 	["from", "via", "to"],
 	["truncate", "overflow"],
 ]
@@ -148,6 +150,7 @@ export async function generator (configOrder: StylelintConfigOrder, source: stri
 		index = configOrder.order.indexOf("inset")
 		configOrder.order = [...configOrder.order.slice(0, index + after), "inset-#>", ...configOrder.order.slice(index + after)]
 
+		// https://github.com/tailwindlabs/tailwindcss/pull/19613
 		// --- TOP / RIGHT / BOTTOM / LEFT ---
 		// `inset-##>` property to be added ---after--- `inset-#>` property in generator.ts (see prepare-css.ts)
 		index = configOrder.order.indexOf("inset-#>")

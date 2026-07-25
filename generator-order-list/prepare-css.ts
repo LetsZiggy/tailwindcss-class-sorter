@@ -89,10 +89,21 @@ await (async function () {
 					// --- TOP / RIGHT / BOTTOM / LEFT ---
 					case (
 						(c.startsWith(r`.inset-`) || c.startsWith(r`.-inset-`))
-						&& (c.includes(r`-y-`) || c.includes(r`-x-`))
+						&& (
+							c.includes(r`-bs-`)
+							|| c.includes(r`-be-`)
+							|| c.includes(r`-s-`)
+							|| c.includes(r`-e-`)
+							|| c.includes(r`-y-`)
+							|| c.includes(r`-x-`)
+						)
 					): {
 						cssProperties.add("inset-block: inherit;")
+						cssProperties.add("inset-block-start: inherit;")
+						cssProperties.add("inset-block-end: inherit;")
 						cssProperties.add("inset-inline: inherit;")
+						cssProperties.add("inset-inline-start: inherit;")
+						cssProperties.add("inset-inline-end: inherit;")
 						// `inset-#>` property to be added ---after--- `inset` property in generator.ts (see generator.ts)
 						cssProperties.clear()
 						cssProperties.add("inset-#>: inherit;")
@@ -100,6 +111,7 @@ await (async function () {
 						break
 					}
 
+					// https://github.com/tailwindlabs/tailwindcss/pull/19613
 					// --- TOP / RIGHT / BOTTOM / LEFT ---
 					case (
 						c.startsWith(".start")

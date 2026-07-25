@@ -16,10 +16,10 @@ importers:
         version: 5.10.0(eslint@10.9.0)
       '@tailwindcss/forms':
         specifier: 0.5.11
-        version: 0.5.11(tailwindcss@4.1.18)
+        version: 0.5.11(tailwindcss@4.2.4)
       '@tailwindcss/typography':
         specifier: 0.5.19
-        version: 0.5.19(tailwindcss@4.1.18)
+        version: 0.5.19(tailwindcss@4.2.4)
       '@total-typescript/ts-reset':
         specifier: ^0.6.1
         version: 0.6.1
@@ -78,23 +78,23 @@ importers:
         specifier: github:LetsZiggy/prettier-plugin-tsconfig
         version: https://codeload.github.com/LetsZiggy/prettier-plugin-tsconfig/tar.gz/19291b87dc3d24d1eb9707ee59f9455c8abc9b67(prettier@3.9.6)
       stylelint:
-        specifier: ^17.3.0
+        specifier: ^17.11.0
         version: 17.14.1(typescript@6.0.3)
       stylelint-config-concentric-order:
-        specifier: 5.3.0
-        version: 5.3.0(stylelint@17.14.1(typescript@6.0.3))
+        specifier: 5.5.0
+        version: 5.5.0(stylelint@17.14.1(typescript@6.0.3))
       stylelint-config-property-sort-order-smacss:
-        specifier: 11.1.0
-        version: 11.1.0(stylelint@17.14.1(typescript@6.0.3))
+        specifier: 11.2.0
+        version: 11.2.0(stylelint@17.14.1(typescript@6.0.3))
       stylelint-config-recess-order:
-        specifier: 7.6.1
-        version: 7.6.1(stylelint-order@7.0.1(stylelint@17.14.1(typescript@6.0.3)))(stylelint@17.14.1(typescript@6.0.3))
+        specifier: 7.7.0
+        version: 7.7.0(stylelint-order@8.1.1(stylelint@17.14.1(typescript@6.0.3)))(stylelint@17.14.1(typescript@6.0.3))
       stylelint-order:
-        specifier: ^7.0.1
-        version: 7.0.1(stylelint@17.14.1(typescript@6.0.3))
+        specifier: ^8.1.1
+        version: 8.1.1(stylelint@17.14.1(typescript@6.0.3))
       tailwindcss:
-        specifier: 4.1.18
-        version: 4.1.18
+        specifier: 4.2.4
+        version: 4.2.4
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -1551,6 +1551,11 @@ packages:
     resolution: {integrity: sha512-KvvtD7SrlBP7dlgkBghEE3r84CABm5SmV2aNcG4oCA+qDnJ/tvKonFVvwWAyyWUEwxuNawdfEAZKP9zM3oZ2Uw==}
     engines: {node: '>=4'}
 
+  postcss-sorting@10.0.0:
+    resolution: {integrity: sha512-TXbU+h6vVRW+86c/+ewhWq9k7pr7ijASTnepVhCQiC87zAOTkvB1v2dHyWP+ggstSTX/PNvjzS+IOqzejndz9w==}
+    peerDependencies:
+      postcss: ^8.4.20
+
   postcss-sorting@9.1.0:
     resolution: {integrity: sha512-Mn8KJ45HNNG6JBpBizXcyf6LqY/qyqetGcou/nprDnFwBFBLGj0j/sNKV2lj2KMOVOwdXu14aEzqJv8CIV6e8g==}
     peerDependencies:
@@ -1778,23 +1783,29 @@ packages:
     resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
     engines: {node: '>=14.16'}
 
-  stylelint-config-concentric-order@5.3.0:
-    resolution: {integrity: sha512-0tSiDmZQzOIdumA3zKK0gTedn1JdP6gyGwLojjwz5eMu/Z4pMtr7dFVMCwb8eny4u3VZ9RLQttTycdEPiutY/Q==}
+  stylelint-config-concentric-order@5.5.0:
+    resolution: {integrity: sha512-Vo30Q8ROo4VovI4mDrkX5xmLhu0D+73lJxNmhFt/uqNzPX2rLTqkI+l0ycvP0ffRrlIoJKooLLWx/NVpmPvXhw==}
 
-  stylelint-config-property-sort-order-smacss@11.1.0:
-    resolution: {integrity: sha512-e6YRUew7UmTJhLg/k08K9wXtPvtlWEbqRAZxykTbylKynwG5adILXdaDKDHBxlOWLDfptlrK+83C/Uv7c/vltQ==}
+  stylelint-config-property-sort-order-smacss@11.2.0:
+    resolution: {integrity: sha512-6HLAU9B2zvmTNj3/i0NMLh6xPRKoqZW6Oxm9BFAXdgZe/PiVD4BUWPGubKpeoxUPc1NQRGCPExP6hwvYwRkPJA==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^16.18.0 || ^17.0.0
 
-  stylelint-config-recess-order@7.6.1:
-    resolution: {integrity: sha512-ac0H/Iy2chh1YBADrua87G+nJCmG/SdG7gjnoLvtfpN0D+RuNfuADawfbCKvm0LMp5hvuRFNkJsu6xNoLM5ToA==}
+  stylelint-config-recess-order@7.7.0:
+    resolution: {integrity: sha512-TWRkg+BrwHOki4pi9y1emWgx6pFwZXOYZhNsbEObke/mzYUJVJvDEzJJQXhH7ajslQJGcrExy8ZvJqDiUbhFpA==}
     peerDependencies:
       stylelint: ^16.18.0 || ^17.0.0
-      stylelint-order: ^7.0.0
+      stylelint-order: ^7.0.0 || ^8.0.0
 
   stylelint-order@7.0.1:
     resolution: {integrity: sha512-GWPei1zBVDDjxM+/BmcSCiOcHNd8rSqW6FUZtqQGlTRpD0Z5nSzspzWD8rtKif5KPdzUG68DApKEV/y/I9VbTw==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      stylelint: ^16.18.0 || ^17.0.0
+
+  stylelint-order@8.1.1:
+    resolution: {integrity: sha512-LqsEB6VggJuu5v10RtkrQsBObcdwBE7GuAOlwfc/LR3VL/w8UqKX2BOLIjhyGt0Gne/njo7gRNGiJAKhfmPMNw==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       stylelint: ^16.18.0 || ^17.0.0
@@ -1831,8 +1842,8 @@ packages:
     resolution: {integrity: sha512-yEFYrVhod+hdNyx7g5Bnkkb0G6si8HJurOoOEgC8B/O0uXLHlaey/65KRv6cuWBNhBgHKAROVpc7QyYqE5gFng==}
     engines: {node: '>=20'}
 
-  tailwindcss@4.1.18:
-    resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
+  tailwindcss@4.2.4:
+    resolution: {integrity: sha512-HhKppgO81FQof5m6TEnuBWCZGgfRAWbaeOaGT00KOy/Pf/j6oUihdvBpA7ltCeAvZpFhW3j0PTclkxsd4IXYDA==}
 
   tapable@2.3.3:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
@@ -2135,15 +2146,15 @@ snapshots:
       estraverse: 5.3.0
       picomatch: 4.0.5
 
-  '@tailwindcss/forms@0.5.11(tailwindcss@4.1.18)':
+  '@tailwindcss/forms@0.5.11(tailwindcss@4.2.4)':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 4.1.18
+      tailwindcss: 4.2.4
 
-  '@tailwindcss/typography@0.5.19(tailwindcss@4.1.18)':
+  '@tailwindcss/typography@0.5.19(tailwindcss@4.2.4)':
     dependencies:
       postcss-selector-parser: 6.0.10
-      tailwindcss: 4.1.18
+      tailwindcss: 4.2.4
 
   '@total-typescript/ts-reset@0.6.1': {}
 
@@ -3481,6 +3492,10 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
+  postcss-sorting@10.0.0(postcss@8.5.26):
+    dependencies:
+      postcss: 8.5.26
+
   postcss-sorting@9.1.0(postcss@8.5.26):
     dependencies:
       postcss: 8.5.26
@@ -3729,27 +3744,33 @@ snapshots:
 
   strip-json-comments@5.0.3: {}
 
-  stylelint-config-concentric-order@5.3.0(stylelint@17.14.1(typescript@6.0.3)):
+  stylelint-config-concentric-order@5.5.0(stylelint@17.14.1(typescript@6.0.3)):
     dependencies:
       stylelint-order: 7.0.1(stylelint@17.14.1(typescript@6.0.3))
     transitivePeerDependencies:
       - stylelint
 
-  stylelint-config-property-sort-order-smacss@11.1.0(stylelint@17.14.1(typescript@6.0.3)):
+  stylelint-config-property-sort-order-smacss@11.2.0(stylelint@17.14.1(typescript@6.0.3)):
     dependencies:
       css-property-sort-order-smacss: 3.0.0
       stylelint: 17.14.1(typescript@6.0.3)
-      stylelint-order: 7.0.1(stylelint@17.14.1(typescript@6.0.3))
+      stylelint-order: 8.1.1(stylelint@17.14.1(typescript@6.0.3))
 
-  stylelint-config-recess-order@7.6.1(stylelint-order@7.0.1(stylelint@17.14.1(typescript@6.0.3)))(stylelint@17.14.1(typescript@6.0.3)):
+  stylelint-config-recess-order@7.7.0(stylelint-order@8.1.1(stylelint@17.14.1(typescript@6.0.3)))(stylelint@17.14.1(typescript@6.0.3)):
     dependencies:
       stylelint: 17.14.1(typescript@6.0.3)
-      stylelint-order: 7.0.1(stylelint@17.14.1(typescript@6.0.3))
+      stylelint-order: 8.1.1(stylelint@17.14.1(typescript@6.0.3))
 
   stylelint-order@7.0.1(stylelint@17.14.1(typescript@6.0.3)):
     dependencies:
       postcss: 8.5.26
       postcss-sorting: 9.1.0(postcss@8.5.26)
+      stylelint: 17.14.1(typescript@6.0.3)
+
+  stylelint-order@8.1.1(stylelint@17.14.1(typescript@6.0.3)):
+    dependencies:
+      postcss: 8.5.26
+      postcss-sorting: 10.0.0(postcss@8.5.26)
       stylelint: 17.14.1(typescript@6.0.3)
 
   stylelint@17.14.1(typescript@6.0.3):
@@ -3820,7 +3841,7 @@ snapshots:
 
   tagged-tag@1.0.0: {}
 
-  tailwindcss@4.1.18: {}
+  tailwindcss@4.2.4: {}
 
   tapable@2.3.3: {}
 

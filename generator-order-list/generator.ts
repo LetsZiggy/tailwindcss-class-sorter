@@ -72,6 +72,7 @@ const sizes = [
 ] as NonEmptyArray<string>
 const customs = [r`-\([^\)]+\)`, r`-\[[^\]]+\]`] as NonEmptyArray<string>
 const mergeLists: MergeList[] = [
+	{ include: [], exclude: [], regex: [".start", ".end"] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/19613
 	{ include: [], exclude: [], regex: [".from", ".via", ".to"] },
 	{ include: [], exclude: [], regex: [".form"] },
 	{ include: [], exclude: [], regex: [".prose"] },

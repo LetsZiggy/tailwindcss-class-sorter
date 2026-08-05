@@ -3,7 +3,8 @@
 import { writeFile } from "node:fs/promises"
 import { generator } from "./generator.js"
 import { getArgv } from "./helper.js"
-import { concentricConfigOrder, recessConfigOrder, smacssConfigOrder } from "./stylelint-config-order.js"
+// import { concentricConfigOrder, recessConfigOrder, smacssConfigOrder } from "./stylelint-config-order.js"
+import { recessConfigOrder } from "./stylelint-config-order.js"
 // import type { OrderData } from "./generator.js"
 
 const source: string = getArgv("--src")
@@ -72,7 +73,7 @@ await (async function () {
 	console.timeEnd("generator::recess")
 	/* */
 
-	/* */
+	/*
 	console.time("generator::concentric")
 	const concentric = await generator(concentricConfigOrder, source, stylelintrcPath)
 
@@ -89,7 +90,7 @@ await (async function () {
 	console.timeEnd("generator::concentric")
 	/* */
 
-	/* */
+	/*
 	console.time("generator::smacss")
 	const smacss = await generator(smacssConfigOrder, source, stylelintrcPath)
 

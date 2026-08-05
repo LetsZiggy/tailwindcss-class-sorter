@@ -1,4 +1,4 @@
-/* eslint-disable @stylistic/array-element-newline, @stylistic/no-tabs */
+/* eslint-disable @stylistic/no-tabs */
 
 import { exec } from "node:child_process"
 import { readFile, writeFile } from "node:fs/promises"
@@ -8,9 +8,7 @@ import { normaliseCompareResult, skipStylesGroupsColourRemove } from "./helper.j
 import type { NonEmptyArray } from "./helper.js"
 import type { StylelintConfigOrder } from "./stylelint-config-order.js"
 
-const r = String.raw
-
-interface MergeList { include: string[], exclude: string[], regex: NonEmptyArray<string> }
+interface ClassnameGrouping { include?: NonEmptyArray<string>, exclude?: NonEmptyArray<string>, regex: NonEmptyArray<string> }
 export interface OrderData {
 	group_name: string,
 	regex: string[],
@@ -19,117 +17,56 @@ interface SortedClassnames {
 	others: string[],
 	[key: string]: string[],
 }
-type CompareFunction<T> = (a: T, b: T) => number
+// type CompareFunction<T> = (a: T, b: T) => number
 
-// Ensure colours are grouped together
-const colourList = [
-	...defaults["colour-absolute"]
-		.filter((current) => current === "white")
-		.map((current) => [
-			`-${ current }`,
-			r`-${ current }\/\d{1,4}`,
-		])
-		.flat(Infinity),
-	...defaults["colour-relative"]
-		.filter((current) => current === "red")
-		.map((current) => [
-			`-${ current }-`,
-			r`-${ current }-\d{1,4}`,
-			r`-${ current }-\d{1,4}\/\d{1,4}`,
-		])
-		.flat(Infinity),
-] as NonEmptyArray<string>
-// const colourRegex = new RegExp(r`-(?<!\()(?:${
-// 	colourList
-// 		.map((current) => `(?:${ current.replaceAll(/^-/g, "").toLowerCase() })`)
-// 		.join("|")
-// })(?![0-9A-Za-z]|\))`)
+const r = String.raw
 const colourWhite = "-white"
 const colourWhiteRegex = /-white/
 const colourAbsoluteList = `-(?:${ defaults["colour-absolute"].map((current) => `(?:${ current.toLowerCase() })`).join("|") })`
 const colourRed = "-red-"
 const colourRedRegex = /-red-/
 const colourRelativeList = `-(?:${ defaults["colour-relative"].map((current) => `(?:${ current.toLowerCase() })`).join("|") })-`
+const classnamePrefix = new Set<string>(["no", "not", "min", "max", "auto"])
+const groupnameGrouping: NonEmptyArray<NonEmptyArray<string>> = [
+	[".start", ".end"], // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/19613
+	[".from", ".via", ".to"],
+	[".form"],
+	[".prose"],
+	[".top", ".right", ".bottom", ".left"],
+	[".p", ".ps", ".pe", ".px", ".py", ".pt", ".pr", ".pb", ".pl"],
+	[".m", ".ms", ".me", ".mx", ".my", ".mt", ".mr", ".mb", ".ml"],
+]
+// @ts-expect-error TODO
+const separatorGrouping: NonEmptyArray<ClassnameGrouping> = [
 
-const lineHeight = defaults["line-height"].map((current) => `-${ current }`) as NonEmptyArray<string>
-const fontWeight = defaults["font-weight"].map((current) => `-${ current }`) as NonEmptyArray<string>
-const letterSpacing = defaults["letter-spacing"].map((current) => `-${ current }`) as NonEmptyArray<string>
-const digits = [r`-\d{1,4}`, r`-\d{1,4}\/\d{1,4}`, r`-\d{1,4}\%`] as NonEmptyArray<string>
-const units = [
-	"-none", "-auto", "-initial", "-full", "-screen", "-fit", "-min", "-max", "-fr", "-px",
-	"-vh", "-vw", "-dvw", "-dvh", "-svw", "-svh", "-lvw", "-lvh", "-lh",
-	r`-\d{1,4}xs`, "-xs",
-	"-sm", "-base", "-md", "-lg",
-	"-xl", r`-\d{1,4}xl`,
-] as NonEmptyArray<string>
-const sizes = [
-	"-none", "-auto", "-initial", "-reverse", "-full", "-fr", "-px",
-	r`-\d{1,4}xs`, "-xs", r`-xs\/\d{1,4}`,
-	"-sm", r`-sm\/\d{1,4}`,
-	"-base", r`-base\/\d{1,4}`, "-md",
-	"-lg", r`-lg\/\d{1,4}`,
-	"-xl", r`-xl\/\d{1,4}`, r`-\d{1,4}xl`, r`-\d{1,4}xl\/\d{1,4}`,
-] as NonEmptyArray<string>
-const customs = [r`-\([^\)]+\)`, r`-\[[^\]]+\]`] as NonEmptyArray<string>
-const mergeLists: MergeList[] = [
-	{ include: [], exclude: [], regex: [".start", ".end"] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/19613
-	{ include: [], exclude: [], regex: [".from", ".via", ".to"] },
-	{ include: [], exclude: [], regex: [".form"] },
-	{ include: [], exclude: [], regex: [".prose"] },
-	{ include: [], exclude: [], regex: [".top", ".right", ".bottom", ".left"] },
-	{ include: [], exclude: [], regex: [".p", ".ps", ".pe", ".px", ".py", ".pt", ".pr", ".pb", ".pl"] },
-	{ include: [], exclude: [], regex: [".m", ".ms", ".me", ".mx", ".my", ".mt", ".mr", ".mb", ".ml"] },
-	{ include: lineHeight, exclude: [], regex: lineHeight },
-	{ include: fontWeight, exclude: [], regex: fontWeight },
-	{ include: letterSpacing, exclude: [], regex: letterSpacing },
-	{ include: ["-dashed", "-dotted", "-double", "-solid"], exclude: [], regex: ["-none", "-from-", "-dashed", "-dotted", "-double", "-solid", "-wavy"] },
-	{ include: ["-light", "-dark"], exclude: [], regex: ["-normal", "-light", "-light-", "-dark", "-dark-"] },
-	{ include: ["-ultra-condensed", "-extra-condensed", "-semi-condensed", "-semi-expanded", "-extra-expanded", "-ultra-expanded"], exclude: [], regex: ["-ultra-condensed", "-extra-condensed", "-condensed", "-semi-condensed", "-normal", "-semi-expanded", "-expanded", "-extra-expanded", "-ultra-expanded"] },
-	{ include: ["-before-", "-inside-", "-after-"], exclude: [], regex: ["-before-", "-inside-", "-after-"] },
-	{ include: ["-columns"], exclude: ["-column", "-cols", "-col"], regex: ["-rows", "-rows-", "-columns", "-columns-"] },
-	{ include: ["-columns-"], exclude: ["-column-", "-cols-", "-col-"], regex: ["-rows", "-rows-", "-columns", "-columns-"] },
-	{ include: ["-column"], exclude: ["-cols", "-col", "-columns"], regex: ["-row", "-row-", "-column", "-column-"] },
-	{ include: ["-column-"], exclude: ["-cols-", "-col-", "-columns-"], regex: ["-row", "-row-", "-column", "-column-"] },
-	{ include: ["-cols"], exclude: ["-col", "-columns", "-column"], regex: ["-rows", "-rows-", "-cols", "-cols-"] },
-	{ include: ["-cols-"], exclude: ["-col-", "-columns-", "-column-"], regex: ["-rows", "-rows-", "-cols", "-cols-"] },
-	{ include: ["-col"], exclude: ["-columns", "-column", "-cols"], regex: ["-row", "-row-", "-col", "-col-"] },
-	{ include: ["-col-"], exclude: ["-columns-", "-column-", "-cols-"], regex: ["-row", "-row-", "-col", "-col-"] },
-	{ include: ["-right-top", "-right-bottom", "-left-bottom", "-left-top"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-none", "-initial", "-auto", "-both", "-center", "-top", "-top-right", "-right-top", "-right", "-bottom-right", "-right-bottom", "-bottom", "-bottom-left", "-left-bottom", "-left", "-top-left", "-left-top", ...customs] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/<17378,17437>
-	{ include: ["-top-right", "-top-left", "-bottom-right", "-bottom-left"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-none", "-initial", "-auto", "-both", "-center", "-top", "-top-right", "-right-top", "-right", "-bottom-right", "-right-bottom", "-bottom", "-bottom-left", "-left-bottom", "-left", "-top-left", "-left-top", ...customs] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/<17378,17437>
-	{ include: ["-center", "-top", "-right", "-bottom", "-left"], exclude: ["-down", "-end", "-footer"], regex: ["-center", "-center-", "-top", "-top-", "-right", "-right-", "-bottom", "-bottom-", "-left", "-left-"] },
-	{ include: ["-stretch"], exclude: [], regex: ["-initial", "-auto", "-both", "-around", "-baseline", "-baseline-", "-between", "-evenly", "-normal", "-stretch", "-start", "-center", "-center-", "-end", "-end-"] },
-	{ include: ["-start", "-end", "-right", "-left"], exclude: ["-start-", "-end-", "-right-", "-left-"], regex: ["-none", "-initial", "-auto", "-both", "-justify", "-start", "-end", "-right", "-center", "-left"] },
-	{ include: ["-header", "-footer"], exclude: ["-right", "-down", "-bottom", "-end"], regex: ["-header", "-header-", "-center", "-center-", "-footer", "-footer-"] },
-	{ include: ["-header-", "-footer-"], exclude: ["-header", "-footer"], regex: ["-header-", "-center-", "-footer-"] },
-	{ include: ["-right", "-left"], exclude: ["-down", "-bottom", "-end", "-footer"], regex: ["-right", "-right-", "-center", "-center-", "-left", "-left-"] },
-	{ include: ["-right-", "-left-"], exclude: ["-right", "-left"], regex: ["-right-", "-center-", "-left-"] },
-	{ include: ["-up", "-down"], exclude: ["-bottom", "-end", "-footer", "-right"], regex: ["-up", "-up-", "-center", "-center-", "-down", "-down-"] },
-	{ include: ["-up-", "-down-"], exclude: ["-up", "-down"], regex: ["-up-", "-center-", "-down-"] },
-	{ include: ["-top", "-bottom"], exclude: ["-end", "-footer", "-right", "-down"], regex: ["-baseline", "-sub", "-super", "-top", "-top-", "-center", "-center-", "-middle", "-bottom", "-bottom-"] },
-	{ include: ["-top-", "-bottom-"], exclude: ["-top", "-bottom"], regex: ["-top-", "-center-", "-bottom-"] },
-	{ include: ["-start", "-end"], exclude: ["-footer", "-right", "-down", "-bottom"], regex: ["-start", "-start-", "-center", "-center-", "-end", "-end-"] },
-	{ include: ["-start-", "-end-"], exclude: ["-start", "-end"], regex: ["-start-", "-center-", "-end-"] },
+	{ include: ["-columns$"], exclude: ["-column$", "-cols$", "-col$"], regex: ["-rows$", "-rows-", "-columns$", "-columns-"] },
+	{ include: ["-columns-"], exclude: ["-column-", "-cols-", "-col-"], regex: ["-rows$", "-rows-", "-columns$", "-columns-"] },
+	{ include: ["-column$"], exclude: ["-cols$", "-col$", "-columns$"], regex: ["-row$", "-row-", "-column$", "-column-"] },
+	{ include: ["-column-"], exclude: ["-cols-", "-col-", "-columns-"], regex: ["-row$", "-row-", "-column$", "-column-"] },
+
+	{ include: ["-cols$"], exclude: ["-col$", "-columns$", "-column$"], regex: ["-rows$", "-rows-", "-cols$", "-cols-"] },
+	{ include: ["-cols-"], exclude: ["-col-", "-columns-", "-column-"], regex: ["-rows$", "-rows-", "-cols$", "-cols-"] },
+	{ include: ["-col$"], exclude: ["-columns$", "-column$", "-cols$"], regex: ["-row$", "-row-", "-col$", "-col-"] },
+	{ include: ["-col-"], exclude: ["-columns-", "-column-", "-cols-"], regex: ["-row$", "-row-", "-col$", "-col-"] },
+
 	{ include: ["-nesw-", "-nwse-"], exclude: [], regex: ["-nesw-", "-nwse-", "-ns-", "-ew-", "-n-", "-ne-", "-e-", "-se-", "-s-", "-sw-", "-w-", "-nw-"] },
 	{ include: ["-ss-", "-ee-", "-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s-", "-e-", "-ss-", "-se-", "-ee-", "-es-", "-t-", "-tl-", "-l-", "-bl-", "-b-", "-br-", "-r-", "-tr-"] },
 	{ include: ["-ss-", "-ee-"], exclude: ["-s-", "-e-"], regex: ["-ss-", "-se-", "-ee-", "-es-", "-tl-", "-bl-", "-br-", "-tr-"] },
-	{ include: ["-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s", "-s-", "-e", "-e-"] },
+	{ include: ["-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s$", "-s-", "-e$", "-e-"] },
+
 	{ include: [], exclude: [], regex: ["-p-", "-ps-", "-pe-", "-px-", "-py-", "-pt-", "-pr-", "-pb-", "-pl-"] },
 	{ include: [], exclude: [], regex: ["-m-", "-ms-", "-me-", "-mx-", "-my-", "-mt-", "-mr-", "-mb-", "-ml-"] },
-	{ include: ["-x", "-x-", "-y", "-y-"], exclude: [], regex: ["-x", "-x-", "-y", "-y-"] },
-	{ include: ["-x", "-y"], exclude: ["-x-", "-y-"], regex: ["-x", "-y"] },
-	{ include: ["-x-", "-y-"], exclude: ["-x", "-y"], regex: ["-x-", "-y-"] },
-	{ include: ["-tr", "-br", "-bl", "-tl"], exclude: [], regex: ["-none", "-initial", "-auto", "-both", "-t", "-tr", "-r", "-br", "-b", "-bl", "-l", "-tl"] },
-	{ include: ["-t-", "-l-"], exclude: [], regex: ["-t", "-t-", "-r", "-r-", "-b", "-b-", "-l", "-l-"] },
+
+	{ include: ["-x$", "-x-", "-y$", "-y-"], exclude: [], regex: ["-x$", "-x-", "-y$", "-y-"] },
+	{ include: ["-x$", "-y$"], exclude: ["-x-", "-y-"], regex: ["-x$", "-y$"] },
+	{ include: ["-x-", "-y-"], exclude: ["-x$", "-y$"], regex: ["-x-", "-y-"] },
+
+	{ include: ["-tr$", "-br$", "-bl$", "-tl$"], exclude: [], regex: ["-t$", "-tr$", "-r$", "-br$", "-b$", "-bl$", "-l$", "-tl$"] },
+	{ include: ["-t-", "-l-"], exclude: [], regex: ["-t$", "-t-", "-r$", "-r-", "-b$", "-b-", "-l$", "-l-"] },
 	{ include: ["-t-", "-b-"], exclude: ["-r-", "-l-"], regex: ["-t-", "-b-"] },
 	{ include: ["-r-", "-l-"], exclude: ["-t-", "-b-"], regex: ["-r-", "-l-"] },
-	{ include: ["-first", "-last"], exclude: [], regex: ["-none", "-initial", "-auto", "-both", "-first", "-last", ...digits, ...customs] },
-	{ include: ["-min", "-max"], exclude: [], regex: ["-none", "-initial", "-auto", "-both", "-fr", "-min", "-max"] },
-	{ include: ["-none"], exclude: [], regex: ["-none", "-initial", "-auto", "-manual", "-both", "-contain"] },
-	{ include: [colourWhite, colourRed], exclude: [], regex: colourList },
-	{ include: ["-dvw", "-dvh", "-svw", "-svh", "-lvw", "-lvh"], exclude: [], regex: [...units, ...digits, ...customs] },
-	{ include: [], exclude: [], regex: [...sizes, ...digits, ...customs] },
+
 ]
-const classnamePrefix = new Set<string>(["no", "not", "min", "max", "auto"])
 
 const asyncExec = promisify(exec)
 
@@ -137,256 +74,310 @@ export async function generator (configOrder: StylelintConfigOrder, source: stri
 	await writeFile(stylelintrcPath, `export default ${ JSON.stringify(configOrder.config) }`, { encoding: "utf8", flag: "w" })
 	await asyncExec(`./node_modules/.bin/stylelint ${ source } --config ${ stylelintrcPath } --fix`)
 
-	const sourceData: string[] | undefined = await readFile(source, { encoding: "utf8", flag: "r" })
-		.then((string_: string) => string_.split("\n"))
-		.catch((error: Error) => {
-			throw new Error(`${ error.name }: ${ error.message }`)
-		})
+	let classnames: NonEmptyArray<string>
+	let orderDatas: OrderData[] = []
 
-	const propertyOrder = Object.keys(configOrder.order)
+	// Get classnames from .css
+	{
+		const sourceData: string[] | undefined = await readFile(source, { encoding: "utf8", flag: "r" })
+			.then((string_: string) => string_.split("\n"))
+			.catch((error: Error) => {
+				throw new Error(`${ error.name }: ${ error.message }`)
+			})
 
-	if (propertyOrder.length === 0) {
-		throw new Error(`"order" is empty`)
-	}
+		const propertyOrder = Object.keys(configOrder.order)
 
-	// Sort classes according to their first non-custom property
-	const css: SortedClassnames = sourceData.reduce<SortedClassnames>((accumulator, current): SortedClassnames => {
-		let isFound = false
-
-		for (const property of propertyOrder) {
-			if (current.includes(` ${ property }: `)) {
-				accumulator[property]!.push(current)
-				isFound = true
-
-				break
-			}
+		if (propertyOrder.length === 0) {
+			throw new Error(`"order" is empty`)
 		}
 
-		if (!isFound) {
-			accumulator.others.push(current)
-		}
+		// Sort classes according to their first non-custom property
+		const css: SortedClassnames = sourceData.reduce<SortedClassnames>((accumulator, current): SortedClassnames => {
+			let isFound = false
 
-		return accumulator
-	}, { ...configOrder.order, others: [] })
-
-	// Ensure more specific classes comes first (with more style properties)
-	// Ensure letters comes before numbers
-	/* ... */
-
-	/* */
-	// Ensure classes are `https://github.com/dlclark/regexp2` regex compatible
-	for (const property of [...propertyOrder, "others"]) {
-		css[property] = css[property]!
-			.map((current) => current
-				.split(" {")[0]! // Remove all but class names //-- current.includes(" >") ? " >" : " {" --//
-				.slice(1) // Removes dot (css class identifier)
-				// .replaceAll("\\", "\\") // Escape backslash in css names - NEED TO RE-EVALUATE REGEX
-				.replaceAll(/\d+/g, r`\d{1,4}`) // Replace numbers to \d{1,4}
-				// .replace(screenRegex, `-(${ screenList })`)
-				// .replace(cornerWordVerticalInsetRegex, `-(${ cornerWordVerticalList })-`)
-				// .replace(cornerWordVerticalEndRegex, `-(${ cornerWordVerticalList })`)
-				// .replace(cornerWordHorizontalInsetRegex, `-(${ cornerWordHorizontalList })-`)
-				// .replace(cornerWordHorizontalEndRegex, `-(${ cornerWordHorizontalList })`)
-				// .replace(cornerLetterInsetRegex, `-(${ cornerLetterList })-`)
-				// .replace(cornerLetterEndRegex, `-(${ cornerLetterList })`)
-				// .replace(cornerLogicalLetterInsetRegex, `-(${ cornerLogicalLetterList })-`)
-				// .replace(cornerLogicalLetterEndRegex, `-(${ cornerLogicalLetterList })`)
-				// .replace(directionWordInsetRegex, `-(${ directionWordList })-`)
-				// .replace(directionWordEndRegex, `-(${ directionWordList })`)
-				// .replace(directionLetterInsetRegex, `-(${ directionLetterList })-`)
-				// .replace(directionLetterEndRegex, `-(${ directionLetterList })`)
-				// .replace(directionLogicalLetterInsetRegex, `-(${ directionLogicalLetterList })-`)
-				// .replace(directionLogicalLetterEndRegex, `-(${ directionLogicalLetterList })`)
-				// .replace(rowcolPluralInsetRegex, `-(${ rowcolPluralList })-`)
-				// .replace(rowcolPluralEndRegex, `-(${ rowcolPluralList })`)
-				// .replace(rowcolSingularInsetRegex, `-(${ rowcolSingularList })-`)
-				// .replace(rowcolSingularEndRegex, `-(${ rowcolSingularList })`)
-				// .replace(startendInsetRegex, `-(${ startendList })-`)
-				// .replace(startendEndRegex, `-(${ startendList })`)
-				// .replace(xyInsetRegex, `-(${ xyList })-`)
-				// .replace(xyEndRegex, `-(${ xyList })`)
-				// .replace(colourAbsoluteRegex, `-(${ colourAbsoluteList })`)
-				// .replace(colourRelativeRegex, `-(${ colourRelativeList })`)
-				// .replace(fontWeightRegex, `-(${ fontWeightList })`)
-				// .replace(letterSpacingRegex, `-(${ letterSpacingList })`)
-				// .replace(lineHeightRegex, `-(${ lineHeightList })`)
-				// .replace(fontSizeShorthandRegex, r`-(${ fontSizeList })\/((${ lineHeightListNumber })|(\[\d{1,4}[A-Za-z]{1,4}\])){0,1}`)
-				.replace(/-\\\([^)]+\\\)/, r`-\([^\)]+\)`) // Replace `-(--custom-property-placeholder)`
-				.replace(/-\\\[[^)]+?\\\]/, r`-\[[^\]]+\]`), // Replace `-\\[--value-placeholder\\]`
-				// --- ESCAPE HATCHES --- //
-				// .replace(r`scale-\d{1,4}d`, "scale-3d") // https://tailwindcss.com/docs/scale
-				// .replace(r`transform-\d{1,4}d`, "transform-3d"), // https://tailwindcss.com/docs/transform-style
-				// --- ESCAPE HATCHES --- //
-			) // eslint-disable-line @stylistic/function-paren-newline
-			.map((current) => (current.startsWith("-")
-				? `-{0,1}${ current.slice(1) }`
-				: current)) // Add optional negative `-{0,1}` for classes with negative prefix
-			.map((current) => (
-				(
-					!current.startsWith("-{0,1}")
-					&& current.includes(r`\d`)
-					&& !current.includes(colourWhite)
-					&& !current.includes(colourRed)
-				)
-					? `-{0,1}${ current }`
-					: current)) // Add optional negative `-{0,1}` for classes with numbers that are not colours
-			.filter((current, _, array) => !(!current.startsWith("-{0,1}") && array.includes(`-{0,1}${ current }`))) // Remove redundant classes after adding optional negative `-{0,1}`
-			.filter((current) => current !== "") // Remove empty strings
-	}
-
-	// Ensure less hyphens comes before more hyphens
-	// Ensure letters comes before numbers
-	// Ensure classes are sorted alphabetically
-	/* ... */
-
-	// Ensure letters comes before numbers
-	// Ensure classes are sorted alphabetically
-	/* ... */
-
-	// Flatten sorted arrays
-	const classnames: NonEmptyArray<string> = applyMergeLists([
-		...new Set([...propertyOrder, "others"].reduce<string[]>((accumulator, current) => [...accumulator, ...css[current]!], [])),
-	] as unknown as NonEmptyArray<string>)
-
-	// Convert to `OrderData` format
-	let list: OrderData[] = classnames
-		.reduce<OrderData[]>((accumulator, current) => {
-			const string_: string[] = current
-				.slice((current.startsWith("-{0,1}")) ? 6 : 0)
-				.split("-")
-			const groupname: string = string_.at(classnamePrefix.has(string_.at(0)!) ? 1 : 0)!
-
-			// Group similar classes for quicker matches using list of lists
-			switch (groupname) {
-				case accumulator?.at(-1)?.group_name: {
-					accumulator.at(-1)!.regex.push(current)
+			for (const property of propertyOrder) {
+				if (current.includes(` ${ property }: `)) {
+					accumulator[property]!.push(current)
+					isFound = true
 
 					break
 				}
+			}
 
-				default: {
-					accumulator.push({ group_name: groupname, regex: [current] })
-				}
+			if (!isFound) {
+				accumulator.others.push(current)
 			}
 
 			return accumulator
-		}, [])
+		}, { ...configOrder.order, others: [] })
 
-	// Reorder defaultStyleOrder
-	list = reorderMoveToTop(
-		[
-			{ group_name: "dark", regex: ["dark"] },
-			{ group_name: "group", regex: ["group", r`group/[\dA-Za-z]{1,}`] },
-			{ group_name: "peer", regex: ["peer", r`peer/[\dA-Za-z]{1,}`] },
-			{ group_name: "@container", regex: ["@container", "@container-normal", r`@container/[\dA-Za-z]{1,}`] }, // Added back in from prepare-css
-			{ group_name: "prose", regex: ["prose", "not-prose", "prose-invert"] },
-			...list,
-		],
-		[
-			{ groupname: "@container", include: "@container" },
-			{ groupname: "dark", include: "dark" },
-			{ groupname: "group", include: "group" },
-			{ groupname: "peer", include: "peer" },
-			{ groupname: "form", include: "form-checkbox" },
-			{ groupname: "prose", include: "prose" },
-			{ groupname: "sr", include: "sr-only" },
-		],
-	)
-	// Reorder positionStyleOrder
-	list = reorderMoveToGroupname(list, [
-		{ groupname: "static", include: "static" },
-		{ groupname: "absolute", include: "absolute" },
-		{ groupname: "relative", include: "relative" },
-		{ groupname: "fixed", include: "fixed" },
-		{ groupname: "sticky", include: "sticky" },
-	])
-	// Reorder positionXYOrder
-	list = reorderMoveToGroupname(list, [
-		{ groupname: "inset", include: "inset-auto" },
-		{ groupname: "top", include: "top-auto" },
-		{ groupname: "right", include: "right-auto" },
-		{ groupname: "bottom", include: "bottom-auto" },
-		{ groupname: "left", include: "left-auto" },
-		{ groupname: "z", include: "z-auto" },
-	])
-	// Reorder displayStyleOrder
-	list = reorderMoveToGroupname(list, [
-		{ groupname: "hidden", include: "hidden" },
-		{ groupname: "inline", include: "inline" },
-		{ groupname: "block", include: "block" },
-		{ groupname: "flex", include: "flex" },
-		{ groupname: "grid", include: "grid" },
-		{ groupname: "table", include: "table" },
-		{ groupname: "contents", include: "contents" },
-		{ groupname: "flow", include: "flow-root" },
-		{ groupname: "list", include: "list-item" },
-	])
-	// Reorder sizeStyleOrder
-	list = reorderMoveToGroupname(list, [
-		{ groupname: "container", include: "container" },
-		{ groupname: "size", include: "size-auto" },
-		{ groupname: "w", include: "w-auto" },
-		{ groupname: "h", include: "h-auto" },
-	])
+		// Ensure more specific classes comes first (with more style properties)
+		// Ensure letters comes before numbers
+		/* ... */
 
-	// Re-add colours (absolute | relative)
-	const skipStyles = Object.values(skipStylesGroupsColourRemove)
+		/* */
+		// Ensure classes are `https://github.com/dlclark/regexp2` regex compatible
+		for (const property of [...propertyOrder, "others"]) {
+			css[property] = css[property]!
+				.map((current) => current
+					.split(" {")[0]! // Remove all but class names //-- current.includes(" >") ? " >" : " {" --//
+					.slice(1) // Removes dot (css class identifier)
+					// .replaceAll("\\", "\\") // Escape backslash in css names - NEED TO RE-EVALUATE REGEX
+					.replaceAll(/\d+/g, r`\d{1,4}`) // Replace numbers to \d{1,4}
+					// .replace(screenRegex, `-(${ screenList })`)
+					// .replace(cornerWordVerticalInsetRegex, `-(${ cornerWordVerticalList })-`)
+					// .replace(cornerWordVerticalEndRegex, `-(${ cornerWordVerticalList })`)
+					// .replace(cornerWordHorizontalInsetRegex, `-(${ cornerWordHorizontalList })-`)
+					// .replace(cornerWordHorizontalEndRegex, `-(${ cornerWordHorizontalList })`)
+					// .replace(cornerLetterInsetRegex, `-(${ cornerLetterList })-`)
+					// .replace(cornerLetterEndRegex, `-(${ cornerLetterList })`)
+					// .replace(cornerLogicalLetterInsetRegex, `-(${ cornerLogicalLetterList })-`)
+					// .replace(cornerLogicalLetterEndRegex, `-(${ cornerLogicalLetterList })`)
+					// .replace(directionWordInsetRegex, `-(${ directionWordList })-`)
+					// .replace(directionWordEndRegex, `-(${ directionWordList })`)
+					// .replace(directionLetterInsetRegex, `-(${ directionLetterList })-`)
+					// .replace(directionLetterEndRegex, `-(${ directionLetterList })`)
+					// .replace(directionLogicalLetterInsetRegex, `-(${ directionLogicalLetterList })-`)
+					// .replace(directionLogicalLetterEndRegex, `-(${ directionLogicalLetterList })`)
+					// .replace(rowcolPluralInsetRegex, `-(${ rowcolPluralList })-`)
+					// .replace(rowcolPluralEndRegex, `-(${ rowcolPluralList })`)
+					// .replace(rowcolSingularInsetRegex, `-(${ rowcolSingularList })-`)
+					// .replace(rowcolSingularEndRegex, `-(${ rowcolSingularList })`)
+					// .replace(startendInsetRegex, `-(${ startendList })-`)
+					// .replace(startendEndRegex, `-(${ startendList })`)
+					// .replace(xyInsetRegex, `-(${ xyList })-`)
+					// .replace(xyEndRegex, `-(${ xyList })`)
+					// .replace(colourAbsoluteRegex, `-(${ colourAbsoluteList })`)
+					// .replace(colourRelativeRegex, `-(${ colourRelativeList })`)
+					// .replace(fontWeightRegex, `-(${ fontWeightList })`)
+					// .replace(letterSpacingRegex, `-(${ letterSpacingList })`)
+					// .replace(lineHeightRegex, `-(${ lineHeightList })`)
+					// .replace(fontSizeShorthandRegex, r`-(${ fontSizeList })\/((${ lineHeightListNumber })|(\[\d{1,4}[A-Za-z]{1,4}\])){0,1}`)
+					.replace(/-\\\([^)]+\\\)/, r`-\([^\)]+\)`) // Replace `-(--custom-property-placeholder)`
+					.replace(/-\\\[[^)]+?\\\]/, r`-\[[^\]]+\]`), // Replace `-\\[--value-placeholder\\]`
+					// --- ESCAPE HATCHES --- //
+					// .replace(r`scale-\d{1,4}d`, "scale-3d") // https://tailwindcss.com/docs/scale
+					// .replace(r`transform-\d{1,4}d`, "transform-3d"), // https://tailwindcss.com/docs/transform-style
+					// --- ESCAPE HATCHES --- //
+				) // eslint-disable-line @stylistic/function-paren-newline
+				.map((current) => (current.startsWith("-")
+					? `-{0,1}${ current.slice(1) }`
+					: current)) // Add optional negative `-{0,1}` for classes with negative prefix
+				.map((current) => (
+					(
+						!current.startsWith("-{0,1}")
+						&& current.includes(r`\d`)
+						&& !current.includes(colourWhite)
+						&& !current.includes(colourRed)
+					)
+						? `-{0,1}${ current }`
+						: current)) // Add optional negative `-{0,1}` for classes with numbers that are not colours
+				.filter((current, _, array) => !(!current.startsWith("-{0,1}") && array.includes(`-{0,1}${ current }`))) // Remove redundant classes after adding optional negative `-{0,1}`
+				.filter((current) => current !== "") // Remove empty strings
+		}
 
-	list = list
-		.map((current) => {
-			if (current.regex.some((current_) => skipStyles.some((skipStyle) => current_.startsWith(skipStyle)))) {
-				return current
-			}
+		// Ensure less hyphens comes before more hyphens
+		// Ensure letters comes before numbers
+		// Ensure classes are sorted alphabetically
+		/* ... */
 
-			current.regex = current.regex.map((current_) => {
-				if (current_.includes(colourWhite)) {
-					current_ = current_.replace(colourWhiteRegex, colourAbsoluteList)
-				}
+		// Ensure letters comes before numbers
+		// Ensure classes are sorted alphabetically
+		/* ... */
 
-				if (current_.includes(colourRed)) {
-					current_ = current_.replace(colourRedRegex, colourRelativeList)
-				}
+		// Flatten sorted arrays
+		/*
+		classnames = applyMergeLists([
+			...new Set([...propertyOrder, "others"].reduce<string[]>((accumulator, current) => [...accumulator, ...css[current]!], [])),
+		] as unknown as NonEmptyArray<string>)
+		*/
+		classnames = [...new Set([...propertyOrder, "others"].reduce<string[]>((accumulator, current) => [...accumulator, ...css[current]!], []))] as unknown as NonEmptyArray<string>
+	}
 
-				return current_
+	// Group different but related classnames (eg .from, .via, .to)
+	{
+		for (let grouping of groupnameGrouping) {
+			grouping = grouping.map((current) => current.slice(1)) as NonEmptyArray<string>
+			const groupnames = classnames.map((current) => {
+				const classnameWithoutPrefix = getClassnameParts(current).classnameWithoutPrefix
+
+				return (
+					classnameWithoutPrefix.includes("-")
+						? classnameWithoutPrefix.split("-").at(0)!
+						: current
+				)
 			})
 
-			return current
-		})
-		.map((current) => {
-			const group_name = current.group_name // eslint-disable-line @typescript-eslint/naming-convention
-			const regex = applyMergeLists(current.regex as NonEmptyArray<string>)
+			const found: string[][] = Array.from(grouping, () => [])
+			const firstIndex = Math.min(...grouping.map((current) => groupnames.indexOf(current)))
 
-			return ({ group_name, regex })
-		})
-		.map((current) => ({
-			group_name: current.group_name,
-			regex: current.regex.toSorted((a, b) => {
-				// Sort classnames without hyphen before classnames with hyphen (eg `.prose` < `.prose-base`)
-				const aIndex = getClassnameParts(a).classnameWithoutPrefix.includes("-") ? 0 : -1
-				const bIndex = getClassnameParts(b).classnameWithoutPrefix.includes("-") ? 0 : -1
-
-				if (aIndex !== 0 || bIndex !== 0) {
-					const compareResult = normaliseCompareResult(aIndex - bIndex)
-
-					if (compareResult !== 0) {
-						return compareResult
-					}
+			for (const [index, groupname] of groupnames.entries()) {
+				if (grouping.includes(groupname)) {
+					found[grouping.indexOf(groupname)]!.push(classnames.at(index)!)
 				}
+			}
+
+			classnames = [...new Set([...classnames.slice(0, firstIndex), ...found.flat(Infinity), ...classnames.slice(firstIndex)])] as unknown as NonEmptyArray<string>
+		}
+	}
+
+	// Convert to `OrderData` format
+	for (const classname of classnames) {
+		const string_: string[] = classname
+			.slice((classname.startsWith("-{0,1}")) ? 6 : 0)
+			.split("-")
+		const groupname: string = string_.at(classnamePrefix.has(string_.at(0)!) ? 1 : 0)!
+
+		// Group similar classes for quicker matches using list of lists
+		switch (groupname) {
+			case orderDatas?.at(-1)?.group_name: {
+				orderDatas.at(-1)!.regex.push(classname)
+
+				break
+			}
+
+			default: {
+				orderDatas.push({ group_name: groupname, regex: [classname] })
+			}
+		}
+	}
+
+	// Reorder defaultStyleOrder
+	{
+		orderDatas = reorderMoveToTop(
+			[
+				{ group_name: "dark", regex: ["dark"] },
+				{ group_name: "group", regex: ["group", r`group/[\dA-Za-z]{1,}`] },
+				{ group_name: "peer", regex: ["peer", r`peer/[\dA-Za-z]{1,}`] },
+				{ group_name: "@container", regex: ["@container", "@container-normal", r`@container/[\dA-Za-z]{1,}`] }, // Added back in from prepare-css
+				{ group_name: "prose", regex: ["prose-invert", "not-prose", "prose"] },
+				...orderDatas,
+			],
+			[
+				{ groupname: "@container", include: "@container" },
+				{ groupname: "dark", include: "dark" },
+				{ groupname: "group", include: "group" },
+				{ groupname: "peer", include: "peer" },
+				{ groupname: "form", include: "form-checkbox" },
+				{ groupname: "prose", include: "prose" },
+				{ groupname: "sr", include: "sr-only" },
+			],
+		)
+		// Reorder positionStyleOrder
+		orderDatas = reorderMoveToGroupname(orderDatas, [
+			{ groupname: "static", include: "static" },
+			{ groupname: "absolute", include: "absolute" },
+			{ groupname: "relative", include: "relative" },
+			{ groupname: "fixed", include: "fixed" },
+			{ groupname: "sticky", include: "sticky" },
+		])
+		// Reorder positionXYOrder
+		orderDatas = reorderMoveToGroupname(orderDatas, [
+			{ groupname: "inset", include: "inset-auto" },
+			{ groupname: "top", include: "top-auto" },
+			{ groupname: "right", include: "right-auto" },
+			{ groupname: "bottom", include: "bottom-auto" },
+			{ groupname: "left", include: "left-auto" },
+			{ groupname: "z", include: "z-auto" },
+		])
+		// Reorder displayStyleOrder
+		orderDatas = reorderMoveToGroupname(orderDatas, [
+			{ groupname: "hidden", include: "hidden" },
+			{ groupname: "inline", include: "inline" },
+			{ groupname: "block", include: "block" },
+			{ groupname: "flex", include: "flex" },
+			{ groupname: "grid", include: "grid" },
+			{ groupname: "table", include: "table" },
+			{ groupname: "contents", include: "contents" },
+			{ groupname: "flow", include: "flow-root" },
+			{ groupname: "list", include: "list-item" },
+		])
+		// Reorder sizeStyleOrder
+		orderDatas = reorderMoveToGroupname(orderDatas, [
+			{ groupname: "container", include: "container" },
+			{ groupname: "size", include: "size-auto" },
+			{ groupname: "w", include: "w-auto" },
+			{ groupname: "h", include: "h-auto" },
+		])
+	}
+
+	// Re-add colours (absolute | relative)
+	// ...TODO...
+	// Sort classnames without hyphens before other classnames (eg `.prose` < `.prose-base`)
+	// Sort classnames starting with "no-" | "not-" before other classnames
+	{
+		const skipStyles = Object.values(skipStylesGroupsColourRemove)
+
+		for (const index of orderDatas.keys()) {
+			let regex = orderDatas.at(index)!.regex
+
+			// Re-add colours (absolute | relative)
+			if (!regex.some((current) => skipStyles.some((skipStyle) => current.startsWith(skipStyle)))) {
+				regex = regex.map((current) => {
+					if (current.includes(colourWhite)) {
+						current = current.replace(colourWhiteRegex, colourAbsoluteList)
+					}
+
+					if (current.includes(colourRed)) {
+						current = current.replace(colourRedRegex, colourRelativeList)
+					}
+
+					return current
+				})
+			}
+
+			// ...TODO...
+			// regex = applyMergeLists(regex as NonEmptyArray<string>)
+
+			// Sort classnames without hyphens before other classnames (eg `.prose` < `.prose-base`)
+			regex = regex.toSorted((a, b) => {
+				const aIndex = getClassnameParts(a).classnameWithoutPrefix.includes("-") ? 1 : -1
+				const bIndex = getClassnameParts(b).classnameWithoutPrefix.includes("-") ? 1 : -1
+
+				// if (aIndex !== 0 || bIndex !== 0) {
+				const compareResult = normaliseCompareResult(aIndex - bIndex)
+
+				if (compareResult !== 0) {
+					return compareResult
+				}
+				// }
 
 				return 0
-			}),
-		}))
+			})
 
-	return ({ order: list })
+			// Sort classnames starting with "no-" | "not-" before other classnames with hyphen
+			regex = regex.toSorted((a, b) => {
+				const aTrimmed = getClassnameParts(a).classnameTrimmed
+				const bTrimmed = getClassnameParts(b).classnameTrimmed
+				const aIndex = (aTrimmed.startsWith("no-") || aTrimmed.startsWith("not-")) ? -1 : 1
+				const bIndex = (bTrimmed.startsWith("no-") || bTrimmed.startsWith("not-")) ? -1 : 1
+
+				// if (aIndex !== 0 || bIndex !== 0) {
+				const compareResult = normaliseCompareResult(aIndex - bIndex)
+
+				if (compareResult !== 0) {
+					return compareResult
+				}
+				// }
+
+				return 0
+			})
+
+			orderDatas[index]!.regex = regex
+		}
+	}
+
+	return ({ order: orderDatas })
 }
 
+/*
 function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<string> {
 	// Find and group related classnames into an array
 	const mergedIndices = new Set<number>()
 	const merged: Array<string[] | string | undefined> = Array.from({ length: classnamesRaw.length }).map(() => undefined)
 	const unmerged = new Set<string>()
 
-	for (const mergeList of mergeLists) {
+	for (const classnameGrouping of classnameGroupings) {
 		ClassnamesRawLoop:
 		for (const [index, classname] of classnamesRaw.entries()) {
 			if (mergedIndices.has(index)) {
@@ -394,14 +385,14 @@ function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<s
 			}
 
 			const unmergeString = JSON.stringify([index, classname], undefined, "")
-			const { classnameTrimmed, classnameWithoutPrefix, groupname, groupnameWithPrefix } = getClassnameParts(classname, mergeList)
+			const { classnameTrimmed, classnameWithoutPrefix, groupname, groupnameWithPrefix } = getClassnameParts(classname, classnameGrouping)
 
-			// Skip loop if classname has mergeList.exclude
+			// Skip loop if classname has classnameGrouping.exclude
 			if (
-				mergeList.exclude
+				classnameGrouping.exclude
 		    .filter((current) => !current.endsWith("-"))
 		    .some((current) => classname.endsWith(current))
-		    || mergeList.exclude
+		    || classnameGrouping.exclude
 		    .filter((current) => current.endsWith("-"))
 		    .some((current) => classname.includes(current))
 			) {
@@ -410,19 +401,19 @@ function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<s
 				continue ClassnamesRawLoop
 			}
 
-			// Skip loop if classname not in mergeList.regex
+			// Skip loop if classname not in classnameGrouping.regex
 			if (
 				(
-					mergeList.regex.at(0)!.startsWith(".")
-					&& !mergeList.regex.includes(`.${ groupname.split("-").at(0)! }`)
+					classnameGrouping.regex.at(0)!.startsWith(".")
+					&& !classnameGrouping.regex.includes(`.${ groupname.split("-").at(0)! }`)
 				)
 				|| (
-					!mergeList.regex.at(0)!.startsWith(".")
+					!classnameGrouping.regex.at(0)!.startsWith(".")
 					&& (
-						!mergeList.regex
+						!classnameGrouping.regex
 						.filter((current) => !current.endsWith("-"))
 						.some((current) => classnameWithoutPrefix.endsWith(current))
-						&& !mergeList.regex
+						&& !classnameGrouping.regex
 						.filter((current) => current.endsWith("-"))
 						.some((current) => (
 							classnameWithoutPrefix.includes(current)
@@ -436,7 +427,7 @@ function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<s
 				continue ClassnamesRawLoop
 			}
 
-			const { relatedClassnames, relatedIndices } = getRelatedClassnames(classnamesRaw, mergedIndices, mergeList, { index, classname, classnameTrimmed, groupname, groupnameWithPrefix })
+			const { relatedClassnames, relatedIndices } = getRelatedClassnames(classnamesRaw, mergedIndices, classnameGrouping, { index, classname, classnameTrimmed, groupname, groupnameWithPrefix })
 
 			// Skip loop if no related classnames
 			if (relatedIndices.length === 0 || relatedClassnames.length === 0) {
@@ -448,15 +439,15 @@ function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<s
 			const indices = [index, ...relatedIndices]
 			const classnames = [classname, ...relatedClassnames]
 
-			// Skip loop if not every mergeList.include
+			// Skip loop if not every classnameGrouping.include
 			if (
 				!(
-					mergeList.include
+					classnameGrouping.include
 					.filter((current) => !current.endsWith("-"))
 					.every((currentEvery) => (
 						classnames.some((currentSome) => currentSome.endsWith(currentEvery))
 					))
-					&& mergeList.include
+					&& classnameGrouping.include
 					.filter((current) => current.endsWith("-"))
 					.every((currentEvery) => (
 						classnames.some((currentSome) => currentSome.includes(currentEvery))
@@ -469,7 +460,7 @@ function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<s
 			}
 
 			indices.forEach(function (current) { mergedIndices.add(current) })// eslint-disable-line unicorn/no-array-for-each
-			merged[index] = classnames.toSorted(sortClassnamesWrapper(mergeList))
+			merged[index] = classnames.toSorted(sortClassnamesWrapper(classnameGrouping))
 			unmerged.delete(unmergeString)
 		}
 	}
@@ -498,8 +489,9 @@ function applyMergeLists (classnamesRaw: NonEmptyArray<string>): NonEmptyArray<s
 
 	return ([...new Set<string>(merged.filter((current) => current !== undefined).flat(Infinity) as string[])] as NonEmptyArray<string>)
 }
+*/
 
-function getClassnameParts (classname: string, mergeList?: MergeList): { classnameTrimmed: string, classnameWithoutPrefix: string, groupname: string, groupnameWithPrefix: string } {
+function getClassnameParts (classname: string, classnameGrouping?: ClassnameGrouping): { classnameTrimmed: string, classnameWithoutPrefix: string, groupname: string, groupnameWithPrefix: string } {
 	const classnameTrimmed = classname.slice(classname.startsWith("-{0,1}") ? 6 : 0)
 	const prefix = classnamePrefix.has(classnameTrimmed.slice(0, classnameTrimmed.indexOf("-")))
 		? `${ classnameTrimmed.slice(0, classnameTrimmed.indexOf("-")) }`
@@ -510,15 +502,15 @@ function getClassnameParts (classname: string, mergeList?: MergeList): { classna
 	let groupname = ""
 	let groupnameWithPrefix = ""
 
-	if (mergeList === undefined) {
+	if (classnameGrouping === undefined) {
 		return ({ classnameTrimmed, classnameWithoutPrefix, groupname, groupnameWithPrefix })
 	}
 
 	let mergingString = ""
 
-	// MergeList.regex starts with `.` (eg .from | .via | .to)
-	if (mergeList.regex.at(0)!.startsWith(".")) {
-		mergingString = mergeList.regex.reduce((accumulator, current) => {
+	// ClassnameGrouping.regex starts with `.` (eg .from | .via | .to)
+	if (classnameGrouping.regex.at(0)!.startsWith(".")) {
+		mergingString = classnameGrouping.regex.reduce((accumulator, current) => {
 			return (
 				(classnameWithoutPrefix.includes("-"))
 					// eg `.prose-base`
@@ -537,7 +529,7 @@ function getClassnameParts (classname: string, mergeList?: MergeList): { classna
 		const check = { regexEnd: "", regexMiddle: "" }
 
 		// Checks for `-<regex>`; get longest matching regex
-		const mergingStringEnd = mergeList.regex
+		const mergingStringEnd = classnameGrouping.regex
 			.filter((current) => !current.endsWith("-"))
 			.reduce((accumulator, current) => (classnameWithoutPrefix.endsWith(current) && current.length > accumulator.length) ? current : accumulator, "")
 
@@ -546,7 +538,7 @@ function getClassnameParts (classname: string, mergeList?: MergeList): { classna
 		}
 
 		// Checks for `-<regex>-`; get longest matching regex
-		const mergingStringMiddle = mergeList.regex
+		const mergingStringMiddle = classnameGrouping.regex
 			.filter((current) => current.endsWith("-"))
 			.reduce((accumulator, current) => (classnameWithoutPrefix.includes(current) && current.length > accumulator.length) ? current : accumulator, "")
 
@@ -570,7 +562,7 @@ function getClassnameParts (classname: string, mergeList?: MergeList): { classna
 		}
 	}
 
-	groupname = mergeList.regex.at(0)!.startsWith(".")
+	groupname = classnameGrouping.regex.at(0)!.startsWith(".")
 		? mergingString.replace(".", "").replace("-", "")
 		: classnameWithoutPrefix.slice(0, classnameWithoutPrefix.includes(mergingString) ? classnameWithoutPrefix.indexOf(mergingString) : classnameWithoutPrefix.length)
 	groupnameWithPrefix = (prefix === "")
@@ -580,18 +572,19 @@ function getClassnameParts (classname: string, mergeList?: MergeList): { classna
 	return ({ classnameTrimmed, classnameWithoutPrefix, groupname, groupnameWithPrefix })
 }
 
-function getRelatedClassnames (classnamesRaw: NonEmptyArray<string>, mergedIndices: Set<number>, mergeList: MergeList, reference: { index: number, classname: string, classnameTrimmed: string, groupname: string, groupnameWithPrefix: string }): { relatedIndices: number[], relatedClassnames: string[] } {
+/*
+function getRelatedClassnames (classnamesRaw: NonEmptyArray<string>, mergedIndices: Set<number>, classnameGrouping: ClassnameGrouping, reference: { index: number, classname: string, classnameTrimmed: string, groupname: string, groupnameWithPrefix: string }): { relatedIndices: number[], relatedClassnames: string[] } {
 	const relatedIndices: number[] = []
 	const relatedClassnames: string[] = []
 
 	ClassnamesRawLoop:
 	for (const [index, classname] of classnamesRaw.entries()) {
-		const { classnameTrimmed, classnameWithoutPrefix, groupname, groupnameWithPrefix } = getClassnameParts(classname, mergeList)
+		const { classnameTrimmed, classnameWithoutPrefix, groupname, groupnameWithPrefix } = getClassnameParts(classname, classnameGrouping)
 
 		// classnameTrimmed equals to reference if trimmed and `sizes`.regex stripped from reference (eg `inset-ring` === `-{0,1}inset-ring-\\d{1,4}` after trimmed and stripped of regex)
 		// excludes displayStyles
 		if (
-			mergeList.regex.includes(r`-base\/\d{1,4}`)
+			classnameGrouping.regex.includes(r`-base\/\d{1,4}`)
 			&& groupnameWithPrefix === ""
 			&& classnameTrimmed === reference.groupnameWithPrefix
 			&& !["hidden", "inline", "block", "flex", "grid", "table", "contents", "flow-root", "list-item"].includes(classnameTrimmed)
@@ -611,7 +604,7 @@ function getRelatedClassnames (classnamesRaw: NonEmptyArray<string>, mergedIndic
 			|| relatedIndices.includes(index)
 			// Check `-<regex>` | `-<regex>-`
 			|| (
-				!mergeList.regex.at(0)!.startsWith(".")
+				!classnameGrouping.regex.at(0)!.startsWith(".")
 				&& (
 					!classnameWithoutPrefix.startsWith(reference.groupname)
 					|| groupnameWithPrefix !== reference.groupnameWithPrefix
@@ -622,8 +615,8 @@ function getRelatedClassnames (classnamesRaw: NonEmptyArray<string>, mergedIndic
 		}
 
 		// Groups classnames with sibling groupnames (eg .from | .via | .to)
-		if (mergeList.regex.at(0)!.startsWith(".")) {
-			if (mergeList.regex.includes(`.${ groupname }`)) {
+		if (classnameGrouping.regex.at(0)!.startsWith(".")) {
+			if (classnameGrouping.regex.includes(`.${ groupname }`)) {
 				relatedIndices.push(index)
 				relatedClassnames.push(classname)
 			}
@@ -632,24 +625,24 @@ function getRelatedClassnames (classnamesRaw: NonEmptyArray<string>, mergedIndic
 			continue ClassnamesRawLoop
 		}
 
-		// Skip loop if classname has mergeList.exclude
+		// Skip loop if classname has classnameGrouping.exclude
 		if (
-			mergeList.exclude
+			classnameGrouping.exclude
 	    .filter((current) => !current.endsWith("-"))
 	    .some((current) => classname.endsWith(current))
-	    || mergeList.exclude
+	    || classnameGrouping.exclude
 	    .filter((current) => current.endsWith("-"))
 	    .some((current) => classname.includes(current))
 		) {
 			continue ClassnamesRawLoop
 		}
 
-		// Skip loop if classname not in mergeList.regex
+		// Skip loop if classname not in classnameGrouping.regex
 		if (
-			!mergeList.regex
+			!classnameGrouping.regex
 			.filter((current) => !current.endsWith("-"))
 			.some((current) => classnameWithoutPrefix.endsWith(current))
-			&& !mergeList.regex
+			&& !classnameGrouping.regex
 			.filter((current) => current.endsWith("-"))
 			.some((current) => (
 				classnameWithoutPrefix.includes(current)
@@ -665,9 +658,11 @@ function getRelatedClassnames (classnamesRaw: NonEmptyArray<string>, mergedIndic
 
 	return { relatedIndices, relatedClassnames }
 }
+/* */
 
 // Using wrapper function as wrapper because toSorted(compareFn) uses `groupList` for sorting
-function sortClassnamesWrapper (mergeList: MergeList): CompareFunction<string> {
+/*
+function sortClassnamesWrapper (classnameGrouping: ClassnameGrouping): CompareFunction<string> {
 	return function compareFunction (a, b): number {
 		const { classnameWithoutPrefix: aClassnameWithoutPrefix } = getClassnameParts(a)
 		const { classnameWithoutPrefix: bClassnameWithoutPrefix } = getClassnameParts(b)
@@ -675,10 +670,10 @@ function sortClassnamesWrapper (mergeList: MergeList): CompareFunction<string> {
 		let bIndex = 0
 		let compareResult = 0
 
-		// Sort by mergeList.regex order with `.` (eg .from | .via | .to)
-		if (mergeList.regex.at(0)!.startsWith(".")) {
-			aIndex = mergeList.regex.map((current) => `.${ aClassnameWithoutPrefix }`.startsWith(current)).indexOf(true)
-			bIndex = mergeList.regex.map((current) => `.${ bClassnameWithoutPrefix }`.startsWith(current)).indexOf(true)
+		// Sort by classnameGrouping.regex order with `.` (eg .from | .via | .to)
+		if (classnameGrouping.regex.at(0)!.startsWith(".")) {
+			aIndex = classnameGrouping.regex.map((current) => `.${ aClassnameWithoutPrefix }`.startsWith(current)).indexOf(true)
+			bIndex = classnameGrouping.regex.map((current) => `.${ bClassnameWithoutPrefix }`.startsWith(current)).indexOf(true)
 			compareResult = normaliseCompareResult(aIndex - bIndex)
 
 			if (compareResult !== 0) {
@@ -689,9 +684,9 @@ function sortClassnamesWrapper (mergeList: MergeList): CompareFunction<string> {
 			bIndex = 0
 		}
 
-		// Sort by mergeList.regex order (`-<regex>-` and `-<regex>`)
-		if (!mergeList.regex.at(0)!.startsWith(".")) {
-			[aIndex, bIndex] = mergeList.regex.reduce<[number, number]>((accumulator, current, index) => {
+		// Sort by classnameGrouping.regex order (`-<regex>-` and `-<regex>`)
+		if (!classnameGrouping.regex.at(0)!.startsWith(".")) {
+			[aIndex, bIndex] = classnameGrouping.regex.reduce<[number, number]>((accumulator, current, index) => {
 				if (!current.endsWith("-")) {
 					if (accumulator[0] === -1 && a.endsWith(current)) {
 						accumulator[0] = (a.includes(r`\/`)) ? index + 0.5 : index
@@ -753,7 +748,7 @@ function sortClassnamesWrapper (mergeList: MergeList): CompareFunction<string> {
 		}
 
 		// Sort classnames according to size
-		if (!mergeList.regex.includes("-base") && !mergeList.regex.includes("-md")) {
+		if (!classnameGrouping.regex.includes("-base") && !classnameGrouping.regex.includes("-md")) {
 			aIndex = sizes.findIndex((current) => a.endsWith(current))
 			bIndex = sizes.findIndex((current) => b.endsWith(current))
 
@@ -769,26 +764,25 @@ function sortClassnamesWrapper (mergeList: MergeList): CompareFunction<string> {
 			}
 		}
 
-		/*
 		// Sort classnames with % (---included in `const sizes`---)
-		const aWithPercentage = a.endsWith(r`\%`)
-		const bWithPercentage = b.endsWith(r`\%`)
+		// const aWithPercentage = a.endsWith(r`\%`)
+		// const bWithPercentage = b.endsWith(r`\%`)
 
-		if (aWithPercentage || bWithPercentage) {
-			compareResult = normaliseCompareResult([aWithPercentage, bWithPercentage])
+		// if (aWithPercentage || bWithPercentage) {
+		// 	compareResult = normaliseCompareResult([aWithPercentage, bWithPercentage])
 
-			if (compareResult !== 0) {
-				return compareResult
-			}
+		// 	if (compareResult !== 0) {
+		// 		return compareResult
+		// 	}
 
-			aIndex = 0
-			bIndex = 0
-		}
-		*/
+		// 	aIndex = 0
+		// 	bIndex = 0
+		// }
 
 		return 0
 	}
 }
+*/
 
 function reorderMoveToTop (orderDataArray: OrderData[], order: Array<Record<"groupname" | "include", string>>): OrderData[] {
 	// Reorder and combine same groupnames according to `order` argument
@@ -868,6 +862,34 @@ function reorderMoveToGroupname (orderDataArray: OrderData[], order: Array<Recor
 
 	return newOrderDataArray
 }
+
+/*
+{
+	// Ensure colours are grouped together
+	const colourList = [
+		...defaults["colour-absolute"]
+			.filter((current) => current === "white")
+			.map((current) => [
+				`-${ current }`,
+				r`-${ current }\/\d{1,4}`,
+			])
+			.flat(Infinity),
+		...defaults["colour-relative"]
+			.filter((current) => current === "red")
+			.map((current) => [
+				`-${ current }-`,
+				r`-${ current }-\d{1,4}`,
+				r`-${ current }-\d{1,4}\/\d{1,4}`,
+			])
+			.flat(Infinity),
+	] as NonEmptyArray<string>
+	const colourRegex = new RegExp(r`-(?<!\()(?:${
+		colourList
+			.map((current) => `(?:${ current.replaceAll(/^-/g, "").toLowerCase() })`)
+			.join("|")
+	})(?![0-9A-Za-z]|\))`)
+}
+/* */
 
 /*
 {
@@ -1086,5 +1108,88 @@ function reorderMoveToGroupname (orderDataArray: OrderData[], order: Array<Recor
 
 			return (sorting<string>(baseA, baseB))
 		})
+}
+/* */
+
+/*
+{
+	const lineHeight = defaults["line-height"].map((current) => `-${ current }`) as NonEmptyArray<string>
+	const fontWeight = defaults["font-weight"].map((current) => `-${ current }`) as NonEmptyArray<string>
+	const letterSpacing = defaults["letter-spacing"].map((current) => `-${ current }`) as NonEmptyArray<string>
+	const digits = [r`-\d{1,4}`, r`-\d{1,4}\/\d{1,4}`, r`-\d{1,4}\%`] as NonEmptyArray<string>
+	const units = [
+		"-none", "-auto", "-initial", "-full", "-screen", "-fit", "-min", "-max", "-fr", "-px",
+		"-vh", "-vw", "-dvw", "-dvh", "-svw", "-svh", "-lvw", "-lvh", "-lh",
+		r`-\d{1,4}xs`, "-xs",
+		"-sm", "-base", "-md", "-lg",
+		"-xl", r`-\d{1,4}xl`,
+	] as NonEmptyArray<string>
+	const sizes = [
+		"-none", "-auto", "-initial", "-reverse", "-full", "-fr", "-px",
+		r`-\d{1,4}xs`, "-xs", r`-xs\/\d{1,4}`,
+		"-sm", r`-sm\/\d{1,4}`,
+		"-base", r`-base\/\d{1,4}`, "-md",
+		"-lg", r`-lg\/\d{1,4}`,
+		"-xl", r`-xl\/\d{1,4}`, r`-\d{1,4}xl`, r`-\d{1,4}xl\/\d{1,4}`,
+	] as NonEmptyArray<string>
+	const customs = [r`-\([^\)]+\)`, r`-\[[^\]]+\]`] as NonEmptyArray<string>
+	const classnameGroupings: ClassnameGrouping[] = [
+		{ include: [], exclude: [], regex: [".start", ".end"] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/19613
+		{ include: [], exclude: [], regex: [".from", ".via", ".to"] },
+		{ include: [], exclude: [], regex: [".form"] },
+		{ include: [], exclude: [], regex: [".prose"] },
+		{ include: [], exclude: [], regex: [".top", ".right", ".bottom", ".left"] },
+		{ include: [], exclude: [], regex: [".p", ".ps", ".pe", ".px", ".py", ".pt", ".pr", ".pb", ".pl"] },
+		{ include: [], exclude: [], regex: [".m", ".ms", ".me", ".mx", ".my", ".mt", ".mr", ".mb", ".ml"] },
+		{ include: lineHeight, exclude: [], regex: lineHeight },
+		{ include: fontWeight, exclude: [], regex: fontWeight },
+		{ include: letterSpacing, exclude: [], regex: letterSpacing },
+		{ include: ["-dashed", "-dotted", "-double", "-solid"], exclude: [], regex: ["-none", "-from-", "-dashed", "-dotted", "-double", "-solid", "-wavy"] },
+		{ include: ["-light", "-dark"], exclude: [], regex: ["-normal", "-light", "-light-", "-dark", "-dark-"] },
+		{ include: ["-ultra-condensed", "-extra-condensed", "-semi-condensed", "-semi-expanded", "-extra-expanded", "-ultra-expanded"], exclude: [], regex: ["-ultra-condensed", "-extra-condensed", "-condensed", "-semi-condensed", "-normal", "-semi-expanded", "-expanded", "-extra-expanded", "-ultra-expanded"] },
+		{ include: ["-before-", "-inside-", "-after-"], exclude: [], regex: ["-before-", "-inside-", "-after-"] },
+		{ include: ["-columns"], exclude: ["-column", "-cols", "-col"], regex: ["-rows", "-rows-", "-columns", "-columns-"] },
+		{ include: ["-columns-"], exclude: ["-column-", "-cols-", "-col-"], regex: ["-rows", "-rows-", "-columns", "-columns-"] },
+		{ include: ["-column"], exclude: ["-cols", "-col", "-columns"], regex: ["-row", "-row-", "-column", "-column-"] },
+		{ include: ["-column-"], exclude: ["-cols-", "-col-", "-columns-"], regex: ["-row", "-row-", "-column", "-column-"] },
+		{ include: ["-cols"], exclude: ["-col", "-columns", "-column"], regex: ["-rows", "-rows-", "-cols", "-cols-"] },
+		{ include: ["-cols-"], exclude: ["-col-", "-columns-", "-column-"], regex: ["-rows", "-rows-", "-cols", "-cols-"] },
+		{ include: ["-col"], exclude: ["-columns", "-column", "-cols"], regex: ["-row", "-row-", "-col", "-col-"] },
+		{ include: ["-col-"], exclude: ["-columns-", "-column-", "-cols-"], regex: ["-row", "-row-", "-col", "-col-"] },
+		{ include: ["-right-top", "-right-bottom", "-left-bottom", "-left-top"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-none", "-initial", "-auto", "-both", "-center", "-top", "-top-right", "-right-top", "-right", "-bottom-right", "-right-bottom", "-bottom", "-bottom-left", "-left-bottom", "-left", "-top-left", "-left-top", ...customs] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/<17378,17437>
+		{ include: ["-top-right", "-top-left", "-bottom-right", "-bottom-left"], exclude: ["-center-", "-down", "-end", "-footer"], regex: ["-none", "-initial", "-auto", "-both", "-center", "-top", "-top-right", "-right-top", "-right", "-bottom-right", "-right-bottom", "-bottom", "-bottom-left", "-left-bottom", "-left", "-top-left", "-left-top", ...customs] }, // Deprecated: https://github.com/tailwindlabs/tailwindcss/pull/<17378,17437>
+		{ include: ["-center", "-top", "-right", "-bottom", "-left"], exclude: ["-down", "-end", "-footer"], regex: ["-center", "-center-", "-top", "-top-", "-right", "-right-", "-bottom", "-bottom-", "-left", "-left-"] },
+		{ include: ["-stretch"], exclude: [], regex: ["-initial", "-auto", "-both", "-around", "-baseline", "-baseline-", "-between", "-evenly", "-normal", "-stretch", "-start", "-center", "-center-", "-end", "-end-"] },
+		{ include: ["-start", "-end", "-right", "-left"], exclude: ["-start-", "-end-", "-right-", "-left-"], regex: ["-none", "-initial", "-auto", "-both", "-justify", "-start", "-end", "-right", "-center", "-left"] },
+		{ include: ["-header", "-footer"], exclude: ["-right", "-down", "-bottom", "-end"], regex: ["-header", "-header-", "-center", "-center-", "-footer", "-footer-"] },
+		{ include: ["-header-", "-footer-"], exclude: ["-header", "-footer"], regex: ["-header-", "-center-", "-footer-"] },
+		{ include: ["-right", "-left"], exclude: ["-down", "-bottom", "-end", "-footer"], regex: ["-right", "-right-", "-center", "-center-", "-left", "-left-"] },
+		{ include: ["-right-", "-left-"], exclude: ["-right", "-left"], regex: ["-right-", "-center-", "-left-"] },
+		{ include: ["-up", "-down"], exclude: ["-bottom", "-end", "-footer", "-right"], regex: ["-up", "-up-", "-center", "-center-", "-down", "-down-"] },
+		{ include: ["-up-", "-down-"], exclude: ["-up", "-down"], regex: ["-up-", "-center-", "-down-"] },
+		{ include: ["-top", "-bottom"], exclude: ["-end", "-footer", "-right", "-down"], regex: ["-baseline", "-sub", "-super", "-top", "-top-", "-center", "-center-", "-middle", "-bottom", "-bottom-"] },
+		{ include: ["-top-", "-bottom-"], exclude: ["-top", "-bottom"], regex: ["-top-", "-center-", "-bottom-"] },
+		{ include: ["-start", "-end"], exclude: ["-footer", "-right", "-down", "-bottom"], regex: ["-start", "-start-", "-center", "-center-", "-end", "-end-"] },
+		{ include: ["-start-", "-end-"], exclude: ["-start", "-end"], regex: ["-start-", "-center-", "-end-"] },
+		{ include: ["-nesw-", "-nwse-"], exclude: [], regex: ["-nesw-", "-nwse-", "-ns-", "-ew-", "-n-", "-ne-", "-e-", "-se-", "-s-", "-sw-", "-w-", "-nw-"] },
+		{ include: ["-ss-", "-ee-", "-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s-", "-e-", "-ss-", "-se-", "-ee-", "-es-", "-t-", "-tl-", "-l-", "-bl-", "-b-", "-br-", "-r-", "-tr-"] },
+		{ include: ["-ss-", "-ee-"], exclude: ["-s-", "-e-"], regex: ["-ss-", "-se-", "-ee-", "-es-", "-tl-", "-bl-", "-br-", "-tr-"] },
+		{ include: ["-s-", "-e-"], exclude: ["-nesw-", "-nwse-"], regex: ["-s", "-s-", "-e", "-e-"] },
+		{ include: [], exclude: [], regex: ["-p-", "-ps-", "-pe-", "-px-", "-py-", "-pt-", "-pr-", "-pb-", "-pl-"] },
+		{ include: [], exclude: [], regex: ["-m-", "-ms-", "-me-", "-mx-", "-my-", "-mt-", "-mr-", "-mb-", "-ml-"] },
+		{ include: ["-x", "-x-", "-y", "-y-"], exclude: [], regex: ["-x", "-x-", "-y", "-y-"] },
+		{ include: ["-x", "-y"], exclude: ["-x-", "-y-"], regex: ["-x", "-y"] },
+		{ include: ["-x-", "-y-"], exclude: ["-x", "-y"], regex: ["-x-", "-y-"] },
+		{ include: ["-tr", "-br", "-bl", "-tl"], exclude: [], regex: ["-none", "-initial", "-auto", "-both", "-t", "-tr", "-r", "-br", "-b", "-bl", "-l", "-tl"] },
+		{ include: ["-t-", "-l-"], exclude: [], regex: ["-t", "-t-", "-r", "-r-", "-b", "-b-", "-l", "-l-"] },
+		{ include: ["-t-", "-b-"], exclude: ["-r-", "-l-"], regex: ["-t-", "-b-"] },
+		{ include: ["-r-", "-l-"], exclude: ["-t-", "-b-"], regex: ["-r-", "-l-"] },
+		{ include: ["-first", "-last"], exclude: [], regex: ["-none", "-initial", "-auto", "-both", "-first", "-last", ...digits, ...customs] },
+		{ include: ["-min", "-max"], exclude: [], regex: ["-none", "-initial", "-auto", "-both", "-fr", "-min", "-max"] },
+		{ include: ["-none"], exclude: [], regex: ["-none", "-initial", "-auto", "-manual", "-both", "-contain"] },
+		{ include: [colourWhite, colourRed], exclude: [], regex: colourList },
+		{ include: ["-dvw", "-dvh", "-svw", "-svh", "-lvw", "-lvh"], exclude: [], regex: [...units, ...digits, ...customs] },
+		{ include: [], exclude: [], regex: [...sizes, ...digits, ...customs] },
+	]
 }
 /* */

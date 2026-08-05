@@ -627,3 +627,8 @@ Order list used if `order_type` is set to `custom`.
 	- Choose one:
 		- `go install github.com/go-task/task/v3/cmd/task@latest`
 		- `yay -S go-task`
+
+## TODO
+
+- Convert vanilla npm package to prettier-plugin
+	- Edit README.md accordingly

@@ -8,7 +8,7 @@ export interface StylelintConfigOrder {
 
 // https://github.com/stormwarning/stylelint-config-recess-order/blob/main/index.js
 // https://github.com/stormwarning/stylelint-config-recess-order/blob/main/groups.js
-// commit: 2f53cd971017aacc11f6b18e3b01dd4d90edce29
+// commit: 9ff25c209f0d4fc388d5b6ace65edcce53e8f1aa
 export const recessConfigOrder: StylelintConfigOrder = {
 	config: {
 		...baseConfig,
@@ -35,6 +35,13 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"box-sizing": [],
 		"display": [],
 		"visibility": [],
+		"columns": [],
+		"column-width": [],
+		"column-count": [],
+		"column-height": [],
+		"column-wrap": [],
+		"column-span": [],
+		"column-fill": [],
 		"flex": [],
 		"flex-grow": [],
 		"flex-shrink": [],
@@ -64,6 +71,10 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"gap": [],
 		"row-gap": [],
 		"column-gap": [],
+		"column-rule": [],
+		"column-rule-width": [],
+		"column-rule-style": [],
+		"column-rule-color": [],
 		"place-content": [],
 		"place-items": [],
 		"place-self": [],
@@ -329,9 +340,9 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"border-style": [],
 		"border-width": [],
 		"border-block": [],
-		"border-block-color": [], // Added
-		"border-block-style": [], // Added
-		"border-block-width": [], // Added
+		"border-block-color": [],
+		"border-block-style": [],
+		"border-block-width": [],
 		"border-block-start": [],
 		"border-block-start-color": [],
 		"border-block-start-style": [],
@@ -341,9 +352,9 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"border-block-end-style": [],
 		"border-block-end-width": [],
 		"border-inline": [],
-		"border-inline-color": [], // Added
-		"border-inline-style": [], // Added
-		"border-inline-width": [], // Added
+		"border-inline-color": [],
+		"border-inline-style": [],
+		"border-inline-width": [],
 		"border-inline-start": [],
 		"border-inline-start-color": [],
 		"border-inline-start-style": [],
@@ -495,7 +506,7 @@ export const recessConfigOrder: StylelintConfigOrder = {
 		"transition-timing-function": [],
 		"transition-duration": [],
 		"transition-property": [],
-		"transition-behavior": [], // Added
+		"transition-behavior": [],
 		"view-transition-name": [],
 		"view-transition-class": [],
 		"animation": [],

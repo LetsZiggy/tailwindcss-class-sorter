@@ -2,6 +2,7 @@
 	"tailwindcss-container-queries": {
 		"regular": [
 			"@container",
+			"@container-size",
 			"@container-normal"
 		],
 		"custom": []
@@ -423,6 +424,7 @@
 			"basis-1/2",
 			"basis-full",
 			"basis-auto",
+			"basis-px",
 			"basis-3xs",
 			"basis-2xs",
 			"basis-xs",
@@ -592,7 +594,8 @@
 			"auto-cols-auto",
 			"auto-cols-min",
 			"auto-cols-max",
-			"auto-cols-fr"
+			"auto-cols-fr",
+			"auto-cols-5"
 		],
 		"custom": [
 			"auto-cols-(<custom-property>)",
@@ -604,7 +607,8 @@
 			"auto-rows-auto",
 			"auto-rows-min",
 			"auto-rows-max",
-			"auto-rows-fr"
+			"auto-rows-fr",
+			"auto-rows-5"
 		],
 		"custom": [
 			"auto-rows-(<custom-property>)",
@@ -614,8 +618,11 @@
 	"gap": {
 		"regular": [
 			"gap-5",
+			"gap-px",
 			"gap-x-5",
-			"gap-y-5"
+			"gap-x-px",
+			"gap-y-5",
+			"gap-y-px"
 		],
 		"custom": [
 			"gap-(<custom-property>)",
@@ -1572,6 +1579,15 @@
 		"custom": [
 			"indent-(<custom-property>)",
 			"indent-[<value>]"
+		]
+	},
+	"tab-size": {
+		"regular": [
+			"tab-5"
+		],
+		"custom": [
+			"tab-(<custom-property>)",
+			"tab-[<value>]"
 		]
 	},
 	"vertical-align": {
@@ -2669,8 +2685,11 @@
 	"border-spacing": {
 		"regular": [
 			"border-spacing-5",
+			"border-spacing-px",
 			"border-spacing-x-5",
-			"border-spacing-y-5"
+			"border-spacing-x-px",
+			"border-spacing-y-5",
+			"border-spacing-y-px"
 		],
 		"custom": [
 			"border-spacing-(<custom-property>)",
@@ -2943,6 +2962,15 @@
 			"translate-z-[<value>]"
 		]
 	},
+	"zoom": {
+		"regular": [
+			"zoom-5"
+		],
+		"custom": [
+			"zoom-(<custom-property>)",
+			"zoom-[<value>]"
+		]
+	},
 	"accent-color": {
 		"regular": [
 			"accent-white",
@@ -3055,30 +3083,82 @@
 		],
 		"custom": []
 	},
+	"scrollbar-color": {
+		"regular": [
+			"scrollbar-thumb-white",
+			"scrollbar-thumb-red-50",
+			"scrollbar-track-white",
+			"scrollbar-track-red-50"
+		],
+		"custom": [
+			"scrollbar-thumb-(<custom-property>)",
+			"scrollbar-thumb-[<value>]",
+			"scrollbar-track-(<custom-property>)",
+			"scrollbar-track-[<value>]"
+		]
+	},
+	"scrollbar-width": {
+		"regular": [
+			"scrollbar-auto",
+			"scrollbar-thin",
+			"scrollbar-none"
+		],
+		"custom": []
+	},
+	"scrollbar-gutter": {
+		"regular": [
+			"scrollbar-gutter-auto",
+			"scrollbar-gutter-stable",
+			"scrollbar-gutter-both"
+		],
+		"custom": []
+	},
 	"scroll-margin": {
 		"regular": [
 			"scroll-m-5",
 			"-scroll-m-5",
+			"scroll-m-px",
+			"-scroll-m-px",
 			"scroll-mx-5",
 			"-scroll-mx-5",
+			"scroll-mx-px",
+			"-scroll-mx-px",
 			"scroll-my-5",
 			"-scroll-my-5",
+			"scroll-my-px",
+			"-scroll-my-px",
 			"scroll-ms-5",
 			"-scroll-ms-5",
+			"scroll-ms-px",
+			"-scroll-ms-px",
 			"scroll-me-5",
 			"-scroll-me-5",
+			"scroll-me-px",
+			"-scroll-me-px",
 			"scroll-mbs-5",
 			"-scroll-mbs-5",
+			"scroll-mbs-px",
+			"-scroll-mbs-px",
 			"scroll-mbe-5",
 			"-scroll-mbe-5",
+			"scroll-mbe-px",
+			"-scroll-mbe-px",
 			"scroll-mt-5",
 			"-scroll-mt-5",
+			"scroll-mt-px",
+			"-scroll-mt-px",
 			"scroll-mr-5",
 			"-scroll-mr-5",
+			"scroll-mr-px",
+			"-scroll-mr-px",
 			"scroll-mb-5",
 			"-scroll-mb-5",
+			"scroll-mb-px",
+			"-scroll-mb-px",
 			"scroll-ml-5",
-			"-scroll-ml-5"
+			"-scroll-ml-5",
+			"scroll-ml-px",
+			"-scroll-ml-px"
 		],
 		"custom": [
 			"scroll-m-(<custom-property>)",
@@ -3108,27 +3188,27 @@
 	"scroll-padding": {
 		"regular": [
 			"scroll-p-5",
-			"-scroll-p-5",
+			"scroll-p-px",
 			"scroll-px-5",
-			"-scroll-px-5",
+			"scroll-px-px",
 			"scroll-py-5",
-			"-scroll-py-5",
+			"scroll-py-px",
 			"scroll-ps-5",
-			"-scroll-ps-5",
+			"scroll-ps-px",
 			"scroll-pe-5",
-			"-scroll-pe-5",
+			"scroll-pe-px",
 			"scroll-pbs-5",
-			"-scroll-pbs-5",
+			"scroll-pbs-px",
 			"scroll-pbe-5",
-			"-scroll-pbe-5",
+			"scroll-pbe-px",
 			"scroll-pt-5",
-			"-scroll-pt-5",
+			"scroll-pt-px",
 			"scroll-pr-5",
-			"-scroll-pr-5",
+			"scroll-pr-px",
 			"scroll-pb-5",
-			"-scroll-pb-5",
+			"scroll-pb-px",
 			"scroll-pl-5",
-			"-scroll-pl-5"
+			"scroll-pl-px"
 		],
 		"custom": [
 			"scroll-p-(<custom-property>)",

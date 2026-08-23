@@ -80,6 +80,7 @@ https://tailwindcss.com/docs/text-transform
 https://tailwindcss.com/docs/text-overflow
 https://tailwindcss.com/docs/text-wrap
 https://tailwindcss.com/docs/text-indent
+https://tailwindcss.com/docs/tab-size
 https://tailwindcss.com/docs/vertical-align
 https://tailwindcss.com/docs/white-space
 https://tailwindcss.com/docs/word-break
@@ -156,6 +157,7 @@ https://tailwindcss.com/docs/transform
 https://tailwindcss.com/docs/transform-origin
 https://tailwindcss.com/docs/transform-style
 https://tailwindcss.com/docs/translate
+https://tailwindcss.com/docs/zoom
 https://tailwindcss.com/docs/accent-color
 https://tailwindcss.com/docs/appearance
 https://tailwindcss.com/docs/caret-color
@@ -165,6 +167,9 @@ https://tailwindcss.com/docs/field-sizing
 https://tailwindcss.com/docs/pointer-events
 https://tailwindcss.com/docs/resize
 https://tailwindcss.com/docs/scroll-behavior
+https://tailwindcss.com/docs/scrollbar-color
+https://tailwindcss.com/docs/scrollbar-width
+https://tailwindcss.com/docs/scrollbar-gutter
 https://tailwindcss.com/docs/scroll-margin
 https://tailwindcss.com/docs/scroll-padding
 https://tailwindcss.com/docs/scroll-snap-align

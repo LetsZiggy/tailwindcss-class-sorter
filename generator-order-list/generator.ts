@@ -63,6 +63,8 @@ const separatorSortOrders: NonEmptyArray<Prettify<ClassnameGrouping>> = [
 
 	{ include: ["-t-from-", "-b-to-", "-x-from-", "-y-to-", "-conic-", "-linear-", "-radial-"], regex: ["-t-from-", "-t-to-", "-r-from-", "-r-to-", "-b-from-", "-b-to-", "-l-from-", "-l-to-", "-x-from-", "-x-to-", "-y-from-", "-y-to-", "-conic-from-", "-conic-to-", "-conic-", "-linear-from-", "-linear-to-", "-linear-", "-radial-closest-", "-radial-farthest-", "-radial-from-", "-radial-to-", "-radial-at-center", "-radial-at-top", "-radial-at-top-right", "-radial-at-right", "-radial-at-bottom-right", "-radial-at-bottom", "-radial-at-bottom-left", "-radial-at-left", "-radial-at-top-left", "-radial-"] },
 
+	{ regex: ["-thumb-", "-track-", "-gutter-"] },
+
 	{ include: ["-blur-", "-brightness-", "-contrast-", "-filter-", "-grayscale-", "-hue-rotate-", "-invert-", "-opacity-", "-saturate-", "-sepia-"], regex: ["-blur-", "-brightness-", "-contrast-", "-filter", "-filter-", "-grayscale", "-grayscale-", "-hue-rotate-", "-invert", "-invert-", "-opacity-", "-saturate-", "-sepia", "-sepia-"] },
 
 	{ include: ["-light", "-dark"], regex: ["-normal", "-light", "-light-", "-dark", "-dark-"] },
@@ -1044,7 +1046,8 @@ export async function generator (configOrder: StylelintConfigOrder, source: stri
 				{ group_name: "group", regex: ["group", r`group/[\w\-]{1,}`] },
 				{ group_name: "peer", regex: ["peer", r`peer/[\w\-]{1,}`] },
 				// `.@container\/\[\\w\\-\]` to be added back in generate-order-list.ts as `@container/[\w\-]` (see prepare-css.ts)
-				{ group_name: "@container", regex: ["@container", r`@container/[\w\-]{1,}`, "@container-normal"] },
+				// `.@container-size\/\[\\w\\-\]` to be added back in generate-order-list.ts as `@container-size/[\w\-]` (see prepare-css.ts)
+				{ group_name: "@container", regex: ["@container", r`@container/[\w\-]{1,}`, "@container-size", r`@container-size/[\w\-]{1,}`, "@container-normal"] },
 				{ group_name: "prose", regex: ["not-prose", "prose", "prose-invert"] },
 				...orderDatas,
 			],

@@ -1,8 +1,11 @@
 {
 	"3rd-party": {
 		"tailwindcss-container-queries": {
-			"links": ["https://github.com/tailwindlabs/tailwindcss-container-queries"],
-			"regular": ["@container", "@container-normal"],
+			"links": [
+				"https://github.com/tailwindlabs/tailwindcss-container-queries",
+				"https://github.com/tailwindlabs/tailwindcss/pull/18901"
+			],
+			"regular": ["@container", "@container-size", "@container-normal"],
 			"custom": []
 		},
 		"tailwindcss-forms": {

@@ -366,7 +366,13 @@ await (async function () {
 				}
 
 				// `.@container\/\[\\w\\-\]` to be added back in generate-order-list.ts as `@container/[\w\-]` (see generator.ts)
-				if (!classname.includes(r`.@container\/\[\\w\\-\]`)) {
+				// `.@container-size\/\[\\w\\-\]` to be added back in generate-order-list.ts as `@container-size/[\w\-]` (see generator.ts)
+				if (
+					!(
+						classname.includes(r`.@container\/\[\\w\\-\]`)
+						|| classname.includes(r`.@container-size\/\[\\w\\-\]`)
+					)
+				) {
 					classname += cssPropertiesArray.join(" ")
 					classname += ` ${ line.trim() }`
 					classLines.push(classname)

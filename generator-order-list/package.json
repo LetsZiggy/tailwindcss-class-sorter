@@ -18,7 +18,7 @@
 		"generate:order-lists": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/generator-order-list && node ./dist/generate-order-list.js --src ./style.css --stylelintrc ./dist/stylelint.config.js --out $rootpath/dist/order_list.json )",
 		"generate:tailwindcss": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/generator-order-list && pnpm dlx @tailwindcss/cli@4.3.* -i ./tailwind.css -o ./style-raw.css )",
 		"preinstall": "npx only-allow pnpm",
-		"link:files": "git rev-parse --show-toplevel | ( read rootpath; ln -frs $rootpath/webscrape-tailwindcss/defaults-list.json $rootpath/generator-order-list/defaults-list.json )",
+		"link:files": "git rev-parse --show-toplevel | ( read rootpath; cat $rootpath/webscrape-tailwindcss/defaults-list.json > $rootpath/generator-order-list/defaults-list.json )",
 		"prepare:css": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/generator-order-list && node ./dist/prepare-css.js --in ./style-raw.css --out ./style.css )",
 		"transpile": "git rev-parse --show-toplevel | ( read rootpath; cd $rootpath/generator-order-list && tsc --target esnext --outdir ./dist )"
 	},

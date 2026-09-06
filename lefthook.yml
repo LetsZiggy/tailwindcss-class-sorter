@@ -36,6 +36,7 @@ pre-commit:
         echo -e "staged_files >>> {staged_files} >>> "$STAGED_FILES_ABS_PATH"\n";
         cd $GIT_ROOT_PATH/generator-order-list;
         pnpm run fix:eslint $STAGED_FILES_ABS_PATH;
+        sed -E -i -z -e 's/\n+$/\n/' $STAGED_FILES_ABS_PATH;
         cd $CURRENT_FOLDER;
       stage_fixed: true
     # stylelint:

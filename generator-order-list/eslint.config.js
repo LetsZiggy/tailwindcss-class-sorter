@@ -22,7 +22,7 @@ const rootRules = {
 
 	"no-inner-declarations": ["error"], // Overwrite eslint default
 
-	"no-invalid-regexp": ["error", { allowConstructorFlags: ["u"/* , "y" */] }], // Overwrite eslint default
+	"no-invalid-regexp": ["error", { allowConstructorFlags: ["u"] }], // Overwrite eslint default
 
 	"no-unused-vars": ["off"], // Overwrite eslint default
 	"@typescript-eslint/no-unused-vars": ["warn", { vars: "all", args: "none", ignoreRestSiblings: true }], // Overwrite tseslint default
@@ -89,6 +89,8 @@ const rootRules = {
 	"unicorn/prefer-module": ["off"], // Overwrite unicorn
 
 	"unicorn/prefer-string-replace-all": ["error"], // Overwrite unicorn
+
+	"unicorn/single-line-block-comment-style": ["off"], // Overwrite unicorn
 
 	// ---@stylistic--- //
 

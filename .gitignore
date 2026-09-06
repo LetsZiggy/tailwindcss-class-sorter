@@ -57,110 +57,110 @@ go.work.sum
 # ------------------------------ #
 
 # Logs
-**/logs/
-**/*.log
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
-**/lerna-debug.log*
-**/.pnpm-debug.log*
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
 # Bower dependency directory (https://bower.io/)
-**/bower_components/
+bower_components/
 
 # Dependency directories
-**/jspm_packages/
-**/node_modules/
+jspm_packages/
+node_modules/
 
 # TypeScript cache
-**/*.tsbuildinfo
+*.tsbuildinfo
 
 # Optional npm cache directory
-**/.npm/
+.npm/
 
 # Optional eslint cache
-**/.eslintcache/
+.eslintcache/
 
 # Optional stylelint cache
-**/.stylelintcache/
+.stylelintcache/
 
 # dotenv environment variable files
-**/.env
-**/.env.development.local
-**/.env.test.local
-**/.env.production.local
-**/.env.local
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
-**/.cache/
-**/.parcel-cache/
+.cache/
+.parcel-cache/
 
 # ------------------------------ #
 # ----------- Python ----------- #
 # ------------------------------ #
 
 # Byte-compiled / optimized / DLL files
-**/__pycache__/
-**/*.py[cod]
-**/*$py.class
+__pycache__/
+*.py[cod]
+*$py.class
 
 # C extensions
-**/*.so
+*.so
 
 # Distribution / Packaging
-**/.Python
-**/build/
-**/develop-eggs/
-**/dist/
-**/downloads/
-**/eggs/
-**/.eggs/
-**/lib/
-**/lib64/
-**/parts/
-**/sdist/
-**/var/
-**/wheels/
-**/share/python-wheels/
-**/*.egg-info/
-**/.installed.cfg
-**/*.egg
-**/MANIFEST
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
 # Unit test / coverage reports
-**/htmlcov/
-**/.tox/
-**/.nox/
-**/.coverage
-**/.coverage.*
-**/.cache
-**/nosetests.xml
-**/coverage.xml
-**/*.cover
-**/*.py,cover
-**/.hypothesis/
-**/.pytest_cache/
-**/cover/
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
 
 # Django
-**/*.log
-**/local_settings.py
-**/db.sqlite3
-**/db.sqlite3-journal
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
 
 # Environments
-**/.env/
-**/env/
-**/.venv/
-**/venv/
-**/.env.bak/
-**/env.bak/
-**/.venv.bak/
-**/venv.bak/
-**/ENV/
+.env/
+env/
+.venv/
+venv/
+.env.bak/
+env.bak/
+.venv.bak/
+venv.bak/
+ENV/
 
 # Ruff
-**/.ruff_cache/
+.ruff_cache/
 
 # ------------------------------ #
 # ------------ *** ------------- #

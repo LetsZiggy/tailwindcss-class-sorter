@@ -27,7 +27,7 @@ export default {
 	bracketSameLine: true,
 	arrowParens: "always",
 	rangeStart: 0,
-	rangeEnd: Number.POSITIVE_INFINITY,
+	rangeEnd: Infinity,
 	// parser: "",
 	// filepath: "",
 	requirePragma: false,

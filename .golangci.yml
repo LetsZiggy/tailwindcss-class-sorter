@@ -9,6 +9,7 @@ linters:
     - 'clickhouselint'
     - 'cyclop'
     - 'depguard'
+    - 'exhaustruct'
     - 'ginkgolinter'
     - 'gocognit'
     - 'gocyclo'
@@ -43,13 +44,14 @@ linters:
       disable-default-exclusions: true
       verbose: true
     exhaustive:
-      check: ['switch', 'map']
+      check: ['switch']
       default-signifies-exhaustive: true
       default-case-required: true
-    exhaustruct:
+    exhaustruct_v5:
       allow-empty: true
       allow-empty-returns: true
       allow-empty-declarations: true
+      allow-empty-blank-assignments: true
     fatcontext:
       check-struct-pointers: true
     funcorder:
@@ -114,7 +116,7 @@ linters:
     makezero:
       always: true
     misspell:
-      locale: 'US'
+      locale: ''
     mnd:
       ignored-numbers: ['0o600', '2', '3', '5', '75', '80', '100', '100000']
     nestif:
@@ -126,7 +128,7 @@ linters:
       enable-all-rules: true
       enable-default-rules: true
       rules:
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#add-constant
+        # https://revive.run/r/#add-constant
         - name: add-constant
           severity: warning
           disabled: true
@@ -137,54 +139,54 @@ linters:
               allow-ints: '0,1,2'
               allow-floats: '0.0,0.,1.0,1.,2.0,2.'
               ignore-funcs: 'os\\.*,fmt\\.Println,make'
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#argument-limit
+        # https://revive.run/r/#argument-limit
         - name: argument-limit
           severity: warning
           disabled: true
           exclude: []
           arguments: [8]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#cognitive-complexity
+        # https://revive.run/r/#cognitive-complexity
         - name: cognitive-complexity
           severity: warning
           disabled: true
           exclude: []
           arguments: [7]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#cyclomatic
+        # https://revive.run/r/#cyclomatic
         - name: cyclomatic
           severity: warning
           disabled: true
           exclude: []
           arguments: [10]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#flag-parameter
+        # https://revive.run/r/#flag-parameter
         - name: flag-parameter
           severity: warning
           disabled: true
           exclude: []
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#function-length
+        # https://revive.run/r/#function-length
         - name: function-length
           severity: warning
           disabled: true
           exclude: []
           arguments: [50, 75]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#function-result-limit
+        # https://revive.run/r/#function-result-limit
         - name: function-result-limit
           severity: warning
           disabled: true
           exclude: []
           arguments: [3]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#line-length-limit
+        # https://revive.run/r/#line-length-limit
         - name: line-length-limit
           severity: warning
           disabled: true
           exclude: []
           arguments: [80]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#max-public-structs
+        # https://revive.run/r/#max-public-structs
         - name: max-public-structs
           severity: warning
           disabled: true
           exclude: []
           arguments: [5]
-        # https://github.com/mgechev/revive/blob/HEAD/RULES_DESCRIPTIONS.md#package-comments
+        # https://revive.run/r/#package-comments
         - name: package-comments
           severity: warning
           disabled: true

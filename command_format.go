@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"cmp"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"path/filepath"
 	"slices"
@@ -42,7 +43,7 @@ func cleanup(input string, removeList []string, checkFromTail bool) string {
 			input = strings.TrimPrefix(input, s)
 
 		default:
-			handleError(makeError("never"), "not expected values `true` | `false`", true)
+			handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 		}
 	}
 
@@ -79,7 +80,7 @@ func mergeDynamicVariantParts(sl []string) []string {
 			}
 
 		default:
-			handleError(makeError("never"), "not expected values `true` | `false`", true)
+			handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 		}
 	}
 
@@ -419,7 +420,7 @@ func formatClassName(
 			conditionalClassnameSplitString = classNameSplitList[1]
 
 		default:
-			handleError(makeError("never"), "not expected values `before` | `after`", true)
+			handleError(errors.New("never"), "not expected values `before` | `after`", true) //nolint:err113 // ...
 		}
 
 		matchesConditionalClassName, err = regexps.conditionalClassName.FindStringMatch(conditionalClassnameSplitString)
@@ -555,7 +556,7 @@ func formatClassName(
 				classNameVariantSorted[0].sl = []string{s}
 
 			default:
-				handleError(makeError("never"), "not expected values `true` | `false`", true)
+				handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 			}
 		}
 
@@ -581,7 +582,7 @@ func formatClassName(
 						classNameVariantSorted[i].sl = []string{s}
 
 					default:
-						handleError(makeError("never"), "not expected values `true` | `false`", true)
+						handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 					}
 				}
 			}
@@ -599,11 +600,11 @@ func formatClassName(
 			classNameVariantSorted[0].sl = []string{className}
 
 		default:
-			handleError(makeError("never"), "not expected values `true` | `false`", true)
+			handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 		}
 
 	default:
-		handleError(makeError("never"), "not expected values `true` | `false`", true)
+		handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 	}
 
 	/* ---
@@ -923,7 +924,7 @@ func formatRegion(
 		output += nonTailwindCSS
 
 	default:
-		handleError(makeError("never"), "not expected values `front` | `back`", true)
+		handleError(errors.New("never"), "not expected values `front` | `back`", true) //nolint:err113 // ...
 	}
 
 	return output
@@ -966,7 +967,7 @@ func format(
 		switch len(sl) {
 		case 0:
 			handleError(
-				makeError("\"--region-input\" flag is set and \"--stdin\" is not base64-encoded json array of regions (strings)"),
+				errors.New("\"--region-input\" flag is set and \"--stdin\" is not base64-encoded json array of regions (strings)"), //nolint:err113 // ...
 				"input error",
 				false,
 			)
@@ -988,7 +989,7 @@ func format(
 		}
 
 	default:
-		handleError(makeError("never"), "not expected values `true` | `false`", true)
+		handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 	}
 
 	/* ---format in reverse order of found matches--- */
@@ -1009,7 +1010,7 @@ func format(
 			code = start + regionList[regionIndex].classesSorted + end
 
 		default:
-			handleError(makeError("never"), "not expected values `true` | `false`", true)
+			handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 		}
 
 		regionIndex--
@@ -1107,7 +1108,7 @@ func formatCommand(isBase64Config, isEmbeddedConfig, isRegionInput bool, code, c
 		config.breakpointOrderWeightMultiplier = 100000000
 
 	default:
-		handleError(makeError("never"), "not expected values `style` | `breakpoint`", true)
+		handleError(errors.New("never"), "not expected values `style` | `breakpoint`", true) //nolint:err113 // ...
 	}
 
 	/* ---define default regexps--- */
@@ -1151,7 +1152,7 @@ func formatCommand(isBase64Config, isEmbeddedConfig, isRegionInput bool, code, c
 	// handle code
 	case code != "" && codeExt != "":
 		if extensionRegex, ok = configInput.ExtensionsRegex[codeExt]; !ok {
-			err = makeError("cannot find \"--ext\" in \"extensions_regex\" config option")
+			err = errors.New("cannot find \"--ext\" in \"extensions_regex\" config option") //nolint:err113 // ...
 			handleError(err, "flags error", true)
 		}
 
@@ -1163,7 +1164,7 @@ func formatCommand(isBase64Config, isEmbeddedConfig, isRegionInput bool, code, c
 	case filepathsLength > 0:
 		for _, v := range filepaths {
 			if strings.Contains(v, "*") {
-				err = makeError("invalid glob/filepath: " + v)
+				err = errors.New("invalid glob/filepath: " + v) //nolint:err113 // ...
 				handleError(err, "glob/filepath error", false)
 
 				continue
@@ -1171,14 +1172,14 @@ func formatCommand(isBase64Config, isEmbeddedConfig, isRegionInput bool, code, c
 
 			extension := filepath.Ext(v)[1:]
 			if codeByte, ok = readFile(v, true, false); !ok {
-				err = makeError("cannot read file: " + v)
+				err = errors.New("cannot read file: " + v) //nolint:err113 // ...
 				handleError(err, "file error", false)
 
 				continue
 			}
 
 			if extensionRegex, ok = configInput.ExtensionsRegex[extension]; !ok {
-				err = makeError("cannot find file type in \"extensions_regex\" config option")
+				err = errors.New("cannot find file type in \"extensions_regex\" config option") //nolint:err113 // ...
 				handleError(err, "file error", false)
 
 				continue

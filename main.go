@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	_ "embed"
+	"errors"
 	"flag"
 	"os"
 	"strings"
@@ -62,7 +63,7 @@ func main() {
 			builder := strings.Builder{}
 
 			for scanner.Scan() {
-				_, err := builder.WriteString(scanner.Text())
+				_, err = builder.WriteString(scanner.Text())
 				handleError(err, "main os.Stdin", true)
 			}
 
@@ -78,14 +79,14 @@ func main() {
 		/* ---check base64 input--- */
 		case (codeInputLen > 0 && extensionInputLen == 0):
 			handleError(
-				makeError("\"--stdin\" and \"--ext\" must be set together"),
+				errors.New("\"--stdin\" and \"--ext\" must be set together"), //nolint:err113 // ...
 				"flags error",
 				true,
 			)
 
 		case (codeInputLen == 0 && extensionInputLen > 0):
 			handleError(
-				makeError("\"--stdin\" and \"--ext\" must be set together"),
+				errors.New("\"--stdin\" and \"--ext\" must be set together"), //nolint:err113 // ...
 				"flags error",
 				true,
 			)
@@ -97,7 +98,7 @@ func main() {
 		/* ---check globs/filepaths input - no globs/filepaths--- */
 		case args == "":
 			handleError(
-				makeError("no globs/filepaths provided"),
+				errors.New("no globs/filepaths provided"), //nolint:err113 // ...
 				"args error",
 				true,
 			)
@@ -105,7 +106,7 @@ func main() {
 		/* ---check globs/filepaths input - flags after globs/filepaths--- */
 		case strings.Contains(args, " -"):
 			handleError(
-				makeError("place flags before globs/filepaths: "+args),
+				errors.New("place flags before globs/filepaths: "+args), //nolint:err113 // ...
 				"args error",
 				true,
 			)

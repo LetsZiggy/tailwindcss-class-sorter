@@ -107,7 +107,7 @@ func linebreak(input string, length int) []string {
 				buffer[count] = v
 
 			default:
-				break
+				break //nolint:revive // ...
 			}
 
 			count++
@@ -142,21 +142,17 @@ func removeSliceIndex[TS ~[]T, T any](s TS, index int) TS {
 }
 */
 
-func makeError(str string) error {
-	return errors.New(str) //nolint:err113 // ...
-}
-
 func handleError(err error, str string, toPanic bool) {
 	if err != nil {
 		logger := log.New(os.Stderr, "", 1)
 		fatal := ""
 
 		if toPanic {
-			fatal = "::Fatal::"
+			fatal = "FATAL::"
 		}
 
 		if str != "" {
-			err = errors.Join(makeError("\n"+fatal+str+":"), err)
+			err = errors.Join(errors.New("\n"+fatal+str+":"), err) //nolint:err113 // ...
 		}
 
 		switch toPanic {
@@ -167,7 +163,7 @@ func handleError(err error, str string, toPanic bool) {
 			logger.Println(err)
 
 		default:
-			handleError(makeError("never"), "not expected values `true` | `false`", true)
+			handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 		}
 	}
 }
@@ -183,7 +179,7 @@ func decodeBase64(input string, toOutputErr, panicIfEmpty bool) ([]byte, bool) {
 	if input == "" && toOutputErr {
 		ok = false
 
-		err = makeError("base64 is empty")
+		err = errors.New("base64 is empty") //nolint:err113 // ...
 		handleError(err, "reading base64", panicIfEmpty)
 	}
 
@@ -205,7 +201,7 @@ func decodeBase64(input string, toOutputErr, panicIfEmpty bool) ([]byte, bool) {
 //nolint:unparam // ...
 func encodeBase64(input []byte, toOutputErr, panicIfEmpty bool) string {
 	if len(input) == 0 && toOutputErr {
-		err := makeError("input is empty")
+		err := errors.New("input is empty") //nolint:err113 // ...
 		handleError(err, "writing base64", panicIfEmpty)
 	}
 
@@ -241,7 +237,7 @@ func writeFile(input []byte, fp string, toOutputErr, panicIfEmpty, panicIfInvali
 	var err error
 
 	if len(input) == 0 && toOutputErr {
-		err = makeError("input is empty")
+		err = errors.New("input is empty") //nolint:err113 // ...
 		handleError(err, "writing file ["+fp+"]", panicIfEmpty)
 	}
 
@@ -263,7 +259,7 @@ func getUserConfig(input string, isBase64 bool) []byte {
 		out, ok = readFile(input, false, false)
 
 	default:
-		handleError(makeError("never"), "not expected values `true` | `false`", true)
+		handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 	}
 
 	if !ok {
@@ -310,7 +306,7 @@ func normaliseConfig(input []byte, isEmbedded, toOutputErr bool) TConfigInput {
 		}
 
 	default:
-		handleError(makeError("never"), "not expected values `true` | `false`", true)
+		handleError(errors.New("never"), "not expected values `true` | `false`", true) //nolint:err113 // ...
 	}
 
 	/* ---expand variantOrdering (group-* | peer-*)--- */
@@ -470,7 +466,7 @@ func normaliseOrder(order TOrderList, editOrder TEditOrder) TOrderList {
 			order[v.GroupIndex].Regex = append(order[v.GroupIndex].Regex, v.Regex...)
 
 		default:
-			handleError(makeError("never"), "not expected values `start` | `end`", true)
+			handleError(errors.New("never"), "not expected values `start` | `end`", true) //nolint:err113 // ...
 		}
 	}
 
@@ -486,7 +482,7 @@ func normaliseOrder(order TOrderList, editOrder TEditOrder) TOrderList {
 			appendIndex = v.GroupIndex + 1
 
 		default:
-			handleError(makeError("never"), "not expected values `before` | `after`", true)
+			handleError(errors.New("never"), "not expected values `before` | `after`", true) //nolint:err113 // ...
 		}
 
 		switch {
